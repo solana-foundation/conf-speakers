@@ -1,12 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -41,25 +34,13 @@ import {
   SheetDescription,
   SheetFooter,
 } from "@/components/ui/sheet";
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableCaption,
-} from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, TableCaption } from "@/components/ui/table";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { PlusIcon, ChevronDownIcon } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="font-sans min-h-screen p-8 sm:p-20">
+    <div className="min-h-screen p-8 font-sans sm:p-20">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">Kitchen Sink</h1>
@@ -135,14 +116,10 @@ export default function Home() {
                   <TabsTrigger value="password">Password</TabsTrigger>
                 </TabsList>
                 <TabsContent value="account" className="pt-4">
-                  <div className="text-sm text-muted-foreground">
-                    Account tab content goes here.
-                  </div>
+                  <div className="text-muted-foreground text-sm">Account tab content goes here.</div>
                 </TabsContent>
                 <TabsContent value="password" className="pt-4">
-                  <div className="text-sm text-muted-foreground">
-                    Password tab content goes here.
-                  </div>
+                  <div className="text-muted-foreground text-sm">Password tab content goes here.</div>
                 </TabsContent>
               </Tabs>
             </CardContent>
@@ -156,15 +133,11 @@ export default function Home() {
             <CardContent className="flex flex-col gap-4">
               <Alert>
                 <AlertTitle>Heads up</AlertTitle>
-                <AlertDescription>
-                  This is a standard alert — check it out!
-                </AlertDescription>
+                <AlertDescription>This is a standard alert — check it out!</AlertDescription>
               </Alert>
               <Alert variant="destructive">
                 <AlertTitle>Error</AlertTitle>
-                <AlertDescription>
-                  Something went wrong. Please try again.
-                </AlertDescription>
+                <AlertDescription>Something went wrong. Please try again.</AlertDescription>
               </Alert>
             </CardContent>
           </Card>
@@ -228,13 +201,9 @@ export default function Home() {
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Dialog title</DialogTitle>
-                    <DialogDescription>
-                      Short description text.
-                    </DialogDescription>
+                    <DialogDescription>Short description text.</DialogDescription>
                   </DialogHeader>
-                  <div className="text-sm text-muted-foreground">
-                    Dialog body content.
-                  </div>
+                  <div className="text-muted-foreground text-sm">Dialog body content.</div>
                   <DialogFooter>
                     <Button variant="outline">Cancel</Button>
                     <Button>Confirm</Button>
@@ -251,9 +220,7 @@ export default function Home() {
                     <SheetTitle>Sheet title</SheetTitle>
                     <SheetDescription>Slide-over content.</SheetDescription>
                   </SheetHeader>
-                  <div className="p-4 text-sm text-muted-foreground">
-                    Sheet body area.
-                  </div>
+                  <div className="text-muted-foreground p-4 text-sm">Sheet body area.</div>
                   <SheetFooter>
                     <Button variant="outline">Dismiss</Button>
                     <Button>Save</Button>
@@ -284,9 +251,7 @@ export default function Home() {
                     <DropdownMenuItem>Team</DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
-                    Email Notifications
-                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem checked>Email Notifications</DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
