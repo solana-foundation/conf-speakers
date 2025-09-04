@@ -1,4 +1,5 @@
 export type Speaker = {
+  id: string;
   _name?: string;
   firstName?: string;
   lastName?: string;
@@ -11,9 +12,11 @@ export type Speaker = {
 };
 
 export type Session = {
+  id: string;
   name?: string;
   description?: string;
   startTime?: string;
   endTime?: string;
   stage?: string;
+  speakerIds?: string[];
 };

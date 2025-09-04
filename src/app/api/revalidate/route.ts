@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
 import { isAuthenticated } from "@/lib/sign.server";
 
-const COMMON_TAGS = ["sessions", "speaker"];
+const COMMON_TAGS = ["sessions", "speaker", "speakers"];
 
 export async function POST(request: NextRequest) {
   // Check authentication

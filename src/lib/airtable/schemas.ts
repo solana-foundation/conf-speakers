@@ -3,47 +3,57 @@ import { sanitizeXLink, sanitizeXName } from "@/lib/utils";
 
 export const SessionFieldsSchema = z
   .object({
-    "⚙️ Session Name": z.string(),
-    Description: z.string().optional(),
-    "Start Time": z.string().optional(),
-    "End Time": z.string().optional(),
-    Stage: z.string(),
+    id: z.string(),
+    fields: z.object({
+      "⚙️ Session Name": z.string(),
+      Description: z.string().optional(),
+      "Start Time": z.string().optional(),
+      "End Time": z.string().optional(),
+      Stage: z.string(),
+      Speakers: z.array(z.string()).optional(),
+    }),
   })
   .transform((data) => ({
-    name: data["⚙️ Session Name"],
-    description: data["Description"],
-    startTime: data["Start Time"],
-    endTime: data["End Time"],
-    stage: data["Stage"],
+    id: data.id,
+    name: data.fields["⚙️ Session Name"],
+    description: data.fields["Description"],
+    startTime: data.fields["Start Time"],
+    endTime: data.fields["End Time"],
+    stage: data.fields["Stage"],
+    speakerIds: data.fields["Speakers"],
   }));
 
 export const SpeakerFieldsSchema = z
   .object({
-    Name: z.string(),
-    "First Name": z.string(),
-    "Last Name": z.string(),
-    "Role or Title": z.string().optional(),
-    Company: z.string().optional(),
-    Bio: z.string().optional(),
-    "Headshot_For Web": z
-      .array(
-        z
-          .object({
-            url: z.string().optional(),
-          })
-          .optional(),
-      )
-      .optional(),
-    Twitter: z.string().optional(),
+    id: z.string(),
+    fields: z.object({
+      Name: z.string(),
+      "First Name": z.string(),
+      "Last Name": z.string(),
+      "Role or Title": z.string().optional(),
+      Company: z.string().optional(),
+      Bio: z.string().optional(),
+      "Headshot_For Web": z
+        .array(
+          z
+            .object({
+              url: z.string().optional(),
+            })
+            .optional(),
+        )
+        .optional(),
+      Twitter: z.string().optional(),
+    }),
   })
   .transform((data) => ({
-    _name: data["Name"],
-    firstName: data["First Name"],
-    lastName: data["Last Name"],
-    jobTitle: data["Role or Title"],
-    company: data.Company,
-    bio: data.Bio,
-    imageUrl: data["Headshot_For Web"]?.[0]?.url,
-    xLink: data.Twitter ? (sanitizeXLink(data.Twitter) ?? undefined) : undefined,
-    xName: data.Twitter ? (sanitizeXName(data.Twitter) ?? undefined) : undefined,
+    id: data.id,
+    _name: data.fields["Name"],
+    firstName: data.fields["First Name"],
+    lastName: data.fields["Last Name"],
+    jobTitle: data.fields["Role or Title"],
+    company: data.fields["Company"],
+    bio: data.fields["Bio"],
+    imageUrl: data.fields["Headshot_For Web"]?.[0]?.url,
+    xLink: data.fields["Twitter"] ? (sanitizeXLink(data.fields["Twitter"]) ?? undefined) : undefined,
+    xName: data.fields["Twitter"] ? (sanitizeXName(data.fields["Twitter"]) ?? undefined) : undefined,
   }));

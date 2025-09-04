@@ -14,12 +14,12 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
   try {
     // Fetch speaker details
     const speakerRecord = await fetchSpeaker(speakerId);
-    const speaker = SpeakerFieldsSchema.parse(speakerRecord.fields);
+    const speaker = SpeakerFieldsSchema.parse(speakerRecord);
 
     // Fetch sessions for this speaker
     const sessionRecords = await fetchSessions({ speakerName: speaker._name });
     const sessions = sessionRecords
-      .map((record) => SessionFieldsSchema.parse(record.fields))
+      .map((record) => SessionFieldsSchema.parse(record))
       .filter((session) => session.startTime && session.endTime);
 
     if (sessions.length === 0) {
@@ -28,7 +28,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
 
     const icsContent = generateSpeakerIcsContent(
       sessions.map((session) => ({
-        id: sessionRecords.find((r) => SessionFieldsSchema.parse(r.fields).name === session.name)?.id || "",
+        id: sessionRecords.find((r) => SessionFieldsSchema.parse(r).name === session.name)?.id || "",
         name: session.name,
         description: session.description,
         startTime: session.startTime!,

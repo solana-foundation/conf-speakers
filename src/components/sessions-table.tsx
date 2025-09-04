@@ -6,7 +6,7 @@ import { Badge } from "./ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { formatVenueTime } from "@/lib/time/tz";
 import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from "./ui/table";
-import { Session } from "@/lib/airtable/types";
+import { Session, Speaker } from "@/lib/airtable/types";
 import {
   createColumnHelper,
   flexRender,
@@ -19,10 +19,10 @@ import SessionSheet from "./session-sheet";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
-const columnHelper = createColumnHelper<Session & { subscribeUrl?: string }>();
+const columnHelper = createColumnHelper<Session & { subscribeUrl?: string; speakers?: Speaker[] }>();
 
 export interface SessionsTableProps {
-  items: (Session & { subscribeUrl?: string })[];
+  items: (Session & { subscribeUrl?: string; speakers?: Speaker[] })[];
   filters?: {
     stages: Set<string>;
     times: Set<string>;
@@ -177,6 +177,7 @@ export default function SessionsTable({ items, filters }: SessionsTableProps) {
                   endTime={row.original.endTime}
                   stage={row.original.stage}
                   subscribeUrl={row.original.subscribeUrl}
+                  speakers={row.original.speakers}
                 >
                   <Button className="max-lg:hidden" variant="outline" size="sm">
                     View Details

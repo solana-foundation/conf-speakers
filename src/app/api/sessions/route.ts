@@ -12,7 +12,7 @@ export const GET = async (request: NextRequest) => {
   try {
     const records = await fetchSessions();
 
-    const data = records.map((record) => SessionFieldsSchema.parse(record.fields));
+    const data = records.map((record) => SessionFieldsSchema.parse(record));
 
     return NextResponse.json(data);
   } catch (error) {

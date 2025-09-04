@@ -1,12 +1,13 @@
 import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
-import { getCachedSessions } from "@/lib/airtable/fetch";
-import { SessionFieldsSchema } from "@/lib/airtable/schemas";
+import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
+import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SessionsTable from "@/components/sessions-table";
 import { generateHmac } from "@/lib/sign.server";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { getSessionsFilters } from "@/lib/airtable/utils";
+import { Speaker } from "@/lib/airtable/types";
 
 export const metadata: Metadata = {
   title: "Breakpoint 2025 Schedule",
@@ -19,19 +20,26 @@ export const metadata: Metadata = {
 
 export const revalidate = 60 * 10; // 10 minutes
 
-export default async function Schedule({ searchParams }: { searchParams: Promise<{ key: string }> }) {
+export default async function SchedulePage({ searchParams }: { searchParams: Promise<{ key: string }> }) {
   const { key } = await searchParams;
 
   if (key !== generateHmac()) {
     notFound();
   }
 
-  // Use the cached version
+  const speakers = await getCachedSpeakers();
+  const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
   const sessions = await getCachedSessions();
-  const sessionsData = sessions.map((session) => ({
-    ...SessionFieldsSchema.parse(session.fields),
-    subscribeUrl: `/api/ics/session/${session.id}?key=${key}`,
-  }));
+  const sessionsData = sessions.map((session) => {
+    const sessionData = SessionFieldsSchema.parse(session);
+    return {
+      ...SessionFieldsSchema.parse(session),
+      subscribeUrl: `/api/ics/session/${session.id}?key=${key}`,
+      speakers: sessionData.speakerIds
+        ?.map((id) => speakersData.find((item) => item.id === id))
+        .filter(Boolean) as Speaker[],
+    };
+  });
   const filters = getSessionsFilters(sessionsData);
 
   return (

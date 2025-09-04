@@ -14,9 +14,9 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
   try {
     const record = await fetchSpeaker(speakerId);
 
-    const data = SpeakerFieldsSchema.parse(record.fields);
+    const data = SpeakerFieldsSchema.parse(record);
 
-    return NextResponse.json({ id: speakerId, ...data });
+    return NextResponse.json({ ...data });
   } catch (error) {
     console.error(error);
 

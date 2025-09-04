@@ -4,6 +4,8 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "./ui/sheet";
 import { formatVenueTime } from "@/lib/time/tz";
+import { Speaker } from "@/lib/airtable/types";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export interface SessionSheetProps {
   name?: string;
@@ -12,6 +14,7 @@ export interface SessionSheetProps {
   endTime?: string;
   stage?: string;
   subscribeUrl?: string;
+  speakers?: Speaker[];
   children: React.ReactNode;
 }
 
@@ -22,6 +25,7 @@ export default function SessionSheet({
   endTime,
   stage,
   subscribeUrl,
+  speakers,
   children,
 }: SessionSheetProps) {
   return (
@@ -29,7 +33,7 @@ export default function SessionSheet({
       <SheetTrigger asChild>
         <div>{children}</div>
       </SheetTrigger>
-      <SheetContent side="right">
+      <SheetContent side="right" aria-describedby={undefined}>
         <SheetHeader>
           <SheetTitle>{name}</SheetTitle>
         </SheetHeader>
@@ -44,6 +48,26 @@ export default function SessionSheet({
           <p className="mt-2">
             <Badge variant="default">{stage}</Badge>
           </p>
+
+          {speakers && (
+            <div className="mt-2 text-sm">
+              Speakers:
+              {speakers.map((speaker) => (
+                <div key={speaker.id} className="flex items-center gap-2">
+                  <Avatar className="size-4">
+                    <AvatarImage src={speaker.imageUrl} alt={`${speaker.firstName} ${speaker.lastName}`} />
+                    <AvatarFallback className="text-xs font-semibold">
+                      {speaker.firstName?.charAt(0)}
+                      {speaker.lastName?.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm">
+                    {speaker.firstName} {speaker.lastName}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <SheetFooter>
           {subscribeUrl && (

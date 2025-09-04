@@ -14,9 +14,9 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
   try {
     const record = await fetchSession(sessionId);
 
-    const data = SessionFieldsSchema.parse(record.fields);
+    const data = SessionFieldsSchema.parse(record);
 
-    return NextResponse.json({ id: sessionId, ...data });
+    return NextResponse.json({ ...data });
   } catch (error) {
     console.error(error);
 

@@ -12,7 +12,7 @@ export const GET = async (request: NextRequest) => {
   try {
     const sessionRecords = await fetchSessions();
     const sessions = sessionRecords
-      .map((record) => SessionFieldsSchema.parse(record.fields))
+      .map((record) => SessionFieldsSchema.parse(record))
       .filter((session) => session.startTime && session.endTime);
 
     if (sessions.length === 0) {
@@ -21,7 +21,7 @@ export const GET = async (request: NextRequest) => {
 
     const icsContent = generateIcsContent(
       sessions.map((session) => ({
-        id: sessionRecords.find((r) => SessionFieldsSchema.parse(r.fields).name === session.name)?.id || "",
+        id: sessionRecords.find((r) => SessionFieldsSchema.parse(r).name === session.name)?.id || "",
         name: session.name,
         description: session.description,
         startTime: session.startTime!,

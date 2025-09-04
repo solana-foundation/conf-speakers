@@ -13,7 +13,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
 
   try {
     const record = await fetchSession(sessionId);
-    const session = SessionFieldsSchema.parse(record.fields);
+    const session = SessionFieldsSchema.parse(record);
 
     if (!session.startTime || !session.endTime) {
       return NextResponse.json({ error: "Session missing start or end time" }, { status: 400 });

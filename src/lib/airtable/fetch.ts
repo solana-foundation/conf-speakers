@@ -16,7 +16,7 @@ export const fetchSessions = (params: SessionParams = {}) => {
   return airtable
     .table(tableSessions)
     .select({
-      fields: ["⚙️ Session Name", "Description", "Start Time", "End Time", "Stage"],
+      fields: ["⚙️ Session Name", "Description", "Start Time", "End Time", "Stage", "Speakers"],
       ...(params.speakerName ? { filterByFormula: `FIND("${params.speakerName}", {Speakers}&"")` } : undefined),
       sort: [{ field: "Start Time", direction: "asc" }],
     })
@@ -29,6 +29,16 @@ export const fetchSession = (sessionId: string) => {
 
 export const fetchSpeaker = (speakerId: string) => {
   return airtable.table(tableSpeakers).find(speakerId);
+};
+
+export const fetchSpeakers = () => {
+  return airtable
+    .table(tableSpeakers)
+    .select({
+      fields: ["Name", "First Name", "Last Name", "Role or Title", "Company", "Bio", "Headshot_For Web", "Twitter"],
+      sort: [{ field: "Name", direction: "asc" }],
+    })
+    .all();
 };
 
 export const getCachedSessions = unstable_cache(
@@ -50,5 +60,16 @@ export const getCachedSpeaker = unstable_cache(
   {
     revalidate: 1800, // 30 minutes
     tags: ["speaker"],
+  },
+);
+
+export const getCachedSpeakers = unstable_cache(
+  async () => {
+    return await fetchSpeakers();
+  },
+  ["speakers"],
+  {
+    revalidate: 1800, // 30 minutes
+    tags: ["speakers"],
   },
 );
