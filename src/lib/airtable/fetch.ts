@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { airtable } from "./client";
 
 const tableSessions = process.env.AIRTABLE_TABLE_AGENDA;
@@ -29,3 +30,25 @@ export const fetchSession = (sessionId: string) => {
 export const fetchSpeaker = (speakerId: string) => {
   return airtable.table(tableSpeakers).find(speakerId);
 };
+
+export const getCachedSessions = unstable_cache(
+  async (params: SessionParams = {}) => {
+    return await fetchSessions(params);
+  },
+  ["sessions"],
+  {
+    revalidate: 1800, // 30 minutes
+    tags: ["sessions"],
+  },
+);
+
+export const getCachedSpeaker = unstable_cache(
+  async (speakerId: string) => {
+    return await fetchSpeaker(speakerId);
+  },
+  ["speaker"],
+  {
+    revalidate: 1800, // 30 minutes
+    tags: ["speaker"],
+  },
+);

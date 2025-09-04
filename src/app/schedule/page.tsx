@@ -1,16 +1,23 @@
 import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
-import { fetchSessions } from "@/lib/airtable/fetch";
+import { getCachedSessions } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema } from "@/lib/airtable/schemas";
 import SessionsTable from "@/components/sessions-table";
 import { generateHmac } from "@/lib/sign.server";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { getSessionsFilters } from "@/lib/airtable/utils";
 
 export const metadata: Metadata = {
   title: "Breakpoint 2025 Schedule",
   description: "The schedule of the Breakpoint conference",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
+
+export const revalidate = 60 * 10; // 10 minutes
 
 export default async function Schedule({ searchParams }: { searchParams: Promise<{ key: string }> }) {
   const { key } = await searchParams;
@@ -19,11 +26,13 @@ export default async function Schedule({ searchParams }: { searchParams: Promise
     notFound();
   }
 
-  const sessions = await fetchSessions();
+  // Use the cached version
+  const sessions = await getCachedSessions();
   const sessionsData = sessions.map((session) => ({
     ...SessionFieldsSchema.parse(session.fields),
     subscribeUrl: `/api/ics/session/${session.id}?key=${key}`,
   }));
+  const filters = getSessionsFilters(sessionsData);
 
   return (
     <div className="min-h-screen p-8 font-sans sm:p-20">
@@ -39,7 +48,7 @@ export default async function Schedule({ searchParams }: { searchParams: Promise
 
         <Separator />
 
-        <SessionsTable items={sessionsData} />
+        <SessionsTable items={sessionsData} filters={filters} />
       </main>
     </div>
   );
