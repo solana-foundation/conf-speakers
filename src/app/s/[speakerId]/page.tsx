@@ -23,7 +23,7 @@ export const generateMetadata = async ({ params }: { params: Promise<{ speakerId
   };
 };
 
-export const revalidate = 60 * 10; // 10 minutes
+export const revalidate = 600; // 10 minutes
 
 export default async function SpeakerPage({
   params,

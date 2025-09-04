@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 60 * 10; // 10 minutes
+export const revalidate = 600; // 10 minutes
 
 export default async function SchedulePage({ searchParams }: { searchParams: Promise<{ key: string }> }) {
   const { key } = await searchParams;
