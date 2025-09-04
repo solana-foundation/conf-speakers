@@ -8,6 +8,7 @@ import SpeakerCard from "@/components/speaker-card";
 import SessionsTable from "@/components/sessions-table";
 import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
+import { Gallery } from "@/components/gallery";
 
 export const generateMetadata = async ({ params }: { params: Promise<{ speakerId: string }> }): Promise<Metadata> => {
   const { speakerId } = await params;
@@ -67,7 +68,24 @@ export default async function SpeakerPage({
 
         <Separator />
 
+        <h2 className="text-lg font-semibold">Schedule</h2>
+
         <SessionsTable items={sessionsData} filters={filters} />
+
+        <h2 className="text-lg font-semibold">Highlights</h2>
+
+        <Gallery
+          images={[
+            { src: "/placeholder1.png" },
+            { src: "/placeholder2.png" },
+            { src: "/placeholder1.png" },
+            { src: "/placeholder1.png" },
+            { src: "/placeholder2.png" },
+            { src: "/placeholder2.png" },
+            { src: "/placeholder1.png" },
+            { src: "/placeholder2.png" },
+          ]}
+        />
       </main>
     </div>
   );

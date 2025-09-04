@@ -49,7 +49,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
           <h1 className="text-2xl font-semibold">Breakpoint 2025 Schedule</h1>
           <Button asChild>
             <a href={`/api/ics/event?key=${key}`} target="_blank" rel="noopener noreferrer">
-              Subscribe to all sessions
+              Add all sessions to calendar
             </a>
           </Button>
         </div>

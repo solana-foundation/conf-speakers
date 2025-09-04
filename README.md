@@ -109,10 +109,7 @@ lib/
 
 components/
   speaker-card.tsx
-  ticket-card.tsx
   schedule-table.tsx
-  session-cell.tsx
-  share-menu.tsx
   highlights-gallery.tsx
 
 middleware.ts       # optional: extra headers for /s/*
