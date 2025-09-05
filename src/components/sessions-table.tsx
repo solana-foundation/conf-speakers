@@ -214,7 +214,7 @@ export default function SessionsTable({
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="!bg-transparent">
+            <TableRow key={headerGroup.id} className="!border-0 !bg-transparent">
               {headerGroup.headers.map((header) => (
                 <Fragment key={header.id}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
