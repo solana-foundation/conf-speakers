@@ -89,3 +89,13 @@
     @slot;
   }
 }
+
+[data-slot="sheet-content"] {
+  @apply border-stroke-primary;
+}
+
+[data-slot="sheet-header"] {
+  h2 {
+    @apply text-3xl font-bold;
+  }
+}

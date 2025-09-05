@@ -50,10 +50,10 @@ export default function SessionSheet({
           </p>
 
           {speakers && (
-            <div className="mt-2 text-sm">
-              Speakers:
+            <div className="mt-4 text-sm">
+              <div className="text-foreground/50 font-bold">Speakers:</div>
               {speakers.map((speaker) => (
-                <div key={speaker.id} className="flex items-center gap-2">
+                <div key={speaker.id} className="mt-1 flex items-center gap-2">
                   <Avatar className="size-4">
                     <AvatarImage src={speaker.imageUrl} alt={`${speaker.firstName} ${speaker.lastName}`} />
                     <AvatarFallback className="text-xs font-semibold">
