@@ -4,7 +4,6 @@ import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import { generateKey, isKeyValid } from "@/lib/sign.server";
 import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
 import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";

@@ -74,7 +74,7 @@ export default function SpeakerCard({
               <p>
                 <Button size="sm" asChild>
                   <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
-                    Add speaker&apos;s sessions to calendar
+                    Subscribe to speaker&apos;s sessions
                   </a>
                 </Button>
               </p>

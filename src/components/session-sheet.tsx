@@ -73,7 +73,7 @@ export default function SessionSheet({
           {subscribeUrl && (
             <Button asChild>
               <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
-                Add session to calendar
+                Subscribe to session
               </a>
             </Button>
           )}
