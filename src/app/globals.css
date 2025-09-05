@@ -69,6 +69,19 @@
     color: var(--color-wisp);
     font-family: var(--font-abc-diatype);
   }
+  table {
+    @apply text-wisp;
+  }
+  th,
+  td {
+    @apply px-4 py-2;
+  }
+  th {
+    @apply bg-background text-left font-semibold;
+  }
+  tr {
+    @apply border-stroke-primary bg-background border-t;
+  }
 }
 
 @custom-variant touch {

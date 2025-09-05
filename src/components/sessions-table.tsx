@@ -151,7 +151,7 @@ export default function SessionsTable({
           return (
             <TableCell>
               {startTime && (
-                <span className="text-foreground/50 max-sm:text-sm sm:mr-2">{formatVenueTime(startTime, "MMM d")}</span>
+                <span className="text-foreground max-sm:text-sm sm:mr-2">{formatVenueTime(startTime, "MMM d")}</span>
               )}
               <br className="sm:hidden" />
               {startTime && endTime && (
@@ -210,7 +210,7 @@ export default function SessionsTable({
   });
 
   return (
-    <Card>
+    <Card className="bg-background border-muted py-1">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -240,7 +240,12 @@ export default function SessionsTable({
                   subscribeUrl={row.original.subscribeUrl}
                   speakers={row.original.speakers}
                 >
-                  <Button className="max-lg:hidden" variant="outline" size="sm">
+                  <Button
+                    className="text-foreground/80 max-lg:hidden"
+                    variant="outline"
+                    size="sm"
+                    style={{ fontSize: "0.75rem" }}
+                  >
                     View Details
                   </Button>
                   <div className="absolute top-0 right-0 bottom-0 left-0 cursor-pointer"></div>
