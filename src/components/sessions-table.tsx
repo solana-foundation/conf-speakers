@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { Checkbox } from "./ui/checkbox";
 import { formatVenueTime } from "@/lib/time/tz";
 import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from "./ui/table";
 import { Session, Speaker } from "@/lib/airtable/types";
@@ -14,7 +15,7 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useState, useEffect } from "react";
 import SessionSheet from "./session-sheet";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -27,11 +28,70 @@ export interface SessionsTableProps {
     stages: Set<string>;
     times: Set<string>;
   };
+  selectable?: boolean;
+  defaultSelected?: string[];
+  onSelect?: (selectedIds: string[]) => void;
 }
 
-export default function SessionsTable({ items, filters }: SessionsTableProps) {
-  const columns = useMemo(
-    () => [
+export default function SessionsTable({
+  items,
+  filters,
+  selectable = false,
+  defaultSelected,
+  onSelect,
+}: SessionsTableProps) {
+  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set(defaultSelected));
+
+  // Call onSelect whenever selectedRows changes
+  useEffect(() => {
+    if (onSelect && selectable) {
+      onSelect(Array.from(selectedRows));
+    }
+  }, [selectedRows, items, onSelect, selectable]);
+
+  const columns = useMemo(() => {
+    const baseColumns = [
+      // Add checkbox column if selectable
+      ...(selectable
+        ? [
+            columnHelper.display({
+              id: "select",
+              header: () => (
+                <TableHead className="w-12 pb-4 pl-6 align-top" role="checkbox">
+                  <Checkbox
+                    className="relative z-1"
+                    checked={selectedRows.size === items.length && items.length > 0}
+                    onCheckedChange={(checked: boolean) => {
+                      if (checked) {
+                        setSelectedRows(new Set(items.map((_, index) => index.toString())));
+                      } else {
+                        setSelectedRows(new Set());
+                      }
+                    }}
+                  />
+                </TableHead>
+              ),
+              cell: (info) => (
+                <TableCell className="pl-6" role="checkbox">
+                  <Checkbox
+                    value={info.row.original.id}
+                    className="relative z-1"
+                    checked={selectedRows.has(info.row.original.id)}
+                    onCheckedChange={(checked: boolean) => {
+                      const newSelected = new Set(selectedRows);
+                      if (checked) {
+                        newSelected.add(info.row.original.id);
+                      } else {
+                        newSelected.delete(info.row.original.id);
+                      }
+                      setSelectedRows(newSelected);
+                    }}
+                  />
+                </TableCell>
+              ),
+            }),
+          ]
+        : []),
       columnHelper.accessor("name", {
         id: "name",
         header: (info) => (
@@ -137,9 +197,10 @@ export default function SessionsTable({ items, filters }: SessionsTableProps) {
           </TableCell>
         ),
       }),
-    ],
-    [filters],
-  );
+    ];
+
+    return baseColumns;
+  }, [selectable, selectedRows, items, filters]);
 
   const table = useReactTable({
     data: items,
@@ -153,7 +214,7 @@ export default function SessionsTable({ items, filters }: SessionsTableProps) {
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className="!bg-transparent">
               {headerGroup.headers.map((header) => (
                 <Fragment key={header.id}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}

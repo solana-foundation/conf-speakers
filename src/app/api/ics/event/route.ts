@@ -9,11 +9,18 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json({ error: "Invalid key" }, { status: 401 });
   }
 
+  const query = new URLSearchParams(request.nextUrl.searchParams);
+  const selectedSessions = query.get("sessions")?.split(",");
+
   try {
     const sessionRecords = await fetchSessions();
-    const sessions = sessionRecords
+    let sessions = sessionRecords
       .map((record) => SessionFieldsSchema.parse(record))
       .filter((session) => session.startTime && session.endTime);
+
+    if (selectedSessions) {
+      sessions = sessions.filter((session) => selectedSessions.includes(session.id));
+    }
 
     if (sessions.length === 0) {
       return NextResponse.json({ error: "No sessions found" }, { status: 404 });
@@ -34,8 +41,8 @@ export const GET = async (request: NextRequest) => {
       status: 200,
       headers: {
         "Content-Type": "text/calendar; charset=utf-8",
-        "Content-Disposition": 'attachment; filename="breakpoint-2025-schedule.ics"',
         "Cache-Control": "public, max-age=3600, s-maxage=3600",
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch (error) {

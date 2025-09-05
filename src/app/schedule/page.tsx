@@ -2,12 +2,15 @@ import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
-import SessionsTable from "@/components/sessions-table";
 import { generateKey, isKeyValid } from "@/lib/sign.server";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
+import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
+import { GlobalStateProvider } from "@/lib/state";
+import ScheduleSessionsTable from "./components/schedule-sessions-table";
+import ScheduleSubscribeButton from "./components/schedule-subscribe-button";
 
 export const metadata: Metadata = {
   title: "Breakpoint 2025 Schedule",
@@ -36,7 +39,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
     const sessionData = SessionFieldsSchema.parse(session);
     return {
       ...SessionFieldsSchema.parse(session),
-      subscribeUrl: `/api/ics/session/${session.id}?key=${calendarKey}`,
+      subscribeUrl: getSessionCalendarUrl(session.id, calendarKey),
       speakers: sessionData.speakerIds
         ?.map((id) => speakersData.find((item) => item.id === id))
         .filter(Boolean) as Speaker[],
@@ -45,21 +48,19 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
   const filters = getSessionsFilters(sessionsData);
 
   return (
-    <div className="min-h-screen p-8 font-sans sm:p-20">
-      <main className="mx-auto flex max-w-6xl flex-col gap-8">
-        <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
-          <h1 className="text-2xl font-semibold">Breakpoint 2025 Schedule</h1>
-          <Button asChild>
-            <a href={`/api/ics/event?key=${calendarKey}`} target="_blank" rel="noopener noreferrer">
-              Add all sessions to calendar
-            </a>
-          </Button>
-        </div>
+    <GlobalStateProvider>
+      <div className="min-h-screen p-8 font-sans sm:p-20">
+        <main className="mx-auto flex max-w-6xl flex-col gap-8">
+          <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
+            <h1 className="text-2xl font-semibold">Breakpoint 2025 Schedule</h1>
+            <ScheduleSubscribeButton href={getSessionsCalendarUrl(calendarKey)} />
+          </div>
 
-        <Separator />
+          <Separator />
 
-        <SessionsTable items={sessionsData} filters={filters} />
-      </main>
-    </div>
+          <ScheduleSessionsTable items={sessionsData} filters={filters} selectable />
+        </main>
+      </div>
+    </GlobalStateProvider>
   );
 }

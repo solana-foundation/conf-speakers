@@ -42,8 +42,8 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
       status: 200,
       headers: {
         "Content-Type": "text/calendar; charset=utf-8",
-        "Content-Disposition": `attachment; filename="speaker-${speakerId}-sessions.ics"`,
         "Cache-Control": "public, max-age=3600, s-maxage=3600",
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch (error) {
