@@ -53,15 +53,15 @@ export default function SpeakerCard({
 
           {bio && (
             <div className="max-w-none leading-relaxed">
-              <p className="text-sm">{bio}</p>
+              <p className="text-p">{bio}</p>
             </div>
           )}
 
           {xLink && (
             <div className="flex gap-1">
-              <p className="text-foreground/50 m-0 mb-1 text-sm">X Link:</p>
+              <p className="text-foreground/50 text-md m-0 mb-1">X Link:</p>
               <a
-                className="text-primary text-sm hover:underline"
+                className="text-primary text-md hover:underline"
                 href={xLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -74,7 +74,7 @@ export default function SpeakerCard({
           {subscribeUrl && (
             <div>
               <p>
-                <Button size="sm" asChild>
+                <Button size="sm" asChild className="bg-mint">
                   <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
                     Subscribe to {firstName} {lastName}&apos;s sessions
                   </a>
