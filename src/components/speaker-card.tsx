@@ -45,18 +45,18 @@ export default function SpeakerCard({
               {firstName} {lastName}
             </h1>
             {jobTitle && <p className="text-foreground/80 mt-2 font-semibold">{jobTitle}</p>}
-            {company && <p className="text-foreground/50 font-semibold">at {company}</p>}
+            {company && <p className="text-foreground/50 font-semibold">{company}</p>}
           </div>
 
           {bio && (
-            <div className="text-foreground/80 max-w-none leading-relaxed">
-              <p>{bio}</p>
+            <div className="max-w-none leading-relaxed">
+              <p className="text-sm">{bio}</p>
             </div>
           )}
 
           {xLink && (
-            <div>
-              <p className="text-foreground/50 mb-1 text-sm">Follow</p>
+            <div className="flex gap-1">
+              <p className="text-foreground/50 m-0 mb-1 text-sm">X Link:</p>
               <a
                 className="text-primary text-sm hover:underline"
                 href={xLink}
@@ -70,11 +70,10 @@ export default function SpeakerCard({
 
           {subscribeUrl && (
             <div>
-              <p className="text-foreground/50 mb-1 text-sm">Subscribe</p>
               <p>
                 <Button size="sm" asChild>
                   <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
-                    Subscribe to speaker&apos;s sessions
+                    Subscribe to {firstName} {lastName}&apos;s sessions
                   </a>
                 </Button>
               </p>
