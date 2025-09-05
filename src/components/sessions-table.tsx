@@ -193,7 +193,9 @@ export default function SessionsTable({
         ),
         cell: (info) => (
           <TableCell>
-            <Badge variant="default">{info.getValue()}</Badge>
+            <Badge variant="default" className="bg-primary/90">
+              {info.getValue()}
+            </Badge>
           </TableCell>
         ),
       }),

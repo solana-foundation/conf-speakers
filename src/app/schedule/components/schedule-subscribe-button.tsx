@@ -12,7 +12,7 @@ export default function ScheduleSubscribeButton({ href }: ScheduleSubscribeButto
 
   if (selectedSessions.length === 0) {
     return (
-      <Button asChild>
+      <Button asChild className="bg-mint">
         <a href={href} target="_blank" rel="noopener noreferrer">
           Subscribe to all sessions
         </a>
@@ -21,7 +21,7 @@ export default function ScheduleSubscribeButton({ href }: ScheduleSubscribeButto
   }
 
   return (
-    <Button asChild>
+    <Button asChild className="bg-mint">
       <a href={href + "&sessions=" + selectedSessions.join(",")} target="_blank" rel="noopener noreferrer">
         Subscribe to selected sessions
       </a>
