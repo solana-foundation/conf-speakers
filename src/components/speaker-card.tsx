@@ -44,8 +44,11 @@ export default function SpeakerCard({
             <h1 className="text-2xl font-semibold tracking-tight">
               {firstName} {lastName}
             </h1>
-            {jobTitle && <p className="text-foreground/80 mt-2 font-semibold">{jobTitle}</p>}
-            {company && <p className="text-foreground/50 font-semibold">{company}</p>}
+            <p className="mt-2 font-mono text-sm uppercase">
+              {jobTitle && <span className="text-foreground/80 mt-2">{jobTitle}</span>}
+              <br />
+              {company && <span className="text-wisp/80">{company}</span>}
+            </p>
           </div>
 
           {bio && (
