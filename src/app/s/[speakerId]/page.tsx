@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
-import { generateHmac } from "@/lib/sign.server";
+import { generateKey, isKeyValid } from "@/lib/sign.server";
 import { notFound } from "next/navigation";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
@@ -34,9 +34,11 @@ export default async function SpeakerPage({
 }) {
   const { key } = await searchParams;
 
-  if (key !== generateHmac()) {
+  if (!isKeyValid(key)) {
     notFound();
   }
+
+  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
 
   const { speakerId } = await params;
 
@@ -53,7 +55,7 @@ export default async function SpeakerPage({
     const sessionData = SessionFieldsSchema.parse(session);
     return {
       ...sessionData,
-      subscribeUrl: `/api/ics/session/${session.id}?key=${key}`,
+      subscribeUrl: `/api/ics/session/${session.id}?key=${calendarKey}`,
       speakers: sessionData.speakerIds
         ?.map((id) => speakersData.find((item) => item.id === id))
         .filter(Boolean) as Speaker[],
@@ -64,7 +66,7 @@ export default async function SpeakerPage({
   return (
     <div className="min-h-screen p-8 font-sans sm:p-20">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
-        <SpeakerCard {...speakerData} subscribeUrl={`/api/ics/speaker/${speakerId}?key=${key}`} />
+        <SpeakerCard {...speakerData} subscribeUrl={`/api/ics/speaker/${speakerId}?key=${calendarKey}`} />
 
         <Separator />
 

@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async (request: NextRequest, { params }: { params: Promise<{ speakerId: string }> }) => {
   const { speakerId } = await params;
 
-  if (!isAuthenticated(request)) {
+  if (!isAuthenticated(request, "ics")) {
     return NextResponse.json({ error: "Invalid key" }, { status: 401 });
   }
 

@@ -6,7 +6,7 @@ const COMMON_TAGS = ["sessions", "speaker", "speakers"];
 
 export async function POST(request: NextRequest) {
   // Check authentication
-  if (!isAuthenticated(request)) {
+  if (!isAuthenticated(request, "revalidate")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

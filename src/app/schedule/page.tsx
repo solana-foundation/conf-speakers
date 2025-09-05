@@ -3,7 +3,7 @@ import { Metadata } from "next/types";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SessionsTable from "@/components/sessions-table";
-import { generateHmac } from "@/lib/sign.server";
+import { generateKey, isKeyValid } from "@/lib/sign.server";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { getSessionsFilters } from "@/lib/airtable/utils";
@@ -23,9 +23,11 @@ export const revalidate = 600; // 10 minutes
 export default async function SchedulePage({ searchParams }: { searchParams: Promise<{ key: string }> }) {
   const { key } = await searchParams;
 
-  if (key !== generateHmac()) {
+  if (!isKeyValid(key)) {
     notFound();
   }
+
+  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
 
   const speakers = await getCachedSpeakers();
   const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
@@ -34,7 +36,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
     const sessionData = SessionFieldsSchema.parse(session);
     return {
       ...SessionFieldsSchema.parse(session),
-      subscribeUrl: `/api/ics/session/${session.id}?key=${key}`,
+      subscribeUrl: `/api/ics/session/${session.id}?key=${calendarKey}`,
       speakers: sessionData.speakerIds
         ?.map((id) => speakersData.find((item) => item.id === id))
         .filter(Boolean) as Speaker[],
@@ -48,7 +50,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
         <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
           <h1 className="text-2xl font-semibold">Breakpoint 2025 Schedule</h1>
           <Button asChild>
-            <a href={`/api/ics/event?key=${key}`} target="_blank" rel="noopener noreferrer">
+            <a href={`/api/ics/event?key=${calendarKey}`} target="_blank" rel="noopener noreferrer">
               Add all sessions to calendar
             </a>
           </Button>
