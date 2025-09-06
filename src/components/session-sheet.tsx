@@ -6,6 +6,7 @@ import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter
 import { formatVenueTime } from "@/lib/time/tz";
 import { Speaker } from "@/lib/airtable/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { getStageBadgeClass } from "@/lib/stage";
 
 export interface SessionSheetProps {
   name?: string;
@@ -46,7 +47,9 @@ export default function SessionSheet({
             </p>
           )}
           <p className="mt-2">
-            <Badge variant="default">{stage}</Badge>
+            <Badge variant="default" className={getStageBadgeClass(stage as string)}>
+              {stage}
+            </Badge>
           </p>
 
           {speakers && (

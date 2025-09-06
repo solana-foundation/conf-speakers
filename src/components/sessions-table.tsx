@@ -19,6 +19,7 @@ import { Fragment, useMemo, useState, useEffect } from "react";
 import SessionSheet from "./session-sheet";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { getStageBadgeClass } from "@/lib/stage";
 
 const columnHelper = createColumnHelper<Session & { subscribeUrl?: string; speakers?: Speaker[] }>();
 
@@ -191,13 +192,16 @@ export default function SessionsTable({
             )}
           </TableHead>
         ),
-        cell: (info) => (
-          <TableCell>
-            <Badge variant="default" className="bg-primary/90">
-              {info.getValue()}
-            </Badge>
-          </TableCell>
-        ),
+        cell: (info) => {
+          const value = info.getValue() as string;
+          return (
+            <TableCell>
+              <Badge variant="default" className={getStageBadgeClass(value)}>
+                {value}
+              </Badge>
+            </TableCell>
+          );
+        },
       }),
     ];
 
