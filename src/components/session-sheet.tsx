@@ -71,7 +71,7 @@ export default function SessionSheet({
         </div>
         <SheetFooter>
           {subscribeUrl && (
-            <Button asChild>
+            <Button variant="mint" asChild>
               <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
                 Subscribe to session
               </a>

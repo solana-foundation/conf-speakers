@@ -74,7 +74,7 @@ export default function SpeakerCard({
           {subscribeUrl && (
             <div>
               <p>
-                <Button size="sm" asChild className="bg-mint">
+                <Button size="sm" variant="mint" asChild>
                   <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
                     Subscribe to {firstName} {lastName}&apos;s sessions
                   </a>
