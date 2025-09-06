@@ -1,0 +1,269 @@
+@theme {
+  /* Fonts */
+  --font-fh-lecturis: var(--font-fh-lecturis);
+  --font-abc-diatype: var(--font-abc-diatype);
+  --font-macan-mono: var(--font-macan-mono);
+
+  --font-regular: 400;
+
+  --text-3xs: 0.6875rem; /* 11px */
+  --text-2xs: 0.875rem; /* 14px */
+  --text-xs: 0.882rem; /* 14.112px */
+  --text-sm: 0.9375rem; /* 15px */
+  --text-base: 1rem; /* 16px */
+  --text-md: 1.0625rem; /* 17px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-2xl: 1.25rem; /* 20px */
+  --text-3xl: 1.75rem; /* 28px */
+  --text-4xl: 2rem; /* 32px */
+  --text-5xl: 2.25rem; /* 36px */
+  --text-6xl: 2.5rem; /* 40px */
+  --text-7xl: 3.5rem; /* 56px */
+  --text-8xl: 4rem; /* 64px */
+  --text-9xl: 5rem; /* 80px */
+  --text-10xl: 7.5rem; /* 120px */
+
+  /* Scaling Fonts 
+     Essentially need to find the slope from screen min/max and font/min max at those points.
+     All values converted to px for calculation.
+ 
+     y = mx + b
+     m = (maxFontSize - minFontSize) / (maxWidth - minWidth)
+     b = minFontSize - m * minWidth
+ 
+     h1 example:
+     
+     minWidth = 375px
+     maxWidth = 1440px
+     minFontSize = 64px
+     maxFontSize = 80px
+     m = (80 - 64) / (1440 - 375)
+     m = 16 / 1065 = 0.015
+     b = 64 - 0.015 * 375
+     b = 58.375
+     y = 0.015x + 58.375
+ 
+     final equation with rem (rounded up to hundreths) and vw conversion:
+     y = 1.5vw + 3.65rem
+   */
+  --text-h1: clamp(var(--text-8xl), 3.648rem + 1.502vw, var(--text-9xl));
+  --text-h1--line-height: clamp(4.75rem, 4.592rem + 0.676vw, 5.2rem);
+  --text-h1--letter-spacing: clamp(-0.12rem, -0.145rem + 0.105vw, -0.05rem);
+  --text-h1--font-weight: var(--font-medium);
+
+  --text-h2: clamp(var(--text-6xl), 2.148rem + 1.502vw, var(--text-7xl));
+  --text-h2--line-height: clamp(2.6rem, 2.234rem + 1.562vw, 3.64rem);
+  --text-h2--letter-spacing: -0.05rem;
+  --text-h2--font-weight: var(--font-medium);
+
+  --text-h3: clamp(var(--text-5xl), 2.162rem + 0.376vw, var(--text-6xl));
+  --text-h3--line-height: clamp(2.655rem, 2.551rem + 0.443vw, 2.95rem);
+  --text-h3--letter-spacing: clamp(-0.025rem, -0.026rem + 0.004vw, -0.022rem);
+  --text-h3--font-weight: var(--font-medium);
+
+  --text-xl: clamp(var(--text-8xl), 2.768rem + 5.258vw, var(--text-10xl));
+  --text-xl--line-height: clamp(4.75rem, 3.782rem + 4.131vw, var(--text-10xl));
+  --text-xl--letter-spacing: clamp(-0.225rem, -0.276rem + 0.218vw, -0.08rem);
+  --text-xl--font-weight: var(--font-regular);
+
+  --text-stat-display: clamp(
+    var(--text-8xl),
+    3.648rem + 1.502vw,
+    var(--text-9xl)
+  );
+  --text-stat-display--line-height: clamp(4.16rem, 3.794rem + 1.562vw, 5.2rem);
+  --text-stat-display--letter-spacing: clamp(
+    -0.25rem,
+    -0.282rem + 0.135vw,
+    -0.16rem
+  );
+  --text-stat-display--font-weight: var(--font-regular);
+
+  /* Static Fonts */
+  --text-h4: var(--text-3xl);
+  --text-h4--line-height: 2.065rem;
+  --text-h4--letter-spacing: -0.0175rem;
+  --text-h4--font-weight: var(--font-medium);
+
+  --text-h5: var(--text-2xl);
+  --text-h5--line-height: 1.475rem;
+  --text-h5--letter-spacing: 0;
+  --text-h5--font-weight: var(--font-regular);
+
+  --text-p1: var(--text-base);
+  --text-p1--line-height: 1.32rem;
+  --text-p1--letter-spacing: 0.0045rem;
+  --text-p1--font-weight: var(--font-medium);
+
+  --text-p2: var(--text-2xs);
+  --text-p2--line-height: 1.25125rem;
+  --text-p2--letter-spacing: 0.0075rem;
+  --text-p2--font-weight: var(--font-regular);
+
+  --text-p2-mono: var(--text-sm);
+  --text-p2-mono--line-height: var(--text-lg);
+  --text-p2-mono--letter-spacing: 0.075rem;
+  --text-p2-mono--font-weight: var(--font-medium);
+
+  --text-inline-link: var(--text-lg);
+  --text-inline-link--line-height: 1.53rem;
+  --text-inline-link--letter-spacing: -0.00438rem;
+  --text-inline-link--font-weight: var(--font-regular);
+
+  --text-eyebrow: var(--text-xs);
+  --text-eyebrow--line-height: 0.09375rem;
+  --text-eyebrow--letter-spacing: 0.09375rem;
+  --text-eyebrow--font-weight: var(--font-medium);
+
+  --text-button: var(--text-sm);
+  --text-button--line-height: var(--text-sm);
+  --text-button--letter-spacing: 0.09375rem;
+  --text-button--font-weight: var(--font-medium);
+
+  --text-caption: var(--text-3xs);
+  --text-caption--line-height: var(--text-sm);
+  --text-caption--letter-spacing: 0.06875rem;
+  --text-caption--font-weight: var(--font-semibold);
+}
+
+@media (min-width: 23.5rem) {
+  :root {
+    --text-h4: var(--text-4xl);
+    --text-h4--line-height: 2.36rem;
+    --text-h4--letter-spacing: -0.02rem;
+
+    --text-h5: var(--text-3xl);
+    --text-h5--line-height: 2.065rem;
+    --text-h5--letter-spacing: -0.00438rem;
+
+    --text-p1: var(--text-lg);
+    --text-p1--line-height: 1.53rem;
+    --text-p1--letter-spacing: -0.00438rem;
+
+    --text-eyebrow: var(--text-md);
+    --text-eyebrow--line-height: var(--text-md);
+    --text-eyebrow--letter-spacing: 0.10625rem;
+
+    --text-p2: var(--text-base);
+    --text-p2--line-height: 1.4rem;
+  }
+}
+
+@layer base {
+  h1,
+  .h1 {
+    @apply font-abc-diatype text-h1;
+  }
+
+  h2,
+  .h2 {
+    @apply font-abc-diatype text-h2;
+  }
+
+  h3,
+  .h3 {
+    @apply font-abc-diatype text-h3;
+  }
+
+  h4,
+  .h4 {
+    @apply font-abc-diatype text-h4;
+  }
+
+  h5,
+  .h5 {
+    @apply font-abc-diatype text-h5;
+  }
+
+  p {
+    @apply font-abc-diatype text-p1;
+  }
+
+  .text-p1 {
+    @apply font-abc-diatype;
+
+    + .text-p1 {
+      margin-top: var(--spacing-2xs-a);
+    }
+
+    @media (min-width: 376px) {
+      + .text-p1 {
+        margin-top: var(--spacing-xs);
+      }
+    }
+  }
+
+  .text-p2 {
+    + .text-p2 {
+      margin-top: var(--spacing-2xs);
+    }
+  }
+
+  .text-p2-mono {
+    @apply font-macan-mono uppercase;
+  }
+
+  .text-xl {
+    @apply font-fh-lecturis;
+  }
+
+  .text-stat-display {
+    @apply font-fh-lecturis;
+  }
+
+  .text-inline-link {
+    @apply font-abc-diatype relative underline underline-offset-7;
+  }
+
+  .text-caption {
+    @apply font-macan-mono uppercase;
+  }
+
+  ul:not(.unstyled-list) {
+    @apply text-p1 list-inside;
+
+    li {
+      @apply relative ps-[18px] not-first:mt-2xs sm:not-first:mt-xs;
+
+      &::before {
+        @apply absolute text-[6px] -start-0;
+        content: '\25FC';
+      }
+    }
+  }
+
+  ol:not(.unstyled-list) {
+    @apply text-p1 list-inside;
+
+    li {
+      @apply relative ps-[25px] not-first:mt-[var(--spacing-2xs)] sm:not-first:mt-[var(--spacing-xs)];
+
+      &::before {
+        @apply font-macan-mono absolute start-[0];
+        content: counter(list-item) '.';
+      }
+    }
+  }
+
+  .text-eyebrow {
+    @apply font-macan-mono uppercase relative inline-block px-3xs mr-auto self-start before:absolute before:-left-3xs ms-3xs before:content-['['] after:absolute after:-right-3xs after:content-[']'];
+  }
+
+  .text-discount {
+    @apply text-h4 line-through opacity-50;
+  }
+
+  .text-ticker {
+    @apply font-macan-mono uppercase text-sm relative mr-xs pr-[calc(var(--spacing-xs)+4px)] after:absolute after:content-['\25A0'] after:text-[0.438rem] after:bottom-0 after:right-0 after:top-[2px] after:my-auto after:leading-0 after:h-[4px];
+  }
+
+  button:not(.text-inline-link),
+  .text-button:not(.text-inline-link),
+  .cta:not(.text-inline-link) {
+    @apply font-macan-mono text-button uppercase;
+
+    &[disabled] {
+      @apply cursor-not-allowed bg-button-fill-disabled text-primary;
+    }
+  }
+}

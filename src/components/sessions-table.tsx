@@ -2,7 +2,6 @@
 
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Badge } from "./ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { Checkbox } from "./ui/checkbox";
 import { formatVenueTime } from "@/lib/time/tz";
@@ -19,6 +18,8 @@ import { Fragment, useMemo, useState, useEffect } from "react";
 import SessionSheet from "./session-sheet";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import StageBadge, { StageTitle } from "@/components/stage-badge";
+import { EyeIcon } from "lucide-react";
 
 const columnHelper = createColumnHelper<Session & { subscribeUrl?: string; speakers?: Speaker[] }>();
 
@@ -151,7 +152,7 @@ export default function SessionsTable({
           return (
             <TableCell>
               {startTime && (
-                <span className="text-foreground/50 max-sm:text-sm sm:mr-2">{formatVenueTime(startTime, "MMM d")}</span>
+                <span className="text-foreground max-sm:text-sm sm:mr-2">{formatVenueTime(startTime, "MMM d")}</span>
               )}
               <br className="sm:hidden" />
               {startTime && endTime && (
@@ -191,11 +192,14 @@ export default function SessionsTable({
             )}
           </TableHead>
         ),
-        cell: (info) => (
-          <TableCell>
-            <Badge variant="default">{info.getValue()}</Badge>
-          </TableCell>
-        ),
+        cell: (info) => {
+          const value = info.getValue() as string;
+          return (
+            <TableCell>
+              <StageBadge title={value as StageTitle} />
+            </TableCell>
+          );
+        },
       }),
     ];
 
@@ -210,11 +214,11 @@ export default function SessionsTable({
   });
 
   return (
-    <Card>
+    <Card className="bg-background border-muted py-1">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="!bg-transparent">
+            <TableRow key={headerGroup.id} className="!border-0 !bg-transparent">
               {headerGroup.headers.map((header) => (
                 <Fragment key={header.id}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -240,8 +244,13 @@ export default function SessionsTable({
                   subscribeUrl={row.original.subscribeUrl}
                   speakers={row.original.speakers}
                 >
-                  <Button className="max-lg:hidden" variant="outline" size="sm">
-                    View Details
+                  <Button
+                    className="text-foreground/80 max-lg:hidden"
+                    variant="outline"
+                    size="sm"
+                    style={{ fontSize: "0.65rem" }}
+                  >
+                    <EyeIcon className="size-4" />
                   </Button>
                   <div className="absolute top-0 right-0 bottom-0 left-0 cursor-pointer"></div>
                 </SessionSheet>

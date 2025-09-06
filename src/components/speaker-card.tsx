@@ -41,24 +41,27 @@ export default function SpeakerCard({
 
         <div className="flex-1 space-y-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className="text-3xl font-semibold tracking-tight">
               {firstName} {lastName}
             </h1>
-            {jobTitle && <p className="text-foreground/80 mt-2 font-semibold">{jobTitle}</p>}
-            {company && <p className="text-foreground/50 font-semibold">at {company}</p>}
+            <p className="text-p2-mono mt-2 uppercase">
+              {jobTitle && <span className="text-foreground/80 mt-2">{jobTitle}</span>}
+              <br />
+              {company && <span className="text-wisp/80">{company}</span>}
+            </p>
           </div>
 
           {bio && (
-            <div className="text-foreground/80 max-w-none leading-relaxed">
-              <p>{bio}</p>
+            <div className="max-w-none leading-relaxed">
+              <p className="text-p">{bio}</p>
             </div>
           )}
 
           {xLink && (
-            <div>
-              <p className="text-foreground/50 mb-1 text-sm">Follow</p>
+            <div className="flex gap-1">
+              <p className="text-foreground/50 text-md m-0 mb-1">X Link:</p>
               <a
-                className="text-primary text-sm hover:underline"
+                className="text-primary text-md hover:underline"
                 href={xLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -70,11 +73,10 @@ export default function SpeakerCard({
 
           {subscribeUrl && (
             <div>
-              <p className="text-foreground/50 mb-1 text-sm">Subscribe</p>
               <p>
-                <Button size="sm" asChild>
+                <Button size="sm" variant="mint" asChild>
                   <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
-                    Subscribe to speaker&apos;s sessions
+                    Subscribe to {firstName} {lastName}&apos;s sessions
                   </a>
                 </Button>
               </p>

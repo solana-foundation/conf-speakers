@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "./ui/sheet";
 import { formatVenueTime } from "@/lib/time/tz";
 import { Speaker } from "@/lib/airtable/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import StageBadge, { StageTitle } from "@/components/stage-badge";
 
 export interface SessionSheetProps {
   name?: string;
@@ -46,14 +46,14 @@ export default function SessionSheet({
             </p>
           )}
           <p className="mt-2">
-            <Badge variant="default">{stage}</Badge>
+            <StageBadge title={stage as StageTitle} />
           </p>
 
           {speakers && (
-            <div className="mt-2 text-sm">
-              Speakers:
+            <div className="mt-4 text-sm">
+              <div className="text-foreground/50 font-bold">Speakers:</div>
               {speakers.map((speaker) => (
-                <div key={speaker.id} className="flex items-center gap-2">
+                <div key={speaker.id} className="mt-1 flex items-center gap-2">
                   <Avatar className="size-4">
                     <AvatarImage src={speaker.imageUrl} alt={`${speaker.firstName} ${speaker.lastName}`} />
                     <AvatarFallback className="text-xs font-semibold">
@@ -71,7 +71,7 @@ export default function SessionSheet({
         </div>
         <SheetFooter>
           {subscribeUrl && (
-            <Button asChild>
+            <Button variant="mint" asChild>
               <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
                 Subscribe to session
               </a>
