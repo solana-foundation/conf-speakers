@@ -2,7 +2,6 @@
 
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Badge } from "./ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { Checkbox } from "./ui/checkbox";
 import { formatVenueTime } from "@/lib/time/tz";
@@ -19,7 +18,8 @@ import { Fragment, useMemo, useState, useEffect } from "react";
 import SessionSheet from "./session-sheet";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { getStageBadgeClass } from "@/lib/stage";
+import StageBadge, { StageTitle } from "@/components/stage-badge";
+import { EyeIcon } from "lucide-react";
 
 const columnHelper = createColumnHelper<Session & { subscribeUrl?: string; speakers?: Speaker[] }>();
 
@@ -196,9 +196,7 @@ export default function SessionsTable({
           const value = info.getValue() as string;
           return (
             <TableCell>
-              <Badge variant="default" className={getStageBadgeClass(value)}>
-                {value}
-              </Badge>
+              <StageBadge title={value as StageTitle} />
             </TableCell>
           );
         },
@@ -250,9 +248,9 @@ export default function SessionsTable({
                     className="text-foreground/80 max-lg:hidden"
                     variant="outline"
                     size="sm"
-                    style={{ fontSize: "0.75rem" }}
+                    style={{ fontSize: "0.65rem" }}
                   >
-                    View Details
+                    <EyeIcon className="size-4" />
                   </Button>
                   <div className="absolute top-0 right-0 bottom-0 left-0 cursor-pointer"></div>
                 </SessionSheet>
