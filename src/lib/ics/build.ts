@@ -8,6 +8,7 @@ export interface SessionEvent {
   startTime: string;
   endTime: string;
   stage?: string;
+  organizer?: { name: string; email: string };
 }
 
 export interface SpeakerEvent extends SessionEvent {
@@ -20,6 +21,7 @@ export interface SpeakerEvent extends SessionEvent {
 export function sessionToIcsEvent(session: SessionEvent) {
   const start = parseISO(session.startTime);
   const end = parseISO(session.endTime);
+  const created = new Date();
 
   if (!start.isValid || !end.isValid) {
     throw new Error(`Invalid date format for session ${session.id}`);
@@ -35,6 +37,8 @@ export function sessionToIcsEvent(session: SessionEvent) {
 
   const endArray = [end.year, end.month, end.day, end.hour, end.minute] as [number, number, number, number, number];
 
+  const createdArray = [created.getFullYear(), created.getMonth(), created.getDate()] as [number, number, number];
+
   const description = [session.description].filter(Boolean).join("\n\n");
 
   return {
@@ -45,6 +49,11 @@ export function sessionToIcsEvent(session: SessionEvent) {
     location: session.stage,
     uid: `session-${session.id}@speakers.solana.com`,
     productId: "speakers.solana.com//Breakpoint 2025//EN",
+    organizer: { name: "Breakpoint 2025", email: "noreply@speakers.solana.com" },
+    status: "CONFIRMED" as const,
+    busyStatus: "BUSY" as const,
+    created: createdArray,
+    lastModified: createdArray,
   };
 }
 

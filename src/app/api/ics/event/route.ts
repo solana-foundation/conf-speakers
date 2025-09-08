@@ -41,8 +41,12 @@ export const GET = async (request: NextRequest) => {
       status: 200,
       headers: {
         "Content-Type": "text/calendar; charset=utf-8",
+        "Content-Disposition": `attachment; filename="breakpoint-2025-sessions.ics"`,
         "Cache-Control": "public, max-age=3600, s-maxage=3600",
         "X-Content-Type-Options": "nosniff",
+        // Add CORS headers for cross-origin requests
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
       },
     });
   } catch (error) {
