@@ -1,15 +1,25 @@
 import { fetchSessions, fetchSpeaker } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import { generateSpeakerIcsContent } from "@/lib/ics/build";
-import { isAuthenticated } from "@/lib/sign.server";
+import { getTokenPayload, isAuthenticated } from "@/lib/sign.server";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest, { params }: { params: Promise<{ speakerId: string }> }) => {
-  const { speakerId } = await params;
+  const { speakerId: paramSpeakerId } = await params;
 
   if (!isAuthenticated(request, "ics")) {
     return NextResponse.json({ error: "Invalid key" }, { status: 401 });
   }
+
+  const query = new URLSearchParams(request.nextUrl.searchParams);
+  const key = query.get("key")!;
+  const payload = getTokenPayload(key);
+
+  if (!payload || !payload.speakerId || payload.speakerId !== paramSpeakerId) {
+    return NextResponse.json({ error: "Invalid token for this speaker" }, { status: 401 });
+  }
+
+  const speakerId = payload.speakerId;
 
   try {
     // Fetch speaker details

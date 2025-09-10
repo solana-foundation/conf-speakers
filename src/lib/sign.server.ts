@@ -1,23 +1,24 @@
 import { NextRequest } from "next/server";
-import { createHmac } from "crypto";
+import * as jwt from "jsonwebtoken";
 
-// Generate key string base64url(HMAC_SHA256(slug + "." + exp, SITE_SECRET))
-export const generateKey = (exp?: string | number, slug?: string) => {
+// Generate key string as JWT
+export const generateKey = (exp: string | number, slug: string, speakerId?: string) => {
   const siteSecret = process.env.SITE_SECRET;
   if (!siteSecret) {
     throw new Error("SITE_SECRET environment variable is not set");
   }
 
-  // If no parameters provided, generate a simple HMAC for basic auth
   if (!exp || !slug) {
     throw new Error("No exp or slug provided");
   }
 
-  // Generate HMAC with provided exp and slug
-  const message = `${slug}.${exp}`;
-  const hmac = createHmac("sha256", siteSecret).update(message).digest("base64url");
+  const payload: Record<string, any> = { slug };
+  if (speakerId) {
+    payload.speakerId = speakerId;
+  }
+  payload.exp = Math.floor(Number(exp) / 1000);
 
-  return `${hmac}.${exp}`;
+  return jwt.sign(payload, siteSecret, { noTimestamp: true });
 };
 
 export const isAuthenticated = (request: NextRequest, slug?: string) => {
@@ -25,6 +26,15 @@ export const isAuthenticated = (request: NextRequest, slug?: string) => {
   const key = query.get("key");
 
   return isKeyValid(key, slug);
+};
+
+export const getTokenPayload = (key: string) => {
+  const siteSecret = process.env.SITE_SECRET || "";
+  try {
+    return jwt.verify(key, siteSecret) as Record<string, any>;
+  } catch {
+    return null;
+  }
 };
 
 export const isKeyValid = (key: string | null, slug: string = "auth") => {
@@ -37,20 +47,10 @@ export const isKeyValid = (key: string | null, slug: string = "auth") => {
     return false;
   }
 
-  const parts = key.split(".");
-  if (parts.length !== 2) {
+  const payload = getTokenPayload(key);
+  if (!payload) {
     return false;
   }
 
-  const [hmac, exp] = parts;
-
-  if (!exp || !hmac) {
-    return false;
-  }
-
-  if (Number(exp) < Date.now()) {
-    return false;
-  }
-
-  return key === generateKey(exp, slug);
+  return payload.slug === slug;
 };
