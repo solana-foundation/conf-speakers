@@ -48,7 +48,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
 
   return (
     <GlobalStateProvider>
-      <div className="min-h-screen p-8 font-sans sm:p-20">
+      <div className="min-h-screen p-8 font-sans">
         <main className="mx-auto flex max-w-6xl flex-col gap-8">
           <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
             <h1 className="font-fh-lecturis text-4xl font-semibold">Breakpoint 2025 Schedule</h1>

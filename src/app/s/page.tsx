@@ -69,7 +69,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const filters = getSessionsFilters(sessionsData);
 
   return (
-    <div className="min-h-screen p-8 font-sans sm:p-20">
+    <div className="min-h-screen p-8 font-sans">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
         <SpeakerCard {...speakerData} subscribeUrl={`/api/ics/speaker/${speakerId}?key=${calendarKey}`} />
 
