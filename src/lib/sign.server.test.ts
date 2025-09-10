@@ -1,4 +1,3 @@
-import * as jwt from "jsonwebtoken";
 import { generateKey, getTokenPayload, isKeyValid } from "./sign.server";
 
 // Mock environment variable
@@ -25,9 +24,9 @@ describe("sign.server", () => {
       // Should return JWT format: header.payload.signature
       expect(result.split(".").length).toBe(3);
 
-      const payload = jwt.verify(result, process.env.SITE_SECRET!) as any;
-      expect(payload.slug).toBe(slug);
-      expect(payload.exp).toBe(Math.floor(Number(exp) / 1000));
+      const payload = getTokenPayload(result);
+      expect(payload?.slug).toBe(slug);
+      expect(payload?.exp).toBe(Math.floor(Number(exp) / 1000));
     });
 
     test("should generate consistent JWT for same inputs", () => {
