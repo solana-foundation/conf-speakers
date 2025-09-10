@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
 import { generateKey, isKeyValid, getTokenPayload } from "@/lib/sign.server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
@@ -35,7 +35,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const { key } = await searchParams;
 
   if (!isKeyValid(key ?? null)) {
-    notFound();
+    redirect("/?expired=1");
   }
 
   const payload = key ? getTokenPayload(key) : null;

@@ -3,7 +3,7 @@ import { Metadata } from "next/types";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import { generateKey, isKeyValid } from "@/lib/sign.server";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
 import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
@@ -25,8 +25,8 @@ export const revalidate = 600; // 10 minutes
 export default async function SchedulePage({ searchParams }: { searchParams: Promise<{ key: string }> }) {
   const { key } = await searchParams;
 
-  if (!isKeyValid(key)) {
-    notFound();
+  if (!isKeyValid(key ?? null)) {
+    redirect("/?expired=1");
   }
 
   const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
