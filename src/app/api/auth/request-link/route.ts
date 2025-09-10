@@ -29,6 +29,15 @@ export async function POST(request: NextRequest) {
     website: formData.get("website")?.toString() ?? "",
   };
 
+  // Honeypot check: if filled, assume bot and return fake success without processing
+  if (data.website !== "") {
+    return NextResponse.json<ActionState>({
+      ok: true,
+      message: "A login link has been sent to your email.",
+      cooldownMs: 60000,
+    });
+  }
+
   let parsed: z.infer<typeof FormSchema>;
   try {
     parsed = FormSchema.parse(data);
