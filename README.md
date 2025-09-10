@@ -109,10 +109,7 @@ lib/
 
 components/
   speaker-card.tsx
-  ticket-card.tsx
   schedule-table.tsx
-  session-cell.tsx
-  share-menu.tsx
   highlights-gallery.tsx
 
 middleware.ts       # optional: extra headers for /s/*
@@ -127,6 +124,15 @@ key = base64url(HMAC_SHA256(slug + "." + exp, SITE_SECRET)).exp
 Validate key on `/s/[slug]` and any JSON endpoints you expose to that page.
 
 Rotate by shortening exp or changing SITE_SECRET (or store a per-speaker seed in Airtable if you want per-link revocation).
+
+Key slugs:
+
+- `/schedule` - `schedule`
+- `/s/[speakerId]` - `speakerId`
+- `/api/ics*` - `ics`
+- `/api/revalidate` - `revalidate`
+
+In dev mode, you can find the valid key in the server logs.
 
 ### Airtable Reads
 

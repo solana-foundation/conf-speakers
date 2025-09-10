@@ -1,0 +1,52 @@
+/* Colors */
+@theme {
+  --color-primary-null: #11081b;
+  --color-primary-byte: #ab66fd;
+  --color-primary-wisp: #e7d2f9;
+
+  --color-secondary-lime: #c9ff7c;
+  --color-secondary-mint: #14f195;
+  --color-secondary-azure: #59b8fe;
+
+  --color-transparent-wisp-80: #e7d2f9cc;
+  --color-transparent-wisp-60: #e7d2f999;
+  --color-transparent-wisp-40: #e7d2f966;
+  --color-transparent-wisp-30: #e7d2f94d;
+  --color-transparent-wisp-20: #e7d2f933;
+  --color-transparent-wisp-10: #e7d2f91a;
+  --color-transparent-null-80: #11081bcc;
+  --color-transparent-null-60: #11081b99;
+  --color-transparent-null-40: #11081b66;
+  --color-transparent-null-20: #11081b33;
+  --color-transparent-null-10: #11081b1a;
+
+  /* Section Tokens */
+  --color-byte: var(--color-primary-byte);
+  --color-azure: var(--color-secondary-azure);
+  --color-mint: var(--color-secondary-mint);
+  --color-null: var(--color-primary-null);
+  --color-lime: var(--color-secondary-lime);
+  --color-wisp: var(--color-primary-wisp);
+  --color-wisp-10: var(--color-transparent-wisp-10);
+  --color-wisp-40: var(--color-transparent-wisp-40);
+
+  /* Background Tokens */
+  --color-background-primary: var(--color-primary-null);
+  --color-background-secondary: var(--color-transparent-wisp-10);
+  --color-background-invert: var(--color-primary-wisp);
+
+  /* Font Tokens */
+  --color-primary: var(--color-primary-wisp);
+  --color-secondary: var(--color-transparent-wisp-60);
+  --color-invert: var(--color-primary-null);
+
+  /* Stroke Tokens */
+  --color-stroke-primary: var(--color-transparent-wisp-10);
+  --color-stroke-secondary: var(--color-transparent-wisp-40);
+  --color-stroke-tertiary: var(--color-primary-wisp);
+
+  /* Button Tokens */
+  --color-button-fill: var(--color-primary-byte);
+  --color-button-fill-hover: var(--color-primary-wisp);
+  --color-button-fill-disabled: var(--color-transparent-wisp-10);
+}
