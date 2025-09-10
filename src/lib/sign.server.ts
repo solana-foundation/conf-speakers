@@ -38,11 +38,6 @@ export const getTokenPayload = (key: string) => {
 };
 
 export const isKeyValid = (key: string | null, slug: string = "auth") => {
-  // For development, log the valid key
-  if (process.env.NODE_ENV === "development") {
-    console.log("Valid key:", generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), slug));
-  }
-
   if (!key) {
     return false;
   }
