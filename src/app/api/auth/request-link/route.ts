@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
     const link = `${baseUrl}/s?key=${token}`;
 
-    console.log(records, link);
+    console.log(link);
 
     // const resend = new Resend(process.env.RESEND_API_KEY);
     // const { error } = await resend.emails.send({
