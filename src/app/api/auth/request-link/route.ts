@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { airtable } from "@/lib/airtable/client";
 import { generateKey } from "@/lib/sign.server";
-import { Resend } from "resend";
+// import { Resend } from "resend";
 import { isZodError } from "@/lib/airtable/utils";
 
 const tableSpeakers = process.env.AIRTABLE_TABLE_SPEAKERS || "Onboarded Speakers";
