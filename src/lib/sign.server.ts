@@ -1,23 +1,31 @@
 import { NextRequest } from "next/server";
-import { createHmac } from "crypto";
+import * as jwt from "jsonwebtoken";
 
-// Generate key string base64url(HMAC_SHA256(slug + "." + exp, SITE_SECRET))
-export const generateKey = (exp?: string | number, slug?: string) => {
+// Token payload carried in our JWT
+export type TokenPayload = {
+  slug: string;
+  exp: number;
+  speakerId?: string;
+};
+
+// Generate key string as JWT
+export const generateKey = (exp: string | number, slug: string, speakerId?: string) => {
   const siteSecret = process.env.SITE_SECRET;
   if (!siteSecret) {
     throw new Error("SITE_SECRET environment variable is not set");
   }
 
-  // If no parameters provided, generate a simple HMAC for basic auth
   if (!exp || !slug) {
     throw new Error("No exp or slug provided");
   }
 
-  // Generate HMAC with provided exp and slug
-  const message = `${slug}.${exp}`;
-  const hmac = createHmac("sha256", siteSecret).update(message).digest("base64url");
+  const payload: TokenPayload = {
+    slug,
+    exp: Math.floor(Number(exp) / 1000),
+    ...(speakerId ? { speakerId } : {}),
+  };
 
-  return `${hmac}.${exp}`;
+  return jwt.sign(payload, siteSecret, { noTimestamp: true });
 };
 
 export const isAuthenticated = (request: NextRequest, slug?: string) => {
@@ -27,30 +35,41 @@ export const isAuthenticated = (request: NextRequest, slug?: string) => {
   return isKeyValid(key, slug);
 };
 
-export const isKeyValid = (key: string | null, slug: string = "auth") => {
-  // For development, log the valid key
-  if (process.env.NODE_ENV === "development") {
-    console.log("Valid key:", generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), slug));
-  }
+export const getTokenPayload = (key: string): TokenPayload | null => {
+  const siteSecret = process.env.SITE_SECRET || "";
+  try {
+    const decoded = jwt.verify(key, siteSecret);
+    if (typeof decoded !== "object" || decoded === null) {
+      return null;
+    }
 
+    const obj = decoded as Record<string, unknown>;
+    const slug = obj["slug"];
+    const exp = obj["exp"];
+    const speakerId = obj["speakerId"];
+
+    if (typeof slug === "string" && typeof exp === "number") {
+      return {
+        slug,
+        exp,
+        ...(typeof speakerId === "string" ? { speakerId } : {}),
+      };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+export const isKeyValid = (key: string | null, slug: string = "auth") => {
   if (!key) {
     return false;
   }
 
-  const parts = key.split(".");
-  if (parts.length !== 2) {
+  const payload = getTokenPayload(key);
+  if (!payload) {
     return false;
   }
 
-  const [hmac, exp] = parts;
-
-  if (!exp || !hmac) {
-    return false;
-  }
-
-  if (Number(exp) < Date.now()) {
-    return false;
-  }
-
-  return key === generateKey(exp, slug);
+  return payload.slug === slug;
 };

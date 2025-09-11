@@ -1,6 +1,6 @@
 # speakers.solana.com — BP25 Speaker Portal
 
-A focused **Airtable-driven** microsite for Breakpoint speakers. Private-but-shareable pages (no login) via **HMAC-signed links**, fresh data from **Airtable** (server-side only), and convenient **ICS** calendar feeds.
+A focused **Airtable-driven** microsite for Breakpoint speakers. Private-but-shareable pages (no login required) via **JWT-signed links**, fresh data from **Airtable** (server-side only), and convenient **ICS** calendar feeds.
 
 > **Caveat:** This repo is a starter and a guide. **Change anything you see fit** to meet reality as you build.
 
@@ -15,6 +15,7 @@ A focused **Airtable-driven** microsite for Breakpoint speakers. Private-but-sha
 - **TanStack Table** (+ `@tanstack/react-virtual`) — fast agenda tables
 - **Luxon** — timezone-safe formatting
 - **ICS** — generate calendar files server-side
+- **JWT** — signed access tokens (no login)
 - Optional: **Sentry** (observability), **Upstash Ratelimit** (API protection)
 
 ---
@@ -45,6 +46,11 @@ AIRTABLE_TABLE_SESSIONS=Sessions
 
 SITE_SECRET=change_me_hmac_key
 VENUE_TZ=Asia/Dubai
+
+# Auth token issuance for /api/auth/request
+API_KEY=server_only_random_value
+# Milliseconds a token is valid from "now" when issued
+NEXT_PUBLIC_KEY_EXP=900000
 ```
 
 Never expose `AIRTABLE_PAT` to the client. All Airtable reads happen server-side.
@@ -59,7 +65,7 @@ npx shadcn add button input badge card table dialog sheet tabs dropdown-menu toa
 
 ## What’s Already Decided (Scope)
 
-No login. Access via signed links: `/s/[slug]?key=<mac.exp>`
+No login. Access via signed links: `/s/[slug]?key=<jwt>`
 
 Airtable views as source of truth (e.g., Onboarded Speakers > For Web, Agenda > For Web)
 
@@ -70,10 +76,10 @@ Airtable views as source of truth (e.g., Onboarded Speakers > For Web, Agenda > 
 
 ### APIs
 
+- `/api/auth/request` — mint a short-lived JWT for access (server-to-server)
 - `/api/speakers/[slug]` — server data for speaker page
 - `/api/sessions` — list/filter sessions for agenda
 - `/api/ics/session/[id]`, `/api/ics/speaker/[slug]`, `/api/ics/event` — calendar feeds
-- `/api/revalidate` — Airtable Automation webhook (on-demand ISR)
 
 Robots: Disallow `/s/*` and `/api/ics/*` (private-ish but shareable)
 
@@ -84,6 +90,7 @@ app/
   s/[slug]/page.tsx
   schedule/page.tsx
   api/
+    auth/request/route.ts
     speakers/[slug]/route.ts
     sessions/route.ts
     ics/
@@ -100,8 +107,7 @@ lib/
     zod.ts          # Speaker/Session schemas
     speakers.ts     # getSpeakerBySlug(...)
     sessions.ts     # listSessions(...filters)
-  links/
-    sign.ts         # HMAC sign/verify helpers
+  sign.server.ts    # JWT sign/verify helpers
   time/
     tz.ts           # Luxon helpers (venue tz, user tz)
   ics/
@@ -117,22 +123,45 @@ middleware.ts       # optional: extra headers for /s/*
 
 ## Key Implementation Notes
 
-### Signed Links (no login)
+### Signed Links (no login, now JWT)
 
-key = base64url(HMAC_SHA256(slug + "." + exp, SITE_SECRET)).exp
+JWT payload and usage:
 
-Validate key on `/s/[slug]` and any JSON endpoints you expose to that page.
+- Claims:
+  - `slug` — audience marker for the resource (e.g., `auth`, `schedule`, `ics`)
+  - `speakerId` — optional, used when scoping access to a specific speaker
+  - `exp` — expiration (unix seconds)
+- Signing:
+  - Symmetric `HS256` with `SITE_SECRET`
+- Transport:
+  - Sent as `key` query param, e.g., `/s?key=<jwt>`
 
-Rotate by shortening exp or changing SITE_SECRET (or store a per-speaker seed in Airtable if you want per-link revocation).
+Helpers in `lib/sign.server.ts`:
+
+- `generateKey(expMs, slug, speakerId?)` — returns a JWT string
+- `isAuthenticated(request, slug?)` — checks `?key` exists, verifies signature and `slug` (defaults to `"auth"`)
+- `getTokenPayload(key)` — returns decoded claims or `null`
+
+In dev mode, the server logs a valid token for the checked slug when verification runs.
 
 Key slugs:
 
-- `/schedule` - `schedule`
-- `/s/[speakerId]` - `speakerId`
-- `/api/ics*` - `ics`
-- `/api/revalidate` - `revalidate`
+- `/schedule` — `schedule`
+- `/s/*` — `auth` (and validate `payload.speakerId` against the route param if applicable)
+- `/api/ics*` — `ics`
 
-In dev mode, you can find the valid key in the server logs.
+### Auth Token Issuance API
+
+`POST /api/auth/request`
+
+- **Auth**: require header `x-api-key: <API_KEY>`
+- **Body**: `{ "speakerId": "rec123456789" }`
+- **Behavior**:
+  - Computes `exp = Date.now() + Number(NEXT_PUBLIC_KEY_EXP)`
+  - Signs a JWT with claims `{ slug: "auth", speakerId, exp }`
+- **Response**: `{ "token": "<jwt>", "speakerId": "spk_123", "slug": "auth", "exp": 1731234567 }`
+
+Use the returned `token` as `?key=<token>` on protected URLs.
 
 ### Airtable Reads
 
@@ -142,7 +171,7 @@ Prefer denormalized fields for speed (e.g., SessionsExpanded JSON via Automation
 
 ### Caching & Freshness
 
-Use fetch(..., { next: { revalidate: 60, tags: ["agenda","speaker:slug"] } })
+Use `fetch(..., { next: { revalidate: 60, tags: ["agenda","speaker:slug"] } })`
 
 Have Airtable Automation → POST to `/api/revalidate` on record changes; revalidate tag(s) for the touched speaker/day.
 
@@ -156,7 +185,7 @@ Keep Luma “Add to calendar” secondary if needed.
 
 Add noindex meta on `/s/[slug]`.
 
-robots.ts disallows `/s/` and `/api/ics/`.
+`robots.ts` disallows `/s/` and `/api/ics/`.
 
 ### Basic Hardening
 
@@ -168,11 +197,11 @@ Validate all external data with Zod before render.
 
 ## Developer TODO (shortlist)
 
-- Implement lib/links/sign.ts and guard /s/[slug]
+- Guard `/s/[slug]` and relevant APIs with JWT verification
 - Implement Airtable fetchers + Zod schemas
 - Build SpeakerCard, TicketCard, ScheduleTable (TanStack Table + filters)
 - Add ICS routes (session, speaker, event)
-- Wire /api/revalidate and Airtable Automation
+- Wire `/api/revalidate` and Airtable Automation
 - Add noindex + robots rules
 - Add basic rate limiting and Sentry (optional)
 - Smoke test: 1 speaker, 2 sessions, ICS import in Apple/Google/Outlook
@@ -192,7 +221,6 @@ pnpm lint       # lint
 - Set all Environment Variables
 - Assign custom domain speakers.solana.com
 - (Optional) Add Sentry via wizard
-- Connect Airtable Automation → /api/revalidate
 
 ## Contributing
 

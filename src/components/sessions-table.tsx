@@ -19,7 +19,7 @@ import SessionSheet from "./session-sheet";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import StageBadge, { StageTitle } from "@/components/stage-badge";
-import { EyeIcon } from "lucide-react";
+import { CircleMinus, EyeIcon } from "lucide-react";
 
 const columnHelper = createColumnHelper<Session & { subscribeUrl?: string; speakers?: Speaker[] }>();
 
@@ -58,18 +58,17 @@ export default function SessionsTable({
             columnHelper.display({
               id: "select",
               header: () => (
-                <TableHead className="w-12 pb-4 pl-6 align-top" role="checkbox">
-                  <Checkbox
-                    className="relative z-1"
-                    checked={selectedRows.size === items.length && items.length > 0}
-                    onCheckedChange={(checked: boolean) => {
-                      if (checked) {
-                        setSelectedRows(new Set(items.map((_, index) => index.toString())));
-                      } else {
-                        setSelectedRows(new Set());
-                      }
-                    }}
-                  />
+                <TableHead className="pb-4 pl-6 align-top" role="button">
+                  {selectedRows.size > 0 && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="relative z-1 h-4 w-4 p-0"
+                      onClick={() => setSelectedRows(new Set())}
+                    >
+                      <CircleMinus className="h-4 w-4" />
+                    </Button>
+                  )}
                 </TableHead>
               ),
               cell: (info) => (

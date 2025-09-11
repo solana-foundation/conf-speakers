@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
-import { generateKey, isKeyValid } from "@/lib/sign.server";
-import { notFound } from "next/navigation";
+import { generateKey, isKeyValid, getTokenPayload } from "@/lib/sign.server";
+import { notFound, redirect } from "next/navigation";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
@@ -10,8 +10,14 @@ import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
 import { Gallery } from "@/components/gallery";
 
-export const generateMetadata = async ({ params }: { params: Promise<{ speakerId: string }> }): Promise<Metadata> => {
-  const { speakerId } = await params;
+export const generateMetadata = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ key?: string }>;
+}): Promise<Metadata> => {
+  const { key } = await searchParams;
+  const payload = key ? getTokenPayload(key) : null;
+  const speakerId = payload?.speakerId ?? "Unknown";
 
   return {
     title: `Breakpoint 2025 Speaker ${speakerId}`,
@@ -25,22 +31,21 @@ export const generateMetadata = async ({ params }: { params: Promise<{ speakerId
 
 export const revalidate = 600; // 10 minutes
 
-export default async function SpeakerPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ speakerId: string }>;
-  searchParams: Promise<{ key: string }>;
-}) {
+export default async function SpeakerPage({ searchParams }: { searchParams: Promise<{ key?: string }> }) {
   const { key } = await searchParams;
 
-  if (!isKeyValid(key)) {
+  if (!isKeyValid(key ?? null)) {
+    redirect("/?expired=1");
+  }
+
+  const payload = key ? getTokenPayload(key) : null;
+  const speakerId = (payload?.speakerId as string | undefined) ?? null;
+
+  if (!speakerId) {
     notFound();
   }
 
-  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
-
-  const { speakerId } = await params;
+  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics", speakerId);
 
   const speakers = await getCachedSpeakers();
   const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
@@ -64,7 +69,7 @@ export default async function SpeakerPage({
   const filters = getSessionsFilters(sessionsData);
 
   return (
-    <div className="min-h-screen p-8 font-sans sm:p-20">
+    <div className="min-h-screen p-8 font-sans">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
         <SpeakerCard {...speakerData} subscribeUrl={`/api/ics/speaker/${speakerId}?key=${calendarKey}`} />
 

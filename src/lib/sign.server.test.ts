@@ -1,4 +1,4 @@
-import { generateKey, isKeyValid } from "./sign.server";
+import { generateKey, getTokenPayload, isKeyValid } from "./sign.server";
 
 // Mock environment variable
 const originalEnv = process.env.SITE_SECRET;
@@ -15,24 +15,22 @@ describe("sign.server", () => {
   });
 
   describe("generateKey", () => {
-    test("should generate HMAC with exp and slug parameters", () => {
-      const exp = "1234567890000";
+    test("should generate JWT with exp and slug parameters", () => {
+      const exp = Date.now() + 3600000;
       const slug = "test-slug";
 
       const result = generateKey(exp, slug);
 
-      // Should return format: hmac.exp
-      expect(result).toMatch(/^[A-Za-z0-9_-]+\.[0-9]+$/);
+      // Should return JWT format: header.payload.signature
+      expect(result.split(".").length).toBe(3);
 
-      const [hmac, returnedExp] = result.split(".");
-
-      expect(returnedExp).toBe(exp);
-      expect(hmac).toBeTruthy();
-      expect(hmac.length).toBeGreaterThan(0);
+      const payload = getTokenPayload(result);
+      expect(payload?.slug).toBe(slug);
+      expect(payload?.exp).toBe(Math.floor(Number(exp) / 1000));
     });
 
-    test("should generate consistent HMAC for same inputs", () => {
-      const exp = "1234567890000";
+    test("should generate consistent JWT for same inputs", () => {
+      const exp = Date.now() + 3600000;
       const slug = "test-slug";
 
       const result1 = generateKey(exp, slug);
@@ -41,9 +39,9 @@ describe("sign.server", () => {
       expect(result1).toBe(result2);
     });
 
-    test("should generate different HMAC for different inputs", () => {
-      const exp1 = "1234567890000";
-      const exp2 = "1234567891";
+    test("should generate different JWT for different inputs", () => {
+      const exp1 = Date.now() + 3600000;
+      const exp2 = Date.now() + 3600000 + 1000;
       const slug = "test-slug";
 
       const result1 = generateKey(exp1, slug);
@@ -55,11 +53,34 @@ describe("sign.server", () => {
 
   describe("isKeyValid", () => {
     test("should validate correct key with slug", () => {
-      const exp = Math.floor(Date.now() + 3600000).toString(); // 1 hour from now
+      const exp = Date.now() + 3600000; // 1 hour from now
       const slug = "test-slug";
       const validKey = generateKey(exp, slug);
 
       expect(isKeyValid(validKey, slug)).toBe(true);
+    });
+  });
+
+  describe("getTokenPayload", () => {
+    test("should return payload for valid key", () => {
+      const exp = Date.now() + 3600000;
+      const slug = "test-slug";
+      const validKey = generateKey(exp, slug);
+
+      expect(getTokenPayload(validKey)).toBeDefined();
+    });
+    test("should store speakerId in payload if provided", () => {
+      const exp = Date.now() + 3600000;
+      const slug = "test-slug";
+      const speakerId = "rec1234567890";
+      const validKey = generateKey(exp, slug, speakerId);
+
+      expect(getTokenPayload(validKey)?.speakerId).toBe(speakerId);
+    });
+    test("should return null for invalid key", () => {
+      const invalidKey = "invalid-key";
+
+      expect(getTokenPayload(invalidKey)).toBeNull();
     });
   });
 });
