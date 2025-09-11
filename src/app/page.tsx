@@ -4,11 +4,9 @@ import { LockKeyhole } from "lucide-react";
 import { EmailForm } from "@/components/email-form";
 import { useSearchParams } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
+import { Suspense } from "react";
 
 export default function Home() {
-  const searchParams = useSearchParams();
-  const expired = searchParams.get("expired") === "1";
-
   return (
     <main className="flex min-h-dvh items-center">
       <div className="w-full">
@@ -19,15 +17,24 @@ export default function Home() {
           </h1>
           <p className="text-p2 mb-6">Enter your email to receive your secure access link</p>
 
-          {expired && (
-            <Alert>
-              <AlertTitle>Link expired</AlertTitle>
-              <AlertDescription>Your access link has expired. Enter your email to get a new one.</AlertDescription>
-            </Alert>
-          )}
+          <Suspense fallback={null}>
+            <ExpiredAlert />
+          </Suspense>
         </div>
         <EmailForm />
       </div>
     </main>
   );
+}
+
+function ExpiredAlert() {
+  const searchParams = useSearchParams();
+  const expired = searchParams.get("expired") === "1";
+
+  return expired ? (
+    <Alert>
+      <AlertTitle>Link expired</AlertTitle>
+      <AlertDescription>Your access link has expired. Enter your email to get a new one.</AlertDescription>
+    </Alert>
+  ) : null;
 }
