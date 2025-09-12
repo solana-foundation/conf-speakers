@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { abcDiatype, macanMono, fhLecturis } from "../fonts";
+import { SiteHeader } from "@/components/header";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Breakpoint Speakers",
@@ -15,6 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${abcDiatype.variable} ${macanMono.variable} ${fhLecturis.variable} antialiased`}>
+        <Suspense fallback={null}>
+          <SiteHeader />
+        </Suspense>
         {children}
       </body>
     </html>

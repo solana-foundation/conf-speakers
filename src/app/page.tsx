@@ -9,8 +9,6 @@ import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 import { GlobalStateProvider } from "@/lib/state";
 import ScheduleSessionsTable from "@/components/schedule-sessions-table";
 import ScheduleSubscribeButton from "@/components/schedule-subscribe-button";
-import { SiteHeader } from "@/components/header";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Breakpoint 2025 Schedule",
@@ -42,24 +40,19 @@ export default async function SchedulePage() {
   const filters = getSessionsFilters(sessionsData);
 
   return (
-    <>
-      <Suspense fallback={null}>
-        <SiteHeader />
-      </Suspense>
-      <GlobalStateProvider>
-        <div className="min-h-screen p-8 font-sans">
-          <main className="mx-auto flex max-w-6xl flex-col gap-8">
-            <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
-              <h1 className="font-fh-lecturis text-3xl">Breakpoint 2025 Schedule</h1>
-              <ScheduleSubscribeButton href={getSessionsCalendarUrl(calendarKey)} />
-            </div>
+    <GlobalStateProvider>
+      <div className="min-h-screen p-8 font-sans">
+        <main className="mx-auto flex max-w-6xl flex-col gap-8">
+          <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
+            <h1 className="font-fh-lecturis text-3xl">Breakpoint 2025 Schedule</h1>
+            <ScheduleSubscribeButton href={getSessionsCalendarUrl(calendarKey)} />
+          </div>
 
-            <Separator />
+          <Separator />
 
-            <ScheduleSessionsTable items={sessionsData} filters={filters} selectable />
-          </main>
-        </div>
-      </GlobalStateProvider>
-    </>
+          <ScheduleSessionsTable items={sessionsData} filters={filters} selectable />
+        </main>
+      </div>
+    </GlobalStateProvider>
   );
 }

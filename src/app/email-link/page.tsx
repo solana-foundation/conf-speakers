@@ -8,7 +8,7 @@ import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <main className="flex min-h-dvh items-center">
+    <main className="flex min-h-[calc(100vh-5rem)] items-center">
       <div className="w-full">
         <div className="mx-auto max-w-md px-6">
           <h1 className="items-middle mb-2 flex gap-2 text-2xl">
