@@ -1,40 +1,65 @@
-"use client";
-
-import { LockKeyhole } from "lucide-react";
-import { EmailForm } from "@/components/email-form";
-import { useSearchParams } from "next/navigation";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
+import { Separator } from "@/components/ui/separator";
+import { Metadata } from "next/types";
+import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
+import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
+import { generateKey } from "@/lib/sign.server";
+import { getSessionsFilters } from "@/lib/airtable/utils";
+import { Speaker } from "@/lib/airtable/types";
+import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
+import { GlobalStateProvider } from "@/lib/state";
+import ScheduleSessionsTable from "@/components/schedule-sessions-table";
+import ScheduleSubscribeButton from "@/components/schedule-subscribe-button";
+import { SiteHeader } from "@/components/header";
 import { Suspense } from "react";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Breakpoint 2025 Schedule",
+  description: "The schedule of the Breakpoint conference",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
+export const revalidate = 600; // 10 minutes
+
+export default async function SchedulePage() {
+  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
+
+  const speakers = await getCachedSpeakers();
+  const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
+  const sessions = await getCachedSessions();
+  const sessionsData = sessions.map((session) => {
+    const sessionData = SessionFieldsSchema.parse(session);
+    return {
+      ...SessionFieldsSchema.parse(session),
+      subscribeUrl: getSessionCalendarUrl(session.id, calendarKey),
+      speakers: sessionData.speakerIds
+        ?.map((id) => speakersData.find((item) => item.id === id))
+        .filter(Boolean) as Speaker[],
+    };
+  });
+  const filters = getSessionsFilters(sessionsData);
+
   return (
-    <main className="flex min-h-dvh items-center">
-      <div className="w-full">
-        <div className="mx-auto max-w-md px-6">
-          <h1 className="items-middle mb-2 flex gap-2 text-2xl">
-            <LockKeyhole className="h-5 w-5" />
-            Get speakers access link
-          </h1>
-          <p className="text-p2 mb-6">Enter your email to receive your secure access link</p>
+    <>
+      <Suspense fallback={null}>
+        <SiteHeader />
+      </Suspense>
+      <GlobalStateProvider>
+        <div className="min-h-screen p-8 font-sans">
+          <main className="mx-auto flex max-w-6xl flex-col gap-8">
+            <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
+              <h1 className="font-fh-lecturis text-3xl">Breakpoint 2025 Schedule</h1>
+              <ScheduleSubscribeButton href={getSessionsCalendarUrl(calendarKey)} />
+            </div>
 
-          <Suspense fallback={null}>
-            <ExpiredAlert />
-          </Suspense>
+            <Separator />
+
+            <ScheduleSessionsTable items={sessionsData} filters={filters} selectable />
+          </main>
         </div>
-        <EmailForm />
-      </div>
-    </main>
+      </GlobalStateProvider>
+    </>
   );
-}
-
-function ExpiredAlert() {
-  const searchParams = useSearchParams();
-  const expired = searchParams.get("expired") === "1";
-
-  return expired ? (
-    <Alert>
-      <AlertTitle>Link expired</AlertTitle>
-      <AlertDescription>Your access link has expired. Enter your email to get a new one.</AlertDescription>
-    </Alert>
-  ) : null;
 }

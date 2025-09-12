@@ -35,7 +35,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const { key } = await searchParams;
 
   if (!isKeyValid(key ?? null)) {
-    redirect("/?expired=1");
+    redirect("email-link/?expired=1");
   }
 
   const payload = key ? getTokenPayload(key) : null;
