@@ -8,8 +8,8 @@ import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
 import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 import { GlobalStateProvider } from "@/lib/state";
-import ScheduleSessionsTable from "./components/schedule-sessions-table";
-import ScheduleSubscribeButton from "./components/schedule-subscribe-button";
+import ScheduleSessionsTable from "@/components/schedule-sessions-table";
+import ScheduleSubscribeButton from "@/components/schedule-subscribe-button";
 
 export const metadata: Metadata = {
   title: "Breakpoint 2025 Schedule",
