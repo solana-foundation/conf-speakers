@@ -7,6 +7,7 @@ import { isZodError } from "@/lib/airtable/utils";
 
 const tableSpeakers = process.env.AIRTABLE_TABLE_SPEAKERS || "Onboarded Speakers";
 const columnEmail = "fldXAPcvQhbruspxA"; // "Speaker's Email"
+const columnAssistantEmail = "fld1o4wbFWJqYrw5X"; // "Assistant's Email"
 
 const FormSchema = z.object({
   email: z.string("Invalid email address"),
@@ -58,8 +59,8 @@ export async function POST(request: NextRequest) {
     const records = await airtable
       .table(tableSpeakers)
       .select({
-        filterByFormula: `LOWER({${columnEmail}}) = '${email.toLowerCase()}'`,
-        maxRecords: 1,
+        filterByFormula: `OR(LOWER({${columnEmail}}) = '${email.toLowerCase()}', LOWER({${columnAssistantEmail}}) = '${email.toLowerCase()}')`,
+        maxRecords: 2,
       })
       .firstPage();
 
@@ -71,6 +72,13 @@ export async function POST(request: NextRequest) {
           fieldErrors: { email: "No account found" },
         },
         { status: 404 },
+      );
+    }
+
+    if (records.length > 1) {
+      return NextResponse.json<ActionState>(
+        { ok: false, message: "Multiple accounts found for this email. Please contact support." },
+        { status: 400 },
       );
     }
 
