@@ -122,7 +122,7 @@ export default function SessionsTable({
         id: "startTime",
         header: (info) => (
           <TableHead className="w-48 pb-4">
-            Time
+            Date
             {filters && filters?.times.size > 0 && (
               <Select
                 value={(info.column.getFilterValue() as string) ?? ""}
