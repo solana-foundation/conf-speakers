@@ -27,9 +27,9 @@ export const SpeakerFieldsSchema = z
   .object({
     id: z.string(),
     fields: z.object({
-      Name: z.string(),
-      "First Name": z.string(),
-      "Last Name": z.string(),
+      Name: z.string().optional(),
+      "First Name": z.string().optional(),
+      "Last Name": z.string().optional(),
       "Role or Title": z.string().optional(),
       Company: z.string().optional(),
       Bio: z.string().optional(),
