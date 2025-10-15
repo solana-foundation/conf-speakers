@@ -2,8 +2,6 @@
 
 A focused **Airtable-driven** microsite for Breakpoint speakers. Private-but-shareable pages (no login required) via **JWT-signed links**, fresh data from **Airtable** (server-side only), and convenient **ICS** calendar feeds.
 
-> **Caveat:** This repo is a starter and a guide. **Change anything you see fit** to meet reality as you build.
-
 ---
 
 ## Tech Stack
