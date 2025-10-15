@@ -203,7 +203,7 @@ export default function SessionsTable({
     ];
 
     return baseColumns;
-  }, [selectable, selectedRows, items, filters]);
+  }, [selectable, selectedRows, filters]);
 
   const table = useReactTable({
     data: items,

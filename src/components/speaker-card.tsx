@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 export interface SpeakerCardProps {
   imageUrl?: string;
   firstName?: string;
-  lastName: string;
+  lastName?: string;
   jobTitle?: string;
   company?: string;
   bio?: string;
