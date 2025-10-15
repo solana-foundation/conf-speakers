@@ -2,6 +2,10 @@
 
 A focused **Airtable-driven** microsite for Breakpoint speakers. Private-but-shareable pages (no login required) via **JWT-signed links**, fresh data from **Airtable** (server-side only), and convenient **ICS** calendar feeds.
 
+## Getting speaker links
+
+Speaker links are availble in airtable, but can also be found in the server logs where `src/app/api/auth/request-link/route.ts` will log them as they are requested in the email form.
+
 ---
 
 ## Tech Stack
@@ -130,7 +134,7 @@ JWT payload and usage:
   - `speakerId` — optional, used when scoping access to a specific speaker
   - `exp` — expiration (unix seconds)
 - Signing:
-  - Symmetric `HS256` with `SITE_SECRET`
+  - Signed `JWT` with `SITE_SECRET`
 - Transport:
   - Sent as `key` query param, e.g., `/s?key=<jwt>`
 
