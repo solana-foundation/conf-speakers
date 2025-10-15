@@ -1,10 +1,10 @@
 import { Badge } from "./ui/badge";
 
-export type StageTitle = "Stage A" | "Stage B";
+export type StageTitle = "Main Stage" | "Side Stage";
 
 export const stageColorMap: Record<StageTitle, string> = {
-  "Stage A": "bg-azure",
-  "Stage B": "bg-lime",
+  "Main Stage": "bg-azure",
+  "Side Stage": "bg-lime",
 };
 
 export function getStageBadgeClass(title: string): string {
