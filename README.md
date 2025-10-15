@@ -51,8 +51,8 @@ VENUE_TZ=Asia/Dubai
 
 # Auth token issuance for /api/auth/request
 API_KEY=server_only_random_value
-# Milliseconds a token is valid from "now" when issued
-NEXT_PUBLIC_KEY_EXP=900000
+# Milliseconds a token is valid from "now" when issued -eg. 3M
+NEXT_PUBLIC_KEY_EXP=7776000000
 ```
 
 Never expose `AIRTABLE_PAT` to the client. All Airtable reads happen server-side.
