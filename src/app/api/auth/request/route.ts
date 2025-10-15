@@ -36,7 +36,7 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const exp = Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0);
+  const exp = Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP!);
   try {
     const token = generateKey(exp, "auth", speakerId);
     return NextResponse.json({

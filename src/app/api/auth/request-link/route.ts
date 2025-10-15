@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
 
     const speakerId = records[0].id;
 
-    const exp = Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 3600000); // Default 1 hour
+    const exp = Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP!); // Default 3M
     const token = generateKey(exp, "auth", speakerId);
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
