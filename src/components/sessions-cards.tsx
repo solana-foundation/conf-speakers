@@ -14,9 +14,10 @@ import { EyeIcon } from "lucide-react";
 export interface SessionsCardsProps {
   items: (Session & { subscribeUrl?: string; speakers?: Speaker[] })[];
   allSessionsSubscribeUrl?: string;
+  calendarUrl?: string;
 }
 
-export default function SessionsCards({ items, allSessionsSubscribeUrl }: SessionsCardsProps) {
+export default function SessionsCards({ items, allSessionsSubscribeUrl, calendarUrl }: SessionsCardsProps) {
   // Determine session format based on speaker count and other factors
   const getSessionFormat = (session: Session & { speakers?: Speaker[] }) => {
     const speakerCount = session.speakers?.length || 0;
@@ -134,17 +135,26 @@ export default function SessionsCards({ items, allSessionsSubscribeUrl }: Sessio
                 </div>
               )}
 
-              {/* Subscribe to Calendar */}
-              {session.subscribeUrl && (
-                <div className="pt-2">
-                  <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
-                    <a href={session.subscribeUrl} target="_blank" rel="noopener noreferrer">
-                      <Calendar className="mr-2 h-4 w-4" />
-                      Subscribe to Calendar
+              {/* Calendar Buttons */}
+              <div className="flex gap-2 pt-2">
+                {/* Primary CTA Button - Add My Sessions to Calendar */}
+                {calendarUrl && (
+                  <Button size="sm" variant="mint" asChild className="w-full sm:w-auto">
+                    <a href={calendarUrl} target="_blank" rel="noopener noreferrer">
+                      <Calendar className="mr-2 h-4 w-4" />+ Add My Sessions to Calendar
                     </a>
                   </Button>
-                </div>
-              )}
+                )}
+
+                {/* Keep existing subscribe button as secondary option */}
+                {session.subscribeUrl && (
+                  <Button size="sm" variant="lime" asChild className="w-full sm:w-auto">
+                    <a href={session.subscribeUrl} target="_blank" rel="noopener noreferrer">
+                      <Calendar className="mr-2 h-4 w-4" />+ Add All BP25 Sessions to Calendar
+                    </a>
+                  </Button>
+                )}
+              </div>
             </CardContent>
           </Card>
         ))}

@@ -8,6 +8,7 @@ import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
 import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
+import { getSessionsCalendarUrl } from "@/lib/ics/utils";
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsDialogButton from "@/components/speaker-portal/ActionsDialogButton";
@@ -51,6 +52,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   }
 
   const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics", speakerId);
+  const speakerCalendarUrl = getSessionsCalendarUrl(calendarKey);
 
   const speakers = await getCachedSpeakers();
   const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
@@ -76,15 +78,16 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   return (
     <div className="min-h-screen p-8 font-sans">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
-        <SpeakerCard {...speakerData} subscribeUrl={`/api/ics/speaker/${speakerId}?key=${calendarKey}`} />
+        <SpeakerCard {...speakerData} />
 
         <Separator />
 
-        <h2 className="text-lg font-semibold">Schedule</h2>
+        <h2 className="text-lg font-semibold">Your Schedule</h2>
 
         <SessionsCards
           items={sessionsData}
           allSessionsSubscribeUrl={`/api/ics/speaker/${speakerId}?key=${calendarKey}`}
+          calendarUrl={speakerCalendarUrl}
         />
 
         <div className="flex gap-3">

@@ -1,8 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
-import { generateKey } from "@/lib/sign.server";
-import { getSessionsCalendarUrl } from "@/lib/ics/utils";
 import { Separator } from "./ui/separator";
+import { Twitter } from "lucide-react";
 
 export interface SpeakerCardProps {
   imageUrl?: string;
@@ -13,7 +11,6 @@ export interface SpeakerCardProps {
   bio?: string;
   xLink?: string;
   xName?: string;
-  subscribeUrl?: string;
   status?: "awaiting-deck" | "all-set" | "schedule-pending";
 }
 
@@ -26,7 +23,6 @@ export default function SpeakerCard({
   bio,
   xLink,
   xName,
-  subscribeUrl,
   status = "awaiting-deck",
 }: SpeakerCardProps) {
   // Status badge configuration
@@ -42,8 +38,6 @@ export default function SpeakerCard({
         return null;
     }
   };
-  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
-  const calendarUrl = getSessionsCalendarUrl(calendarKey);
 
   const statusConfig = getStatusConfig(status);
 
@@ -92,6 +86,20 @@ export default function SpeakerCard({
               <br />
               {company && <span className="text-wisp/80">{company}</span>}
             </p>
+
+            {xLink && (
+              <div className="mt-2 flex items-center gap-2">
+                <Twitter className="text-foreground/50 h-4 w-4" />
+                <a
+                  className="text-primary text-md hover:underline"
+                  href={xLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  @{xName}
+                </a>
+              </div>
+            )}
           </div>
 
           {bio && (
@@ -99,40 +107,6 @@ export default function SpeakerCard({
               <p className="text-p">{bio}</p>
             </div>
           )}
-
-          {xLink && (
-            <div className="flex gap-1">
-              <p className="text-foreground/50 text-md m-0 mb-1">X Link:</p>
-              <a
-                className="text-primary text-md hover:underline"
-                href={xLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                @{xName}
-              </a>
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            {/* Primary CTA Button - Add All Sessions to Calendar */}
-            {calendarUrl && (
-              <Button size="lg" variant="mint" asChild className="w-full lg:w-auto">
-                <a href={calendarUrl} target="_blank" rel="noopener noreferrer">
-                  + Add My Sessions to Calendar
-                </a>
-              </Button>
-            )}
-
-            {/* Keep existing subscribe button as secondary option */}
-            {subscribeUrl && (
-              <Button size="lg" variant="mint" asChild className="w-full lg:w-auto">
-                <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
-                  + Add All BP25 Sessions to Calendar
-                </a>
-              </Button>
-            )}
-          </div>
         </div>
       </div>
     </div>
