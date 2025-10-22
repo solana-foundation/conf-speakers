@@ -61,22 +61,14 @@
   --text-h3--letter-spacing: clamp(-0.025rem, -0.026rem + 0.004vw, -0.022rem);
   --text-h3--font-weight: var(--font-medium);
 
-  --text-xl: clamp(var(--text-8xl), 2.768rem + 5.258vw, var(--text-10xl));
-  --text-xl--line-height: clamp(4.75rem, 3.782rem + 4.131vw, var(--text-10xl));
-  --text-xl--letter-spacing: clamp(-0.225rem, -0.276rem + 0.218vw, -0.08rem);
+  --text-xl: clamp(var(--text-4xl), 1.5rem + 2vw, var(--text-6xl));
+  --text-xl--line-height: clamp(2.2rem, 1.8rem + 1.5vw, 2.8rem);
+  --text-xl--letter-spacing: clamp(-0.05rem, -0.08rem + 0.1vw, -0.02rem);
   --text-xl--font-weight: var(--font-regular);
 
-  --text-stat-display: clamp(
-    var(--text-8xl),
-    3.648rem + 1.502vw,
-    var(--text-9xl)
-  );
+  --text-stat-display: clamp(var(--text-8xl), 3.648rem + 1.502vw, var(--text-9xl));
   --text-stat-display--line-height: clamp(4.16rem, 3.794rem + 1.562vw, 5.2rem);
-  --text-stat-display--letter-spacing: clamp(
-    -0.25rem,
-    -0.282rem + 0.135vw,
-    -0.16rem
-  );
+  --text-stat-display--letter-spacing: clamp(-0.25rem, -0.282rem + 0.135vw, -0.16rem);
   --text-stat-display--font-weight: var(--font-regular);
 
   /* Static Fonts */
@@ -223,11 +215,11 @@
     @apply text-p1 list-inside;
 
     li {
-      @apply relative ps-[18px] not-first:mt-2xs sm:not-first:mt-xs;
+      @apply not-first:mt-2xs sm:not-first:mt-xs relative ps-[18px];
 
       &::before {
-        @apply absolute text-[6px] -start-0;
-        content: '\25FC';
+        @apply absolute -start-0 text-[6px];
+        content: "\25FC";
       }
     }
   }
@@ -240,13 +232,13 @@
 
       &::before {
         @apply font-macan-mono absolute start-[0];
-        content: counter(list-item) '.';
+        content: counter(list-item) ".";
       }
     }
   }
 
   .text-eyebrow {
-    @apply font-macan-mono uppercase relative inline-block px-3xs mr-auto self-start before:absolute before:-left-3xs ms-3xs before:content-['['] after:absolute after:-right-3xs after:content-[']'];
+    @apply font-macan-mono px-3xs before:-left-3xs ms-3xs after:-right-3xs relative mr-auto inline-block self-start uppercase before:absolute before:content-['['] after:absolute after:content-[']'];
   }
 
   .text-discount {
@@ -254,7 +246,7 @@
   }
 
   .text-ticker {
-    @apply font-macan-mono uppercase text-sm relative mr-xs pr-[calc(var(--spacing-xs)+4px)] after:absolute after:content-['\25A0'] after:text-[0.438rem] after:bottom-0 after:right-0 after:top-[2px] after:my-auto after:leading-0 after:h-[4px];
+    @apply font-macan-mono mr-xs relative pr-[calc(var(--spacing-xs)+4px)] text-sm uppercase after:absolute after:top-[2px] after:right-0 after:bottom-0 after:my-auto after:h-[4px] after:text-[0.438rem] after:leading-0 after:content-['\25A0'];
   }
 
   button:not(.text-inline-link),
@@ -263,7 +255,7 @@
     @apply font-macan-mono text-button uppercase;
 
     &[disabled] {
-      @apply cursor-not-allowed bg-button-fill-disabled text-primary;
+      @apply bg-button-fill-disabled text-primary cursor-not-allowed;
     }
   }
 }

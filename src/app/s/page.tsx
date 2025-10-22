@@ -5,7 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
-import SessionsTable from "@/components/sessions-table";
+import SessionsCards from "@/components/sessions-cards";
 import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
 // import { Gallery } from "@/components/gallery";
@@ -82,7 +82,10 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <h2 className="text-lg font-semibold">Schedule</h2>
 
-        <SessionsTable items={sessionsData} filters={filters} />
+        <SessionsCards
+          items={sessionsData}
+          allSessionsSubscribeUrl={`/api/ics/speaker/${speakerId}?key=${calendarKey}`}
+        />
 
         <div className="flex gap-3">
           <LogisticsDialogButton />

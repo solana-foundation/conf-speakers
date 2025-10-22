@@ -28,7 +28,7 @@
   --color-lime: var(--color-secondary-lime);
   --color-wisp: var(--color-primary-wisp);
   --color-wisp-10: var(--color-transparent-wisp-10);
-  --color-wisp-40: var(--color-transparent-wisp-40);
+  --color-wisp-60: var(--color-transparent-wisp-60);
 
   /* Background Tokens */
   --color-background-primary: var(--color-primary-null);
@@ -37,7 +37,7 @@
 
   /* Font Tokens */
   --color-primary: var(--color-primary-wisp);
-  --color-secondary: var(--color-transparent-wisp-60);
+  --color-secondary: var(--color-transparent-wisp-80);
   --color-invert: var(--color-primary-null);
 
   /* Stroke Tokens */

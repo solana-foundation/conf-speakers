@@ -25,7 +25,7 @@
   --color-secondary-foreground: var(--color-primary);
 
   --color-muted: var(--color-background-secondary);
-  --color-muted-foreground: var(--color-secondary);
+  --color-muted-foreground: var(--color-wisp-60);
 
   --color-accent: var(--color-background-secondary);
   --color-accent-foreground: var(--color-primary);
