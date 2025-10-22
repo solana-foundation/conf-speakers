@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 
 function Row({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b py-3 first:pt-0 last:border-b-0 last:pb-0">
-      <div className="text-sm font-medium">{label}</div>
+    <div className="text-wisp border-stroke-primary flex items-start justify-between gap-4 border-b py-3 first:pt-0 last:border-b-0 last:pb-0">
+      <div className="text-base font-medium">{label}</div>
       <div className="shrink-0">{children}</div>
     </div>
   );
@@ -17,7 +17,7 @@ export default function TicketsSection() {
     <Section title="Tickets" description="Your speaker ticket and plus-one">
       <div className="divide-y">
         <Row label={<span>Speaker Ticket Status</span>}>
-          <Badge variant="secondary">Confirmed</Badge>
+          <Badge variant="outline">Confirmed</Badge>
         </Row>
 
         <Row label={<span>Plus One Ticket Redemption</span>}>
@@ -27,7 +27,7 @@ export default function TicketsSection() {
         </Row>
 
         <Row label={<span>Invite Code</span>}>
-          <code className="text-xs">XXXXXX</code>
+          <code className="text-base">XXXXXX</code>
         </Row>
 
         <Row label={<span>How to Redeem</span>}>

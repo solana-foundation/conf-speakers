@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 
 function Row({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b py-3 first:pt-0 last:border-b-0 last:pb-0">
-      <div className="text-sm font-medium">{label}</div>
+    <div className="text-wisp border-stroke-primary flex items-start justify-between gap-4 border-b py-3 first:pt-0 last:border-b-0 last:pb-0">
+      <div className="text-base font-medium">{label}</div>
       <div className="shrink-0">{children}</div>
     </div>
   );

@@ -90,8 +90,6 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
         </div>
 
         <Separator />
-
-        <Separator />
         <TicketsSection />
 
         <Separator />
