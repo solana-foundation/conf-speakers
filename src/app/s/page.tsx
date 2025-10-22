@@ -8,7 +8,12 @@ import SpeakerCard from "@/components/speaker-card";
 import SessionsTable from "@/components/sessions-table";
 import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
-import { Gallery } from "@/components/gallery";
+// import { Gallery } from "@/components/gallery";
+import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
+import ActionsDialogButton from "@/components/speaker-portal/ActionsDialogButton";
+import TicketsSection from "@/components/speaker-portal/TicketsSection";
+import CommsCalendarSection from "@/components/speaker-portal/CommsCalendarSection";
+import PostEventSection from "@/components/speaker-portal/PostEventSection";
 
 export const generateMetadata = async ({
   searchParams,
@@ -79,20 +84,21 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <SessionsTable items={sessionsData} filters={filters} />
 
-        <h2 className="text-lg font-semibold">Highlights</h2>
+        <div className="flex gap-3">
+          <LogisticsDialogButton />
+          <ActionsDialogButton />
+        </div>
 
-        <Gallery
-          images={[
-            { src: "/placeholder1.png" },
-            { src: "/placeholder2.png" },
-            { src: "/placeholder1.png" },
-            { src: "/placeholder1.png" },
-            { src: "/placeholder2.png" },
-            { src: "/placeholder2.png" },
-            { src: "/placeholder1.png" },
-            { src: "/placeholder2.png" },
-          ]}
-        />
+        <Separator />
+
+        <Separator />
+        <TicketsSection />
+
+        <Separator />
+        <CommsCalendarSection />
+
+        <Separator />
+        <PostEventSection />
       </main>
     </div>
   );
