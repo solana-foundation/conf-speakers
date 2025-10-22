@@ -1,5 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { generateKey } from "@/lib/sign.server";
+import { getSessionsCalendarUrl } from "@/lib/ics/utils";
 
 export interface SpeakerCardProps {
   imageUrl?: string;
@@ -11,6 +14,7 @@ export interface SpeakerCardProps {
   xLink?: string;
   xName?: string;
   subscribeUrl?: string;
+  status?: "awaiting-deck" | "all-set" | "schedule-pending";
 }
 
 export default function SpeakerCard({
@@ -23,9 +27,45 @@ export default function SpeakerCard({
   xLink,
   xName,
   subscribeUrl,
+  status = "awaiting-deck",
 }: SpeakerCardProps) {
+  // Status badge configuration
+  const getStatusConfig = (status?: string) => {
+    switch (status) {
+      case "awaiting-deck":
+        return { label: "Awaiting deck", variant: "secondary" as const };
+      case "all-set":
+        return { label: "All set", variant: "default" as const };
+      case "schedule-pending":
+        return { label: "Schedule pending", variant: "outline" as const };
+      default:
+        return null;
+    }
+  };
+  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
+  const calendarUrl = getSessionsCalendarUrl(calendarKey);
+
+  const statusConfig = getStatusConfig(status);
+
   return (
     <div>
+      {/* Status Badge Banner - moved to top */}
+      {statusConfig && (
+        <div className="mb-6 w-full">
+          <div
+            className={`text-md w-full rounded-lg border-2 px-6 py-2 text-center font-semibold ${
+              statusConfig.variant === "secondary"
+                ? "bg-secondary text-secondary-foreground border-secondary"
+                : statusConfig.variant === "default"
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-background text-foreground border-border"
+            }`}
+          >
+            {statusConfig.label}
+          </div>
+        </div>
+      )}
+
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
         <div className="flex flex-col items-center gap-4 lg:items-start">
           <div className="relative">
@@ -71,17 +111,25 @@ export default function SpeakerCard({
             </div>
           )}
 
-          {subscribeUrl && (
-            <div>
-              <p>
-                <Button size="sm" variant="mint" asChild>
-                  <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
-                    Subscribe to {firstName} {lastName}&apos;s sessions
-                  </a>
-                </Button>
-              </p>
-            </div>
-          )}
+          <div className="flex gap-2">
+            {/* Primary CTA Button - Add All Sessions to Calendar */}
+            {calendarUrl && (
+              <Button size="lg" variant="mint" asChild className="w-full lg:w-auto">
+                <a href={calendarUrl} target="_blank" rel="noopener noreferrer">
+                  + Add My Sessions to Calendar
+                </a>
+              </Button>
+            )}
+
+            {/* Keep existing subscribe button as secondary option */}
+            {subscribeUrl && (
+              <Button size="lg" variant="mint" asChild className="w-full lg:w-auto">
+                <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
+                  + Add All BP25 Sessions to Calendar
+                </a>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>
