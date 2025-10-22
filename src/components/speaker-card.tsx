@@ -1,8 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 import { generateKey } from "@/lib/sign.server";
 import { getSessionsCalendarUrl } from "@/lib/ics/utils";
+import { Separator } from "./ui/separator";
 
 export interface SpeakerCardProps {
   imageUrl?: string;
@@ -51,19 +51,22 @@ export default function SpeakerCard({
     <div>
       {/* Status Badge Banner - moved to top */}
       {statusConfig && (
-        <div className="mb-6 w-full">
-          <div
-            className={`text-md w-full rounded-lg border-2 px-6 py-2 text-center font-semibold ${
-              statusConfig.variant === "secondary"
-                ? "bg-secondary text-secondary-foreground border-secondary"
-                : statusConfig.variant === "default"
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-background text-foreground border-border"
-            }`}
-          >
-            {statusConfig.label}
+        <>
+          <div className="mb-6 w-full">
+            <div
+              className={`text-md w-full rounded-lg border-2 px-6 py-2 text-center font-semibold ${
+                statusConfig.variant === "secondary"
+                  ? "bg-secondary text-secondary-foreground border-secondary"
+                  : statusConfig.variant === "default"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-background text-foreground border-border"
+              }`}
+            >
+              {statusConfig.label}
+            </div>
           </div>
-        </div>
+          <Separator className="my-4" />
+        </>
       )}
 
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
