@@ -12,6 +12,7 @@ export interface SpeakerCardProps {
   xLink?: string;
   xName?: string;
   status?: "awaiting-deck" | "all-set" | "schedule-pending";
+  dueDate?: string;
 }
 
 export default function SpeakerCard({
@@ -24,22 +25,34 @@ export default function SpeakerCard({
   xLink,
   xName,
   status = "awaiting-deck",
+  dueDate = "24 Oct, 2025",
 }: SpeakerCardProps) {
-  // Status badge configuration
-  const getStatusConfig = (status?: string) => {
+  const getStatusConfig = (status?: string, dueDate?: string) => {
     switch (status) {
       case "awaiting-deck":
-        return { label: "Awaiting deck", variant: "secondary" as const };
+        return {
+          label: "Awaiting deck",
+          variant: "urgent" as const,
+          dueDate: dueDate ? `Due: ${dueDate}` : undefined,
+        };
       case "all-set":
-        return { label: "All set", variant: "default" as const };
+        return {
+          label: "All set",
+          variant: "default" as const,
+          dueDate: dueDate ? `Due: ${dueDate}` : undefined,
+        };
       case "schedule-pending":
-        return { label: "Schedule pending", variant: "outline" as const };
+        return {
+          label: "Schedule pending",
+          variant: "warning" as const,
+          dueDate: dueDate ? `Due: ${dueDate}` : undefined,
+        };
       default:
         return null;
     }
   };
 
-  const statusConfig = getStatusConfig(status);
+  const statusConfig = getStatusConfig(status, dueDate);
 
   return (
     <div>
@@ -48,15 +61,20 @@ export default function SpeakerCard({
         <>
           <div className="mb-6 w-full">
             <div
-              className={`text-md w-full rounded-lg border-2 px-6 py-2 text-center font-semibold ${
-                statusConfig.variant === "secondary"
-                  ? "bg-secondary text-secondary-foreground border-secondary"
-                  : statusConfig.variant === "default"
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-foreground border-border"
+              className={`text-md w-full rounded-lg px-6 py-2 text-center font-semibold ${
+                statusConfig.variant === "urgent"
+                  ? "bg-red-500 text-black"
+                  : statusConfig.variant === "warning"
+                    ? "bg-lime text-black"
+                    : statusConfig.variant === "default"
+                      ? "bg-mint text-black"
+                      : "bg-background text-primary border-0"
               }`}
             >
-              {statusConfig.label}
+              <span>{statusConfig.label}</span>
+              {statusConfig.dueDate && (
+                <span className="ml-2 text-sm font-normal opacity-80">{statusConfig.dueDate}</span>
+              )}
             </div>
           </div>
           <Separator className="my-4" />

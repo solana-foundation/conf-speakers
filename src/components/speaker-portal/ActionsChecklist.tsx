@@ -8,7 +8,7 @@ export default function ActionsChecklist() {
   const [tasks, setTasks] = React.useState([
     {
       id: "upload-deck",
-      title: "Deck has been submitted",
+      title: "Deck received by Events Team",
       description: "Use 16:9 aspect, embed fonts, and export a PDF as backup.",
       completed: false,
       link: "#",
