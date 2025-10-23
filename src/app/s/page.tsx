@@ -90,7 +90,10 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
     }));
 
   // Add test data for debugging
-  const telegramGroups = [{ sessionName: sessionsData[0]?.name, telegramGroup: "#" }, ...sessionTelegramGroups];
+  const telegramGroups =
+    sessionsData.length > 0
+      ? [{ sessionName: sessionsData[0]?.name, telegramGroup: "#" }, ...sessionTelegramGroups]
+      : sessionTelegramGroups;
 
   return (
     <div className="min-h-screen p-8 font-sans">
@@ -104,7 +107,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
         <SessionsCards items={sessionsData} calendarUrl={speakerCalendarUrl} />
 
         <div className="flex gap-3">
-          <LogisticsDialogButton stage={sessionsData[0]?.stage} />
+          <LogisticsDialogButton stage={sessionsData[0]?.stage || "Main Stage"} />
         </div>
 
         <Separator />
