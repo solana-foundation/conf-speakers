@@ -69,7 +69,7 @@ export default function ActionsChecklist() {
                   : "border-stroke-primary"
             }`}
           >
-            <div className="mt-1 flex items-center justify-center">{getTaskIcon(task)}</div>
+            <div className="flex items-start justify-center">{getTaskIcon(task)}</div>
             <div className="flex-1 space-y-2">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2">
@@ -77,8 +77,11 @@ export default function ActionsChecklist() {
                   {task.type === "task" && task.completed && (
                     <span className="bg-mint rounded-full px-2 py-0.5 font-mono text-[12px] text-black">Completed</span>
                   )}
+                  {task.type === "task" && !task.completed && (
+                    <span className="bg-azure rounded-full px-2 py-0.5 font-mono text-[12px] text-black">To Do</span>
+                  )}
                 </div>
-                {task.link && task.linkText && (
+                {task.link && task.linkText && (!task.completed || task.type === "info") && (
                   <Button size="sm" variant="azure" asChild>
                     <a href={task.link}>{task.linkText}</a>
                   </Button>
