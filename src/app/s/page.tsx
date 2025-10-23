@@ -13,7 +13,6 @@ import { getSessionsCalendarUrl } from "@/lib/ics/utils";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsDialogButton from "@/components/speaker-portal/ActionsDialogButton";
 import TicketsSection from "@/components/speaker-portal/TicketsSection";
-import CommsCalendarSection from "@/components/speaker-portal/CommsCalendarSection";
 import PostEventSection from "@/components/speaker-portal/PostEventSection";
 
 export const generateMetadata = async ({
@@ -97,9 +96,6 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
         <TicketsSection />
-
-        <Separator />
-        <CommsCalendarSection />
 
         <Separator />
         <PostEventSection />

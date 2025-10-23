@@ -6,46 +6,27 @@
 
   --font-regular: 400;
 
-  --text-3xs: 0.6875rem; /* 11px */
-  --text-2xs: 0.875rem; /* 14px */
-  --text-xs: 0.882rem; /* 14.112px */
-  --text-sm: 0.9375rem; /* 15px */
-  --text-base: 1rem; /* 16px */
-  --text-md: 1.0625rem; /* 17px */
-  --text-lg: 1.125rem; /* 18px */
-  --text-2xl: 1.25rem; /* 20px */
-  --text-3xl: 1.75rem; /* 28px */
-  --text-4xl: 2rem; /* 32px */
-  --text-5xl: 2.25rem; /* 36px */
-  --text-6xl: 2.5rem; /* 40px */
-  --text-7xl: 3.5rem; /* 56px */
-  --text-8xl: 4rem; /* 64px */
-  --text-9xl: 5rem; /* 80px */
-  --text-10xl: 7.5rem; /* 120px */
+  /* Optimized font sizes for information-heavy content */
+  --text-4xs: 0.625rem; /* 10px - for very small labels */
+  --text-3xs: 0.75rem; /* 12px - improved from 11px */
+  --text-2xs: 0.8125rem; /* 13px - new intermediate size */
+  --text-xs: 0.875rem; /* 14px - kept same */
+  --text-sm: 0.9375rem; /* 15px - kept same */
+  --text-base: 0.9375rem; /* 15px - reduced from 16px for better density */
+  --text-md: 1rem; /* 16px - moved from base */
+  --text-lg: 1.125rem; /* 18px - kept same */
+  --text-xl: 1.25rem; /* 20px - kept same */
+  --text-2xl: 1.5rem; /* 24px - increased from 20px */
+  --text-3xl: 1.75rem; /* 28px - kept same */
+  --text-4xl: 2rem; /* 32px - kept same */
+  --text-5xl: 2.25rem; /* 36px - kept same */
+  --text-6xl: 2.5rem; /* 40px - kept same */
+  --text-7xl: 3.5rem; /* 56px - kept same */
+  --text-8xl: 4rem; /* 64px - kept same */
+  --text-9xl: 5rem; /* 80px - kept same */
+  --text-10xl: 7.5rem; /* 120px - kept same */
 
-  /* Scaling Fonts 
-     Essentially need to find the slope from screen min/max and font/min max at those points.
-     All values converted to px for calculation.
- 
-     y = mx + b
-     m = (maxFontSize - minFontSize) / (maxWidth - minWidth)
-     b = minFontSize - m * minWidth
- 
-     h1 example:
-     
-     minWidth = 375px
-     maxWidth = 1440px
-     minFontSize = 64px
-     maxFontSize = 80px
-     m = (80 - 64) / (1440 - 375)
-     m = 16 / 1065 = 0.015
-     b = 64 - 0.015 * 375
-     b = 58.375
-     y = 0.015x + 58.375
- 
-     final equation with rem (rounded up to hundreths) and vw conversion:
-     y = 1.5vw + 3.65rem
-   */
+  /* ... existing scaling font calculations ... */
   --text-h1: clamp(var(--text-8xl), 3.648rem + 1.502vw, var(--text-9xl));
   --text-h1--line-height: clamp(4.75rem, 4.592rem + 0.676vw, 5.2rem);
   --text-h1--letter-spacing: clamp(-0.12rem, -0.145rem + 0.105vw, -0.05rem);
@@ -71,7 +52,7 @@
   --text-stat-display--letter-spacing: clamp(-0.25rem, -0.282rem + 0.135vw, -0.16rem);
   --text-stat-display--font-weight: var(--font-regular);
 
-  /* Static Fonts */
+  /* Optimized static fonts for information density */
   --text-h4: var(--text-3xl);
   --text-h4--line-height: 2.065rem;
   --text-h4--letter-spacing: -0.0175rem;
@@ -82,37 +63,44 @@
   --text-h5--letter-spacing: 0;
   --text-h5--font-weight: var(--font-regular);
 
-  --text-p1: var(--text-base);
-  --text-p1--line-height: 1.32rem;
+  /* Improved body text for better readability in dense content */
+  --text-p1: var(--text-base); /* Now 15px instead of 16px */
+  --text-p1--line-height: 1.5rem; /* Improved from 1.32rem for better readability */
   --text-p1--letter-spacing: 0.0045rem;
-  --text-p1--font-weight: var(--font-medium);
+  --text-p1--font-weight: var(--font-regular); /* Changed from medium to regular */
 
-  --text-p2: var(--text-2xs);
-  --text-p2--line-height: 1.25125rem;
+  --text-p2: var(--text-sm); /* Now 15px instead of 14px */
+  --text-p2--line-height: 1.4rem; /* Improved from 1.25125rem */
   --text-p2--letter-spacing: 0.0075rem;
   --text-p2--font-weight: var(--font-regular);
 
-  --text-p2-mono: var(--text-sm);
+  --text-p2-mono: var(--text-base); /* Now 15px instead of 14px */
   --text-p2-mono--line-height: var(--text-lg);
   --text-p2-mono--letter-spacing: 0.075rem;
   --text-p2-mono--font-weight: var(--font-medium);
 
-  --text-inline-link: var(--text-lg);
-  --text-inline-link--line-height: 1.53rem;
+  --text-inline-link: var(--text-base); /* Now 15px instead of 18px */
+  --text-inline-link--line-height: 1.5rem;
   --text-inline-link--letter-spacing: -0.00438rem;
   --text-inline-link--font-weight: var(--font-regular);
 
-  --text-eyebrow: var(--text-xs);
-  --text-eyebrow--line-height: 0.09375rem;
+  --text-eyebrow: var(--text-xs); /* Now 14px instead of 14.112px */
+  --text-eyebrow--line-height: var(--text-xs);
   --text-eyebrow--letter-spacing: 0.09375rem;
   --text-eyebrow--font-weight: var(--font-medium);
 
-  --text-button: var(--text-sm);
+  --text-button: var(--text-sm); /* Kept at 15px */
   --text-button--line-height: var(--text-sm);
   --text-button--letter-spacing: 0.09375rem;
   --text-button--font-weight: var(--font-medium);
 
-  --text-caption: var(--text-3xs);
+  /* New utility class for very small text */
+  --text-micro: var(--text-4xs);
+  --text-micro--line-height: var(--text-3xs);
+  --text-micro--letter-spacing: 0.06875rem;
+  --text-micro--font-weight: var(--font-semibold);
+
+  --text-caption: var(--text-3xs); /* Now 12px instead of 11px */
   --text-caption--line-height: var(--text-sm);
   --text-caption--letter-spacing: 0.06875rem;
   --text-caption--font-weight: var(--font-semibold);
@@ -128,16 +116,16 @@
     --text-h5--line-height: 2.065rem;
     --text-h5--letter-spacing: -0.00438rem;
 
-    --text-p1: var(--text-lg);
-    --text-p1--line-height: 1.53rem;
+    --text-p1: var(--text-md); /* Now 16px on larger screens */
+    --text-p1--line-height: 1.6rem; /* Improved line height */
     --text-p1--letter-spacing: -0.00438rem;
 
-    --text-eyebrow: var(--text-md);
-    --text-eyebrow--line-height: var(--text-md);
+    --text-eyebrow: var(--text-sm); /* Now 15px instead of 17px */
+    --text-eyebrow--line-height: var(--text-sm);
     --text-eyebrow--letter-spacing: 0.10625rem;
 
-    --text-p2: var(--text-base);
-    --text-p2--line-height: 1.4rem;
+    --text-p2: var(--text-base); /* Now 15px instead of 16px */
+    --text-p2--line-height: 1.5rem; /* Improved from 1.4rem */
   }
 }
 
@@ -169,6 +157,10 @@
 
   p {
     @apply font-abc-diatype text-p1;
+  }
+
+  .text-micro {
+    @apply font-macan-mono uppercase;
   }
 
   .text-p1 {
