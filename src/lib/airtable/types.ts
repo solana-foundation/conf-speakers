@@ -20,6 +20,10 @@ export type Speaker = {
   lumaTicketPlusOne?: string;
   invitationCode?: string;
   slideDeckUrl?: string;
+  actionsDeckReceived?: string;
+  dietary?: string;
+  portalTelegramGroup?: string;
+  greenlightTime?: string;
 };
 
 export type Session = {

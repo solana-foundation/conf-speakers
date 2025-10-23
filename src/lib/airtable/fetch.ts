@@ -61,6 +61,10 @@ export const fetchSpeakers = () => {
         "Invitation Code",
         "Slide Deck File",
         "Slide Deck File_String",
+        "Actions_Deck Received",
+        "Dietary",
+        "Portal_Telegram Group",
+        "Portal_Greenlight Time",
       ],
       sort: [{ field: "Name", direction: "asc" }],
     })

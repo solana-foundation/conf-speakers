@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Check, CircleMinus, Info } from "lucide-react";
 
 interface ActionsChecklistProps {
-  hasSlideDeck?: boolean;
-  hasDietaryForm?: boolean;
+  deckStatus?: string;
+  dietaryStatus?: string;
+  speakerTelegramGroup?: string;
   telegramGroups?: Array<{
     sessionName: string;
     telegramGroup: string;
@@ -12,8 +13,9 @@ interface ActionsChecklistProps {
 }
 
 export default function ActionsChecklist({
-  hasSlideDeck = false,
-  hasDietaryForm = true,
+  deckStatus = "To Do",
+  dietaryStatus = "To Do",
+  speakerTelegramGroup,
   telegramGroups = [],
 }: ActionsChecklistProps) {
   const tasks = [
@@ -21,7 +23,7 @@ export default function ActionsChecklist({
       id: "upload-deck",
       title: "Deck received by Events Team",
       description: "Use 16:9 aspect, embed fonts, and export a PDF as backup.",
-      completed: hasSlideDeck,
+      completed: deckStatus === "Completed",
       link: "#",
       linkText: "Upload Deck",
       type: "task" as const,
@@ -30,7 +32,7 @@ export default function ActionsChecklist({
       id: "content-dietary-form",
       title: "On‑stage Content & Dietary Form",
       description: "Share any content caveats and dietary needs.",
-      completed: hasDietaryForm,
+      completed: dietaryStatus === "Completed",
       link: "#",
       linkText: "Fill Form",
       type: "task" as const,
@@ -44,6 +46,21 @@ export default function ActionsChecklist({
       linkText: null,
       type: "info" as const,
     },
+    // Add speaker-level Telegram group if available
+    ...(speakerTelegramGroup
+      ? [
+          {
+            id: "speaker-telegram-group",
+            title: "Join Speaker Telegram Group (optional)",
+            description: "Casual updates and coordination with fellow speakers.",
+            completed: true,
+            link: speakerTelegramGroup,
+            linkText: "Open Group",
+            type: "info" as const,
+          },
+        ]
+      : []),
+    // Add session-specific Telegram groups
     ...telegramGroups.map((group, index) => ({
       id: `telegram-group-${index}`,
       title: `Join ${group.sessionName} Telegram Group (optional)`,

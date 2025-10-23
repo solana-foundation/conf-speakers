@@ -63,6 +63,10 @@ export const SpeakerFieldsSchema = z
         )
         .optional(),
       "Slide Deck File_String": z.string().optional(),
+      "Actions_Deck Received": z.string().optional(),
+      Dietary: z.string().optional(),
+      "Portal_Telegram Group": z.string().optional(),
+      "Portal_Greenlight Time": z.string().optional(),
     }),
   })
   .transform((data) => ({
@@ -80,6 +84,10 @@ export const SpeakerFieldsSchema = z
     lumaTicketPlusOne: data.fields["Luma Ticket_Plus One"],
     invitationCode: data.fields["Invitation Code"],
     slideDeckUrl: data.fields["Slide Deck File"]?.[0]?.url || data.fields["Slide Deck File_String"],
+    actionsDeckReceived: data.fields["Actions_Deck Received"],
+    dietary: data.fields["Dietary"],
+    portalTelegramGroup: data.fields["Portal_Telegram Group"],
+    greenlightTime: data.fields["Portal_Greenlight Time"],
   }));
 
 export const FormatFieldsSchema = z

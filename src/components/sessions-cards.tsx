@@ -10,7 +10,7 @@ import StageBadge from "@/components/stage-badge";
 import { Calendar, Clock, Users, AlertTriangle } from "lucide-react";
 
 export interface SessionsCardsProps {
-  items: (Session & { subscribeUrl?: string; speakers?: Speaker[]; format?: string[] })[];
+  items: (Session & { subscribeUrl?: string; speakers?: Speaker[]; format?: string[]; greenlightTime?: string })[];
   calendarUrl?: string;
 }
 
@@ -28,18 +28,7 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
     return null;
   };
 
-  // Check if time is TBD using time window logic
-  const isTimeTBD = (session: Session & { speakers?: Speaker[] }) => {
-    if (!session.startTime || !session.endTime) return true;
-
-    // Parse times and check if there's a significant gap (indicating TBD)
-    const start = new Date(session.startTime);
-    const end = new Date(session.endTime);
-    const duration = end.getTime() - start.getTime();
-
-    // If duration is more than 3 hours, consider it TBD
-    return duration > 3 * 60 * 60 * 1000;
-  };
+  console.log("session", items);
 
   return (
     <div className="space-y-6">
@@ -63,6 +52,14 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
             </CardHeader>
 
             <CardContent className="space-y-4">
+              {/* Greenlight Time Display */}
+              {session.greenlightTime && (
+                <div className="border-lime bg-lime/10 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
+                  <AlertTriangle className="text-lime h-4 w-4" />
+                  <span className="font-medium text-white">{session.greenlightTime}</span>
+                </div>
+              )}
+
               {/* Logistics */}
               <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
                 {session.startTime && (
@@ -116,14 +113,6 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
-
-              {/* Time TBD Warning */}
-              {isTimeTBD(session) && (
-                <div className="flex items-center gap-2 rounded-md border border-yellow-200 bg-yellow-50 px-3 py-2 text-sm">
-                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                  <span className="font-medium text-yellow-800">Time TBD (11:00-14:00 window)</span>
                 </div>
               )}
 

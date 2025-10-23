@@ -73,12 +73,13 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
       format: sessionData.format
         ?.map((formatId) => formats.find((item) => item.id === formatId)?.fields["Format"])
         .filter(Boolean) as string[],
+      greenlightTime: speakerData.greenlightTime,
     };
   });
 
   // Calculate speaker status based on deck upload and dietary form completion
   const hasSlideDeck = !!speakerData.slideDeckUrl;
-  const hasDietaryForm = true;
+  const hasDietaryForm = speakerData.dietary === "Completed";
   const speakerStatus = hasSlideDeck && hasDietaryForm ? "all-set" : "awaiting-deck";
 
   // Extract telegram groups from sessions
@@ -88,12 +89,6 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
       sessionName: session.name,
       telegramGroup: session.telegramGroup!,
     }));
-
-  // Add test data for debugging
-  const telegramGroups =
-    sessionsData.length > 0
-      ? [{ sessionName: sessionsData[0]?.name, telegramGroup: "#" }, ...sessionTelegramGroups]
-      : sessionTelegramGroups;
 
   return (
     <div className="min-h-screen p-8 font-sans">
@@ -112,7 +107,12 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <ActionsChecklist hasSlideDeck={hasSlideDeck} hasDietaryForm={hasDietaryForm} telegramGroups={telegramGroups} />
+        <ActionsChecklist
+          deckStatus={speakerData.actionsDeckReceived}
+          dietaryStatus={speakerData.dietary}
+          speakerTelegramGroup={speakerData.portalTelegramGroup}
+          telegramGroups={sessionTelegramGroups}
+        />
 
         <Separator />
         <TicketsSection
