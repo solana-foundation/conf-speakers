@@ -9,6 +9,10 @@ export type Speaker = {
   imageUrl?: string;
   xLink?: string;
   xName?: string;
+  lumaTicketSpeaker?: string;
+  lumaTicketPlusOne?: string;
+  invitationCode?: string;
+  slideDeckUrl?: string;
 };
 
 export type Session = {

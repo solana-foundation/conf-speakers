@@ -35,7 +35,21 @@ export const fetchSpeakers = () => {
   return airtable
     .table(tableSpeakers)
     .select({
-      fields: ["Name", "First Name", "Last Name", "Role or Title", "Company", "Bio", "Headshot_For Web", "Twitter"],
+      fields: [
+        "Name",
+        "First Name",
+        "Last Name",
+        "Role or Title",
+        "Company",
+        "Bio",
+        "Headshot_For Web",
+        "Twitter",
+        "Luma Ticket_Speaker",
+        "Luma Ticket_Plus One",
+        "Invitation Code",
+        "Slide Deck File",
+        "Slide Deck File_String",
+      ],
       sort: [{ field: "Name", direction: "asc" }],
     })
     .all();

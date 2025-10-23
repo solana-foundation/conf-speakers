@@ -1,0 +1,103 @@
+HARDCODED FIELDS REPORT
+========================
+
+This report documents all fields that remain hardcoded in the speaker portal components after integrating Airtable data for tickets, invitation codes, and slide deck status.
+
+COMPONENT: LogisticsDialogButton.tsx
+====================================
+
+Venue/Stage Location:
+- Venue: "Breakers Ballroom — Stage A" (hardcoded)
+  Potential Airtable field: "Lookup Speaking On Location" or similar venue field
+- Backstage entrance: "Backstage entrance via Hall C. Staff will guide you." (hardcoded)
+  Potential Airtable field: None identified
+
+Arrival Information:
+- Arrival time: "Please arrive 45 minutes before your session start time." (hardcoded)
+  Potential Airtable field: None identified
+- Check-in instructions: "Check in at Speaker Ops for mic fitting and stage brief." (hardcoded)
+  Potential Airtable field: None identified
+
+Speaker Lounge:
+- Location: "Mezzanine Level, Room M2. Coffee, snacks, power, Wi‑Fi." (hardcoded)
+  Potential Airtable field: None identified
+
+Wardrobe Guidelines:
+- Pattern restrictions: "Avoid small stripes and high‑contrast micro‑patterns." (hardcoded)
+  Potential Airtable field: None identified
+- Temperature note: "Bring a light jacket; stage can be cool." (hardcoded)
+  Potential Airtable field: None identified
+
+Travel & Packing:
+- Adapter info: "EU Type C adapters available on site; carry your deck on USB." (hardcoded)
+  Potential Airtable field: None identified
+
+COMPONENT: PostEventSection.tsx
+===============================
+
+Photos Gallery:
+- Gallery link: "#" (hardcoded placeholder)
+  Potential Airtable field: "Photos Gallery URL" or similar
+
+Speaker Permit Info:
+- Permit link: "#" (hardcoded placeholder)
+  Potential Airtable field: "Speaker Permit URL" or similar
+
+Social Card Download:
+- Download link: "#" (hardcoded placeholder)
+  Potential Airtable field: "Social Card Download URL" or similar
+
+COMPONENT: ActionsChecklist.tsx
+===============================
+
+Upload Deck Task:
+- Upload link: "#" (hardcoded placeholder)
+  Potential Airtable field: "Deck Upload URL" or similar
+
+Content & Dietary Form:
+- Form link: "#" (hardcoded placeholder)
+  Potential Airtable field: "Dietary Form URL" or similar
+
+Stage Team Contact:
+- Email: "events@solana.org" (hardcoded)
+  Potential Airtable field: "Stage Team Email" or similar
+
+Telegram Group:
+- Group link: "#" (hardcoded placeholder)
+  Potential Airtable field: "Telegram Group URL" or similar
+
+COMPONENT: TicketsSection.tsx
+=============================
+
+How to Redeem Instructions:
+- Instructions link: "#" (hardcoded placeholder)
+  Potential Airtable field: "Ticket Redemption Instructions URL" or similar
+
+SUMMARY
+=======
+
+Total hardcoded fields identified: 15
+- LogisticsDialogButton: 8 fields (mostly venue/operational info)
+- PostEventSection: 3 fields (all placeholder links)
+- ActionsChecklist: 4 fields (contact info and placeholder links)
+- TicketsSection: 1 field (placeholder link)
+
+Most hardcoded fields are either:
+1. Operational/venue information that may not change between events
+2. Placeholder links that need to be replaced with actual URLs
+3. Contact information that could be centralized
+
+RECOMMENDATIONS
+===============
+
+1. Consider adding Airtable fields for:
+   - Venue location and stage details
+   - Speaker lounge location
+   - Contact email addresses
+   - Various URL fields for forms, galleries, and downloads
+
+2. Create a "Settings" or "Configuration" table in Airtable for event-wide information that doesn't change per speaker
+
+3. Replace all "#" placeholder links with actual URLs or Airtable field references
+
+4. Consider making contact information (like events@solana.org) configurable through environment variables or Airtable

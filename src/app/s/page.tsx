@@ -6,9 +6,8 @@ import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
-import { getSessionsFilters } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
-import { getSessionsCalendarUrl } from "@/lib/ics/utils";
+import { getSessionCalendarHttpUrl, getSessionsCalendarUrl, getSpeakerCalendarUrl } from "@/lib/ics/utils";
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
@@ -66,18 +65,22 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
     const sessionData = SessionFieldsSchema.parse(session);
     return {
       ...sessionData,
-      subscribeUrl: `/api/ics/session/${session.id}?key=${calendarKey}`,
+      subscribeUrl: getSessionCalendarHttpUrl(session.id, calendarKey),
       speakers: sessionData.speakerIds
         ?.map((id) => speakersData.find((item) => item.id === id))
         .filter(Boolean) as Speaker[],
     };
   });
-  const filters = getSessionsFilters(sessionsData);
+
+  // Calculate speaker status based on deck upload and dietary form completion
+  const hasSlideDeck = !!speakerData.slideDeckUrl;
+  const hasDietaryForm = true;
+  const speakerStatus = hasSlideDeck && hasDietaryForm ? "all-set" : "awaiting-deck";
 
   return (
     <div className="min-h-screen p-8 font-sans">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
-        <SpeakerCard {...speakerData} />
+        <SpeakerCard {...speakerData} status={speakerStatus} />
 
         <Separator />
 
@@ -85,7 +88,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <SessionsCards
           items={sessionsData}
-          allSessionsSubscribeUrl={`/api/ics/speaker/${speakerId}?key=${calendarKey}`}
+          allSessionsSubscribeUrl={getSpeakerCalendarUrl(speakerId, calendarKey)}
           calendarUrl={speakerCalendarUrl}
         />
 
@@ -95,10 +98,14 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <ActionsChecklist />
+        <ActionsChecklist hasSlideDeck={hasSlideDeck} hasDietaryForm={hasDietaryForm} />
 
         <Separator />
-        <TicketsSection />
+        <TicketsSection
+          speakerTicket={speakerData.lumaTicketSpeaker}
+          plusOneTicket={speakerData.lumaTicketPlusOne}
+          invitationCode={speakerData.invitationCode}
+        />
 
         <Separator />
         <PostEventSection />

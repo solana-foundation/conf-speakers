@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Separator } from "./ui/separator";
-import { Twitter } from "lucide-react";
+import { Twitter, TriangleAlert } from "lucide-react";
 
 export interface SpeakerCardProps {
   imageUrl?: string;
@@ -12,6 +12,12 @@ export interface SpeakerCardProps {
   xLink?: string;
   xName?: string;
   status?: "awaiting-deck" | "all-set" | "schedule-pending";
+  dueDate?: string;
+}
+
+interface StatusVariant {
+  label: string;
+  variant: "urgent" | "warning" | "default";
   dueDate?: string;
 }
 
@@ -27,25 +33,25 @@ export default function SpeakerCard({
   status = "awaiting-deck",
   dueDate = "10 Nov, 2025",
 }: SpeakerCardProps) {
-  const getStatusConfig = (status?: string, dueDate?: string) => {
+  const getStatusConfig = (status?: string, dueDate?: string): StatusVariant | null => {
     switch (status) {
       case "awaiting-deck":
         return {
-          label: "Awaiting deck",
-          variant: "urgent" as const,
-          dueDate: dueDate ? `Due: ${dueDate}` : undefined,
+          label: "Awaiting Deck",
+          variant: "default",
+          dueDate: dueDate ? `Due: ${dueDate}` : "",
         };
       case "all-set":
         return {
-          label: "All set",
-          variant: "default" as const,
-          dueDate: dueDate ? `Due: ${dueDate}` : undefined,
+          label: "All Set",
+          variant: "default",
+          dueDate: dueDate ? `Due: ${dueDate}` : "",
         };
       case "schedule-pending":
         return {
-          label: "Schedule pending",
-          variant: "warning" as const,
-          dueDate: dueDate ? `Due: ${dueDate}` : undefined,
+          label: "Schedule Pending",
+          variant: "warning",
+          dueDate: dueDate ? `Due: ${dueDate}` : "",
         };
       default:
         return null;
@@ -61,20 +67,19 @@ export default function SpeakerCard({
         <>
           <div className="mb-6 w-full">
             <div
-              className={`text-md w-full rounded-lg px-6 py-2 text-center font-semibold ${
+              className={`text-md flex w-full items-center justify-center gap-2 px-6 py-2 text-center font-semibold ${
                 statusConfig.variant === "urgent"
                   ? "bg-red-500 text-black"
                   : statusConfig.variant === "warning"
                     ? "bg-lime text-black"
                     : statusConfig.variant === "default"
-                      ? "bg-mint text-black"
+                      ? "bg-byte text-black"
                       : "bg-background text-primary border-0"
               }`}
             >
+              <TriangleAlert className="size-4" />
               <span>{statusConfig.label}</span>
-              {statusConfig.dueDate && (
-                <span className="ml-2 text-sm font-normal opacity-80">{statusConfig.dueDate}</span>
-              )}
+              {statusConfig.dueDate && <span className="text-sm font-normal opacity-80">{statusConfig.dueDate}</span>}
             </div>
           </div>
           <Separator className="my-4" />

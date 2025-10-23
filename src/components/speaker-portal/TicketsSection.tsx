@@ -12,22 +12,36 @@ function Row({ label, children }: { label: React.ReactNode; children: React.Reac
   );
 }
 
-export default function TicketsSection() {
+interface TicketsSectionProps {
+  speakerTicket?: string;
+  plusOneTicket?: string;
+  invitationCode?: string;
+}
+
+export default function TicketsSection({ speakerTicket, plusOneTicket, invitationCode }: TicketsSectionProps) {
   return (
     <Section title="Tickets" description="Your speaker ticket and plus-one">
       <div className="divide-y">
         <Row label={<span>Speaker Ticket Status</span>}>
-          <Badge variant="outline">Confirmed</Badge>
+          <Badge variant={speakerTicket ? "outline" : "secondary"}>{speakerTicket ? "Confirmed" : "Not Issued"}</Badge>
         </Row>
 
         <Row label={<span>Plus One Ticket Redemption</span>}>
-          <Button size="sm" variant="outline" asChild>
-            <a href="#">Redeem</a>
-          </Button>
+          {plusOneTicket ? (
+            <Button size="sm" variant="outline" asChild>
+              <a href={plusOneTicket} target="_blank" rel="noopener noreferrer">
+                Redeem
+              </a>
+            </Button>
+          ) : (
+            <Button size="sm" variant="outline" disabled>
+              Not Available
+            </Button>
+          )}
         </Row>
 
         <Row label={<span>Invite Code</span>}>
-          <code className="text-base">XXXXXX</code>
+          <code className="text-base">{invitationCode || "Not Available"}</code>
         </Row>
 
         <Row label={<span>How to Redeem</span>}>

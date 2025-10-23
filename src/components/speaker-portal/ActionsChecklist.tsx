@@ -1,16 +1,19 @@
-"use client";
-
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Check, CircleMinus, Info } from "lucide-react";
 
-export default function ActionsChecklist() {
-  const [tasks, setTasks] = React.useState([
+interface ActionsChecklistProps {
+  hasSlideDeck?: boolean;
+  hasDietaryForm?: boolean;
+}
+
+export default function ActionsChecklist({ hasSlideDeck = false, hasDietaryForm = true }: ActionsChecklistProps) {
+  const tasks = [
     {
       id: "upload-deck",
       title: "Deck received by Events Team",
       description: "Use 16:9 aspect, embed fonts, and export a PDF as backup.",
-      completed: false,
+      completed: hasSlideDeck,
       link: "#",
       linkText: "Upload Deck",
       type: "task" as const,
@@ -19,7 +22,7 @@ export default function ActionsChecklist() {
       id: "content-dietary-form",
       title: "On‑stage Content & Dietary Form",
       description: "Share any content caveats and dietary needs.",
-      completed: true,
+      completed: hasDietaryForm,
       link: "#",
       linkText: "Fill Form",
       type: "task" as const,
@@ -42,7 +45,7 @@ export default function ActionsChecklist() {
       linkText: "Open Group",
       type: "info" as const,
     },
-  ]);
+  ];
 
   const getTaskIcon = (task: (typeof tasks)[0]) => {
     if (task.type === "info") {
