@@ -32,5 +32,6 @@ export type Session = {
   speakerIds?: string[];
   moderatorIds?: string[];
   format?: string[];
+  telegramGroup?: string;
   webPublishingStatus?: string;
 };

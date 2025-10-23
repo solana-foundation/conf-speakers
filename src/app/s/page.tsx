@@ -81,6 +81,17 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const hasDietaryForm = true;
   const speakerStatus = hasSlideDeck && hasDietaryForm ? "all-set" : "awaiting-deck";
 
+  // Extract telegram groups from sessions
+  const sessionTelegramGroups = sessionsData
+    .filter((session) => session.telegramGroup)
+    .map((session) => ({
+      sessionName: session.name,
+      telegramGroup: session.telegramGroup!,
+    }));
+
+  // Add test data for debugging
+  const telegramGroups = [{ sessionName: sessionsData[0]?.name, telegramGroup: "#" }, ...sessionTelegramGroups];
+
   return (
     <div className="min-h-screen p-8 font-sans">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
@@ -98,11 +109,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <ActionsChecklist
-          hasSlideDeck={hasSlideDeck}
-          hasDietaryForm={hasDietaryForm}
-          telegramGroup={speakerData.telegramGroup}
-        />
+        <ActionsChecklist hasSlideDeck={hasSlideDeck} hasDietaryForm={hasDietaryForm} telegramGroups={telegramGroups} />
 
         <Separator />
         <TicketsSection

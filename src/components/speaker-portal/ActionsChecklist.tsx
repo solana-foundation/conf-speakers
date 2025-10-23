@@ -5,13 +5,16 @@ import { Check, CircleMinus, Info } from "lucide-react";
 interface ActionsChecklistProps {
   hasSlideDeck?: boolean;
   hasDietaryForm?: boolean;
-  telegramGroup?: string;
+  telegramGroups?: Array<{
+    sessionName: string;
+    telegramGroup: string;
+  }>;
 }
 
 export default function ActionsChecklist({
   hasSlideDeck = false,
   hasDietaryForm = true,
-  telegramGroup = "#",
+  telegramGroups = [],
 }: ActionsChecklistProps) {
   const tasks = [
     {
@@ -41,15 +44,15 @@ export default function ActionsChecklist({
       linkText: null,
       type: "info" as const,
     },
-    {
-      id: "telegram-group",
-      title: "Join Speaker Telegram Group (optional)",
+    ...telegramGroups.map((group, index) => ({
+      id: `telegram-group-${index}`,
+      title: `Join ${group.sessionName} Telegram Group (optional)`,
       description: "Casual updates and coordination with fellow speakers.",
       completed: true,
-      link: telegramGroup,
+      link: group.telegramGroup,
       linkText: "Open Group",
       type: "info" as const,
-    },
+    })),
   ];
 
   const getTaskIcon = (task: (typeof tasks)[0]) => {
