@@ -111,7 +111,7 @@ export default function LogisticsDialogButton({ stage }: { stage: StageTitle }) 
               <div className="bg-wisp/10 text-wisp flex h-8 w-8 items-center justify-center rounded-full">
                 <Luggage className="h-4 w-4" />
               </div>
-              <h4 className="text-h4 text-primary font-medium">Travel & Packing Notes</h4>
+              <h4 className="text-h3 text-primary font-medium uppercase">Travel & Packing Notes</h4>
             </div>
             <div className="pl-11">
               <p className="text-p1">{LOGISTICS_CONFIG.shared.travel}</p>
