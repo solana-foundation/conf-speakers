@@ -21,13 +21,13 @@ export default function PostEventSection() {
           </Button>
         </Row>
 
-        <Row label={<span>Speaker Permit Info (TBC)</span>}>
+        <Row label={<span>Speaker Permit Info</span>}>
           <Button size="sm" variant="outline" asChild>
             <a href="#">View Info</a>
           </Button>
         </Row>
 
-        <Row label={<span>Social Card Download (optional)</span>}>
+        <Row label={<span>Social Card Download</span>}>
           <Button size="sm" variant="outline" asChild>
             <a href="#">Download</a>
           </Button>
