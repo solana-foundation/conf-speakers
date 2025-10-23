@@ -18,7 +18,7 @@ import { Fragment, useMemo, useState, useEffect } from "react";
 import SessionSheet from "./session-sheet";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import StageBadge, { StageTitle } from "@/components/stage-badge";
+import StageBadge from "@/components/stage-badge";
 import { CircleMinus, EyeIcon } from "lucide-react";
 
 const columnHelper = createColumnHelper<Session & { subscribeUrl?: string; speakers?: Speaker[] }>();
@@ -192,10 +192,10 @@ export default function SessionsTable({
           </TableHead>
         ),
         cell: (info) => {
-          const value = info.getValue() as string;
+          const value = info.getValue();
           return (
             <TableCell>
-              <StageBadge title={value as StageTitle} />
+              <StageBadge title={value} />
             </TableCell>
           );
         },

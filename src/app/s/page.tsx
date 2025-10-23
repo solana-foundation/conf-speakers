@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
 import { generateKey, isKeyValid, getTokenPayload } from "@/lib/sign.server";
 import { notFound, redirect } from "next/navigation";
-import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
+import { getCachedFormats, getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
@@ -61,6 +61,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   }
 
   const sessions = await getCachedSessions({ speakerName: speakerData._name });
+  const formats = await getCachedFormats();
   const sessionsData = sessions.map((session) => {
     const sessionData = SessionFieldsSchema.parse(session);
     return {
@@ -69,6 +70,9 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
       speakers: sessionData.speakerIds
         ?.map((id) => speakersData.find((item) => item.id === id))
         .filter(Boolean) as Speaker[],
+      format: sessionData.format
+        ?.map((formatId) => formats.find((item) => item.id === formatId)?.fields["Format"])
+        .filter(Boolean) as string[],
     };
   });
 
@@ -86,14 +90,10 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <h2 className="text-h5 uppercase">Your Schedule</h2>
 
-        <SessionsCards
-          items={sessionsData}
-          allSessionsSubscribeUrl={getSpeakerCalendarUrl(speakerId, calendarKey)}
-          calendarUrl={speakerCalendarUrl}
-        />
+        <SessionsCards items={sessionsData} calendarUrl={speakerCalendarUrl} />
 
         <div className="flex gap-3">
-          <LogisticsDialogButton />
+          <LogisticsDialogButton stage={sessionsData[0].stage} />
         </div>
 
         <Separator />

@@ -4,8 +4,37 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { MapPin, Clock, Coffee, Shirt, Luggage } from "lucide-react";
+import { StageTitle, StageValues } from "@/lib/airtable/types";
 
-export default function LogisticsDialogButton() {
+// Hardcoded configuration data
+const LOGISTICS_CONFIG = {
+  stages: {
+    [StageValues.Main]: {
+      name: "Breakers Ballroom — Stage A",
+      entrance: "Backstage entrance via Hall C. Staff will guide you.",
+      arrivalTime: "45 minutes before your session start time",
+      checkInLocation: "Speaker Ops for mic fitting and stage brief",
+    },
+    [StageValues.Side]: {
+      name: "Conference Room B — Stage B",
+      entrance: "Direct entrance via Main Hall. Look for Stage B signage.",
+      arrivalTime: "30 minutes before your session start time",
+      checkInLocation: "Side Stage Ops for equipment check and brief",
+    },
+  },
+  shared: {
+    speakerLounge: "Mezzanine Level, Room M2. Coffee, snacks, power, Wi‑Fi.",
+    wardrobe: {
+      tips: "Avoid small stripes and high‑contrast micro‑patterns.",
+      jacket: "Bring a light jacket; stage can be cool.",
+    },
+    travel: "EU Type C adapters available on site; carry your deck on USB.",
+  },
+};
+
+export default function LogisticsDialogButton({ stage }: { stage: StageTitle }) {
+  const stageConfig = LOGISTICS_CONFIG.stages[stage];
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -26,8 +55,8 @@ export default function LogisticsDialogButton() {
               <h4 className="text-h3 text-primary font-medium uppercase">Venue & Stage Location</h4>
             </div>
             <div className="space-y-2 pl-11">
-              <p className="text-p1 font-medium">Breakers Ballroom — Stage A</p>
-              <p className="text-p2 text-secondary">Backstage entrance via Hall C. Staff will guide you.</p>
+              <p className="text-p1 font-medium">{stageConfig.name}</p>
+              <p className="text-p2 text-secondary">{stageConfig.entrance}</p>
             </div>
           </section>
 
@@ -41,8 +70,8 @@ export default function LogisticsDialogButton() {
               <h4 className="text-h3 text-primary font-medium uppercase">Arrival</h4>
             </div>
             <div className="space-y-2 pl-11">
-              <p className="text-p1">Please arrive 45 minutes before your session start time.</p>
-              <p className="text-p2 text-secondary">Check in at Speaker Ops for mic fitting and stage brief.</p>
+              <p className="text-p1">Please arrive {stageConfig.arrivalTime}.</p>
+              <p className="text-p2 text-secondary">Check in at {stageConfig.checkInLocation}.</p>
             </div>
           </section>
 
@@ -56,7 +85,7 @@ export default function LogisticsDialogButton() {
               <h4 className="text-h3 text-primary font-medium uppercase">Speaker Lounge</h4>
             </div>
             <div className="pl-11">
-              <p className="text-p1">Mezzanine Level, Room M2. Coffee, snacks, power, Wi‑Fi.</p>
+              <p className="text-p1">{LOGISTICS_CONFIG.shared.speakerLounge}</p>
             </div>
           </section>
 
@@ -70,8 +99,8 @@ export default function LogisticsDialogButton() {
               <h4 className="text-h3 text-primary font-medium uppercase">Wardrobe</h4>
             </div>
             <div className="space-y-2 pl-11">
-              <p className="text-p1">Avoid small stripes and high‑contrast micro‑patterns.</p>
-              <p className="text-p2 text-secondary">Bring a light jacket; stage can be cool.</p>
+              <p className="text-p1">{LOGISTICS_CONFIG.shared.wardrobe.tips}</p>
+              <p className="text-p2 text-secondary">{LOGISTICS_CONFIG.shared.wardrobe.jacket}</p>
             </div>
           </section>
 
@@ -85,7 +114,7 @@ export default function LogisticsDialogButton() {
               <h4 className="text-h4 text-primary font-medium">Travel & Packing Notes</h4>
             </div>
             <div className="pl-11">
-              <p className="text-p1">EU Type C adapters available on site; carry your deck on USB.</p>
+              <p className="text-p1">{LOGISTICS_CONFIG.shared.travel}</p>
             </div>
           </section>
         </div>

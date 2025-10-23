@@ -4,36 +4,39 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { formatVenueTime } from "@/lib/time/tz";
-import { Session, Speaker } from "@/lib/airtable/types";
+import { Session, Speaker, StageTitle } from "@/lib/airtable/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import StageBadge, { StageTitle } from "@/components/stage-badge";
+import StageBadge from "@/components/stage-badge";
 import { Calendar, Clock, Users, AlertTriangle } from "lucide-react";
 import SessionSheet from "./session-sheet";
 import { EyeIcon } from "lucide-react";
 
 export interface SessionsCardsProps {
-  items: (Session & { subscribeUrl?: string; speakers?: Speaker[] })[];
-  allSessionsSubscribeUrl?: string;
+  items: (Session & { subscribeUrl?: string; speakers?: Speaker[]; format?: string[] })[];
   calendarUrl?: string;
 }
 
-export default function SessionsCards({ items, allSessionsSubscribeUrl, calendarUrl }: SessionsCardsProps) {
-  // Determine session format based on speaker count and other factors
-  const getSessionFormat = (session: Session & { speakers?: Speaker[] }) => {
-    const speakerCount = session.speakers?.length || 0;
-    if (speakerCount === 1) return "Keynote";
-    if (speakerCount === 2) return "Panel";
-    if (speakerCount > 2) return "Debate";
-    return "Session";
+export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps) {
+  // Get duration from calculated times
+  const getSessionDuration = (session: Session & { speakers?: Speaker[] }) => {
+    if (session.startTime && session.endTime) {
+      const start = new Date(session.startTime);
+      const end = new Date(session.endTime);
+      const durationMs = end.getTime() - start.getTime();
+      const durationMinutes = Math.round(durationMs / (1000 * 60));
+      return `${durationMinutes} min`;
+    }
+
+    return null;
   };
 
-  // Check if time is TBD (within a window)
-  const isTimeTBD = (startTime?: string, endTime?: string) => {
-    if (!startTime || !endTime) return true;
+  // Check if time is TBD using time window logic
+  const isTimeTBD = (session: Session & { speakers?: Speaker[] }) => {
+    if (!session.startTime || !session.endTime) return true;
 
     // Parse times and check if there's a significant gap (indicating TBD)
-    const start = new Date(startTime);
-    const end = new Date(endTime);
+    const start = new Date(session.startTime);
+    const end = new Date(session.endTime);
     const duration = end.getTime() - start.getTime();
 
     // If duration is more than 3 hours, consider it TBD
@@ -52,28 +55,12 @@ export default function SessionsCards({ items, allSessionsSubscribeUrl, calendar
                   {/* Format Badge */}
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary" className="text-xs">
-                      {getSessionFormat(session)}
+                      {session.format}
                     </Badge>
                   </div>
                   {/* Session Title */}
                   <h3 className="text-xl leading-tight font-bold">{session.name}</h3>
                 </div>
-
-                {/* View Details Button */}
-                <SessionSheet
-                  name={session.name}
-                  description={session.description}
-                  startTime={session.startTime}
-                  endTime={session.endTime}
-                  stage={session.stage}
-                  subscribeUrl={session.subscribeUrl}
-                  speakers={session.speakers}
-                >
-                  <Button variant="outline" size="sm" className="shrink-0">
-                    <EyeIcon className="h-4 w-4" />
-                    <span className="ml-2 hidden sm:inline">View Details</span>
-                  </Button>
-                </SessionSheet>
               </div>
             </CardHeader>
 
@@ -96,8 +83,15 @@ export default function SessionsCards({ items, allSessionsSubscribeUrl, calendar
                   </div>
                 )}
 
+                {getSessionDuration(session) && (
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    <span>{getSessionDuration(session)}</span>
+                  </div>
+                )}
+
                 <div className="flex items-center gap-1">
-                  <StageBadge title={session.stage as StageTitle} />
+                  <StageBadge title={session.stage} />
                 </div>
               </div>
 
@@ -128,7 +122,7 @@ export default function SessionsCards({ items, allSessionsSubscribeUrl, calendar
               )}
 
               {/* Time TBD Warning */}
-              {isTimeTBD(session.startTime, session.endTime) && (
+              {isTimeTBD(session) && (
                 <div className="flex items-center gap-2 rounded-md border border-yellow-200 bg-yellow-50 px-3 py-2 text-sm">
                   <AlertTriangle className="h-4 w-4 text-yellow-600" />
                   <span className="font-medium text-yellow-800">Time TBD (11:00-14:00 window)</span>

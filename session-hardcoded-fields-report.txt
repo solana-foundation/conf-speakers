@@ -1,0 +1,104 @@
+Session Hardcoded Fields Report
+===============================
+
+This report documents session-related fields that remain hardcoded in the application after integrating Airtable session data.
+
+## SessionsCards Component (src/components/sessions-cards.tsx)
+
+### Hardcoded Values:
+1. **TBD Warning Message**: "Time TBD (11:00-14:00 window)"
+   - Location: Line 198
+   - Description: Static warning message for TBD sessions
+   - Potential Airtable Field: Could be customized per session
+
+2. **Calendar Button Labels**:
+   - "Add My Sessions to Calendar" (Line 144)
+   - "Add All BP25 Sessions to Calendar" (Line 153)
+   - Description: Static button text for calendar actions
+   - Potential Airtable Field: Could be customized per session type
+
+3. **Recording Status Icons**:
+   - "📹 Recording" / "🚫 No Recording" (Line 147)
+   - Description: Static emoji indicators for recording status
+   - Potential Airtable Field: Could be customized icons/text
+
+4. **Slide Status Icons**:
+   - "📊 Slides Required" / "📝 No Slides Required" (Line 181)
+   - Description: Static emoji indicators for slide requirements
+   - Potential Airtable Field: Could be customized icons/text
+
+5. **Fallback Format Logic**:
+   - Keynote (1 speaker), Panel (2 speakers), Debate (3+ speakers) (Lines 28-32)
+   - Description: Hardcoded logic when format/sessionType fields are empty
+   - Potential Airtable Field: Already using format/sessionType fields, fallback is reasonable
+
+6. **TBD Detection Logic**:
+   - 3-hour duration threshold for TBD detection (Line 64)
+   - Description: Hardcoded threshold when TBD field is not available
+   - Potential Airtable Field: Already using TBD field, fallback is reasonable
+
+## SessionSheet Component (src/components/session-sheet.tsx)
+
+### Hardcoded Values:
+1. **Recording Status Labels**:
+   - "✅ Allowed" / "❌ Not Allowed" (Line 118)
+   - Description: Static emoji indicators for recording status
+   - Potential Airtable Field: Could be customized icons/text
+
+2. **Slide Status Labels**:
+   - "📊 Required" / "📝 Not Required" (Line 123)
+   - Description: Static emoji indicators for slide requirements
+   - Potential Airtable Field: Could be customized icons/text
+
+3. **TBD Warning**:
+   - "⚠️ Time TBD" (Line 176)
+   - Description: Static warning message for TBD sessions
+   - Potential Airtable Field: Could be customized per session
+
+4. **Button Labels**:
+   - "Subscribe to session" (Line 205)
+   - "View Slides" (Line 212)
+   - "Watch Replay" (Line 217)
+   - Description: Static button text for actions
+   - Potential Airtable Field: Could be customized per session type
+
+5. **Section Headers**:
+   - "Speakers:" (Line 182)
+   - "Categories:" (Line 102)
+   - "Session Topics:" (Line 162)
+   - "Content Summary:" (Line 138)
+   - "Talk Format:" (Line 144)
+   - "Slide Guidelines:" (Line 154)
+   - "Recording:" (Line 117)
+   - "Slides:" (Line 122)
+   - "Stream Status:" (Line 127)
+   - "Duration:" (Line 84)
+   - Description: Static section headers
+   - Potential Airtable Field: Could be customized per session type
+
+## General UI Elements
+
+### Hardcoded Values:
+1. **Badge Styling**:
+   - Various badge variants (secondary, outline, muted, blue-100)
+   - Description: Static CSS classes for different badge types
+   - Potential Airtable Field: Could be customized per session category
+
+2. **Color Schemes**:
+   - Yellow for TBD warnings, blue for slide requirements
+   - Description: Static color choices for different status types
+   - Potential Airtable Field: Could be customized per session type
+
+## Recommendations
+
+1. **High Priority**: Consider making TBD warning messages customizable per session
+2. **Medium Priority**: Allow customization of recording/slide status indicators
+3. **Low Priority**: Button labels and section headers are generally acceptable as hardcoded
+4. **Fallback Logic**: The fallback logic for format detection and TBD detection is reasonable and should remain
+
+## Notes
+
+- Most hardcoded values are UI labels and styling choices that provide consistency
+- The fallback logic ensures the application works even when Airtable fields are empty
+- Some hardcoded values (like emoji indicators) could be replaced with more flexible icon systems
+- The integration successfully replaced the main data-driven logic with Airtable fields

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { sanitizeXLink, sanitizeXName } from "@/lib/utils";
+import { StageValues } from "@/lib/airtable/types";
 
 export const SessionFieldsSchema = z
   .object({
@@ -9,8 +10,11 @@ export const SessionFieldsSchema = z
       Description: z.string().optional(),
       "Start Time": z.string().optional(),
       "End Time": z.string().optional(),
-      Stage: z.string(),
+      Stage: z.enum(Object.values(StageValues)),
       Speakers: z.array(z.string()).optional(),
+      Moderator: z.array(z.string()).optional(),
+      Format: z.array(z.string()).optional(),
+      "Web Publishing Status": z.string().optional(),
     }),
   })
   .transform((data) => ({
@@ -21,6 +25,9 @@ export const SessionFieldsSchema = z
     endTime: data.fields["End Time"],
     stage: data.fields["Stage"],
     speakerIds: data.fields["Speakers"],
+    moderatorIds: data.fields["Moderator"],
+    format: data.fields["Format"],
+    webPublishingStatus: data.fields["Web Publishing Status"],
   }));
 
 export const SpeakerFieldsSchema = z
@@ -73,4 +80,16 @@ export const SpeakerFieldsSchema = z
     lumaTicketPlusOne: data.fields["Luma Ticket_Plus One"],
     invitationCode: data.fields["Invitation Code"],
     slideDeckUrl: data.fields["Slide Deck File"]?.[0]?.url || data.fields["Slide Deck File_String"],
+  }));
+
+export const FormatFieldsSchema = z
+  .object({
+    id: z.string(),
+    fields: z.object({
+      "Format Label": z.string(),
+    }),
+  })
+  .transform((data) => ({
+    id: data.id,
+    label: data.fields["Format Label"],
   }));

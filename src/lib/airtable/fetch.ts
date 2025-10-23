@@ -3,9 +3,11 @@ import { airtable } from "./client";
 
 const tableSessions = process.env.AIRTABLE_TABLE_AGENDA;
 const tableSpeakers = process.env.AIRTABLE_TABLE_SPEAKERS;
+const tableFormats = process.env.AIRTABLE_TABLE_FORMATS;
+const REVALIDATE_TIME = 1800; // 30 minutes
 
-if (!tableSessions || !tableSpeakers) {
-  throw new Error("AIRTABLE_TABLE_AGENDA or AIRTABLE_TABLE_SPEAKERS is not set");
+if (!tableSessions || !tableSpeakers || !tableFormats) {
+  throw new Error("AIRTABLE_TABLE_AGENDA or AIRTABLE_TABLE_SPEAKERS or AIRTABLE_TABLE_FORMATS is not set");
 }
 
 interface SessionParams {
@@ -16,7 +18,17 @@ export const fetchSessions = (params: SessionParams = {}) => {
   return airtable
     .table(tableSessions)
     .select({
-      fields: ["⚙️ Session Name", "Description", "Start Time", "End Time", "Stage", "Speakers"],
+      fields: [
+        "⚙️ Session Name",
+        "Description",
+        "Start Time",
+        "End Time",
+        "Stage",
+        "Speakers",
+        "Moderator",
+        "Format",
+        "Web Publishing Status",
+      ],
       ...(params.speakerName ? { filterByFormula: `FIND("${params.speakerName}", {Speakers}&"")` } : undefined),
       sort: [{ field: "Start Time", direction: "asc" }],
     })
@@ -55,13 +67,22 @@ export const fetchSpeakers = () => {
     .all();
 };
 
+export const fetchFormats = () => {
+  return airtable
+    .table(tableFormats)
+    .select({
+      fields: ["Format"],
+    })
+    .all();
+};
+
 export const getCachedSessions = unstable_cache(
   async (params: SessionParams = {}) => {
     return await fetchSessions(params);
   },
   ["sessions"],
   {
-    revalidate: 1800, // 30 minutes
+    revalidate: REVALIDATE_TIME,
     tags: ["sessions"],
   },
 );
@@ -72,8 +93,19 @@ export const getCachedSpeaker = unstable_cache(
   },
   ["speaker"],
   {
-    revalidate: 1800, // 30 minutes
+    revalidate: REVALIDATE_TIME,
     tags: ["speaker"],
+  },
+);
+
+export const getCachedFormats = unstable_cache(
+  async () => {
+    return await fetchFormats();
+  },
+  ["formats"],
+  {
+    revalidate: REVALIDATE_TIME,
+    tags: ["formats"],
   },
 );
 
@@ -83,7 +115,7 @@ export const getCachedSpeakers = unstable_cache(
   },
   ["speakers"],
   {
-    revalidate: 1800, // 30 minutes
+    revalidate: REVALIDATE_TIME,
     tags: ["speakers"],
   },
 );

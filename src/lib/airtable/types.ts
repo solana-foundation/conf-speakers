@@ -1,3 +1,10 @@
+export type StageTitle = "Main Stage" | "Side Stage";
+
+export enum StageValues {
+  Main = "Main Stage",
+  Side = "Side Stage",
+}
+
 export type Speaker = {
   id: string;
   _name?: string;
@@ -21,6 +28,9 @@ export type Session = {
   description?: string;
   startTime?: string;
   endTime?: string;
-  stage?: string;
+  stage?: StageTitle | undefined;
   speakerIds?: string[];
+  moderatorIds?: string[];
+  format?: string[];
+  webPublishingStatus?: string;
 };
