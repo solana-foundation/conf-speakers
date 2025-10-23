@@ -28,8 +28,6 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
     return null;
   };
 
-  console.log("session", items);
-
   return (
     <div className="space-y-6">
       {/* Sessions Cards */}
