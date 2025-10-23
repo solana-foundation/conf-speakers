@@ -45,7 +45,7 @@ export default function SessionsCards({ items, allSessionsSubscribeUrl, calendar
       {/* Sessions Cards */}
       <div className="space-y-4">
         {items.map((session) => (
-          <Card key={session.id} className="border-border/50 bg-card/50 overflow-hidden border backdrop-blur-sm">
+          <Card key={session.id} className="border-stroke-secondary bg-card/40 overflow-hidden border backdrop-blur-sm">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex-1 space-y-2">

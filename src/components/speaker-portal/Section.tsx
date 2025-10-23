@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export interface SectionProps {
   title: string;
@@ -11,7 +12,7 @@ export interface SectionProps {
 
 export default function Section({ title, description, children, action, className }: SectionProps) {
   return (
-    <Card className={className}>
+    <Card className={cn("border-stroke-primary bg-card/40", className)}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}

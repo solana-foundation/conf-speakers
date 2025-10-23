@@ -21,10 +21,10 @@
   --color-primary: var(--color-primary-byte);
   --color-primary-foreground: var(--color-invert);
 
-  --color-secondary: var(--color-background-secondary);
+  --color-secondary: var(--color-wisp-60);
   --color-secondary-foreground: var(--color-primary);
 
-  --color-muted: var(--color-background-secondary);
+  --color-muted: var(--color-wisp-10);
   --color-muted-foreground: var(--color-wisp-60);
 
   --color-accent: var(--color-background-secondary);
