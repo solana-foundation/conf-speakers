@@ -25,7 +25,7 @@ export default function SpeakerCard({
   xLink,
   xName,
   status = "awaiting-deck",
-  dueDate = "24 Oct, 2025",
+  dueDate = "10 Nov, 2025",
 }: SpeakerCardProps) {
   const getStatusConfig = (status?: string, dueDate?: string) => {
     switch (status) {
