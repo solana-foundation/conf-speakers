@@ -98,7 +98,11 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <ActionsChecklist hasSlideDeck={hasSlideDeck} hasDietaryForm={hasDietaryForm} />
+        <ActionsChecklist
+          hasSlideDeck={hasSlideDeck}
+          hasDietaryForm={hasDietaryForm}
+          telegramGroup={speakerData.telegramGroup}
+        />
 
         <Separator />
         <TicketsSection

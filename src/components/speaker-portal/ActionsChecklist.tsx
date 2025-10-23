@@ -5,9 +5,14 @@ import { Check, CircleMinus, Info } from "lucide-react";
 interface ActionsChecklistProps {
   hasSlideDeck?: boolean;
   hasDietaryForm?: boolean;
+  telegramGroup?: string;
 }
 
-export default function ActionsChecklist({ hasSlideDeck = false, hasDietaryForm = true }: ActionsChecklistProps) {
+export default function ActionsChecklist({
+  hasSlideDeck = false,
+  hasDietaryForm = true,
+  telegramGroup = "#",
+}: ActionsChecklistProps) {
   const tasks = [
     {
       id: "upload-deck",
@@ -41,7 +46,7 @@ export default function ActionsChecklist({ hasSlideDeck = false, hasDietaryForm 
       title: "Join Speaker Telegram Group (optional)",
       description: "Casual updates and coordination with fellow speakers.",
       completed: true,
-      link: "#",
+      link: telegramGroup,
       linkText: "Open Group",
       type: "info" as const,
     },
@@ -86,7 +91,9 @@ export default function ActionsChecklist({ hasSlideDeck = false, hasDietaryForm 
                 </div>
                 {task.link && task.linkText && (!task.completed || task.type === "info") && (
                   <Button size="sm" variant="azure" asChild>
-                    <a href={task.link}>{task.linkText}</a>
+                    <a target="_blank" rel="noopener noreferrer" href={task.link}>
+                      {task.linkText}
+                    </a>
                   </Button>
                 )}
               </div>

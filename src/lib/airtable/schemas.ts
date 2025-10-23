@@ -14,7 +14,7 @@ export const SessionFieldsSchema = z
       Speakers: z.array(z.string()).optional(),
       Moderator: z.array(z.string()).optional(),
       Format: z.array(z.string()).optional(),
-      "Web Publishing Status": z.string().optional(),
+      "Telegram Group": z.string().optional(),
     }),
   })
   .transform((data) => ({
@@ -27,7 +27,7 @@ export const SessionFieldsSchema = z
     speakerIds: data.fields["Speakers"],
     moderatorIds: data.fields["Moderator"],
     format: data.fields["Format"],
-    webPublishingStatus: data.fields["Web Publishing Status"],
+    telegramGroup: data.fields["Telegram Group"],
   }));
 
 export const SpeakerFieldsSchema = z
