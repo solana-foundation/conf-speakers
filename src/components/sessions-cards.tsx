@@ -4,12 +4,10 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { formatVenueTime } from "@/lib/time/tz";
-import { Session, Speaker, StageTitle } from "@/lib/airtable/types";
+import { Session, Speaker } from "@/lib/airtable/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
 import { Calendar, Clock, Users, AlertTriangle } from "lucide-react";
-import SessionSheet from "./session-sheet";
-import { EyeIcon } from "lucide-react";
 
 export interface SessionsCardsProps {
   items: (Session & { subscribeUrl?: string; speakers?: Speaker[]; format?: string[] })[];

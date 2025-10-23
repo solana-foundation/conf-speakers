@@ -7,7 +7,7 @@ import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
 import { Speaker } from "@/lib/airtable/types";
-import { getSessionCalendarHttpUrl, getSessionsCalendarUrl, getSpeakerCalendarUrl } from "@/lib/ics/utils";
+import { getSessionCalendarHttpUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
