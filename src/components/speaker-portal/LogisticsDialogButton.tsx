@@ -3,42 +3,90 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { MapPin, Clock, Coffee, Shirt, Luggage } from "lucide-react";
 
 export default function LogisticsDialogButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="lg" variant="mint">
+        <Button size="lg" variant="mint" className="w-full">
           Key Information
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-xl">
-        <DialogHeader>
-          <DialogTitle>Logistics</DialogTitle>
+      <DialogContent className="border-stroke-secondary max-h-[85vh] overflow-y-auto">
+        <DialogHeader className="pb-6">
+          <DialogTitle className="text-h2 text-center">Speaker Logistics</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 text-sm">
-          <section>
-            <h4 className="font-medium">Venue & Stage Location</h4>
-            <p>Breakers Ballroom — Stage A</p>
-            <p>Backstage entrance via Hall C. Staff will guide you.</p>
+        <div className="space-y-6">
+          <section className="group">
+            <div className="mb-3 flex items-center gap-3">
+              <div className="bg-mint/10 text-mint flex h-8 w-8 items-center justify-center rounded-full">
+                <MapPin className="h-4 w-4" />
+              </div>
+              <h4 className="text-h3 text-primary font-medium uppercase">Venue & Stage Location</h4>
+            </div>
+            <div className="space-y-2 pl-11">
+              <p className="text-p1 font-medium">Breakers Ballroom — Stage A</p>
+              <p className="text-p2 text-secondary">Backstage entrance via Hall C. Staff will guide you.</p>
+            </div>
           </section>
-          <section>
-            <h4 className="font-medium">Arrival</h4>
-            <p>Please arrive 45 minutes before your session start time.</p>
-            <p>Check in at Speaker Ops for mic fitting and stage brief.</p>
+
+          <div className="bg-stroke-primary h-px" />
+
+          <section className="group">
+            <div className="mb-3 flex items-center gap-3">
+              <div className="bg-azure/10 text-azure flex h-8 w-8 items-center justify-center rounded-full">
+                <Clock className="h-4 w-4" />
+              </div>
+              <h4 className="text-h3 text-primary font-medium uppercase">Arrival</h4>
+            </div>
+            <div className="space-y-2 pl-11">
+              <p className="text-p1">Please arrive 45 minutes before your session start time.</p>
+              <p className="text-p2 text-secondary">Check in at Speaker Ops for mic fitting and stage brief.</p>
+            </div>
           </section>
-          <section>
-            <h4 className="font-medium">Speaker Lounge</h4>
-            <p>Mezzanine Level, Room M2. Coffee, snacks, power, Wi‑Fi.</p>
+
+          <div className="bg-stroke-primary h-px" />
+
+          <section className="group">
+            <div className="mb-3 flex items-center gap-3">
+              <div className="bg-lime/10 text-lime flex h-8 w-8 items-center justify-center rounded-full">
+                <Coffee className="h-4 w-4" />
+              </div>
+              <h4 className="text-h3 text-primary font-medium uppercase">Speaker Lounge</h4>
+            </div>
+            <div className="pl-11">
+              <p className="text-p1">Mezzanine Level, Room M2. Coffee, snacks, power, Wi‑Fi.</p>
+            </div>
           </section>
-          <section>
-            <h4 className="font-medium">Wardrobe</h4>
-            <p>Avoid small stripes and high‑contrast micro‑patterns.</p>
-            <p>Bring a light jacket; stage can be cool.</p>
+
+          <div className="bg-stroke-primary h-px" />
+
+          <section className="group">
+            <div className="mb-3 flex items-center gap-3">
+              <div className="bg-byte/10 text-byte flex h-8 w-8 items-center justify-center rounded-full">
+                <Shirt className="h-4 w-4" />
+              </div>
+              <h4 className="text-h3 text-primary font-medium uppercase">Wardrobe</h4>
+            </div>
+            <div className="space-y-2 pl-11">
+              <p className="text-p1">Avoid small stripes and high‑contrast micro‑patterns.</p>
+              <p className="text-p2 text-secondary">Bring a light jacket; stage can be cool.</p>
+            </div>
           </section>
-          <section>
-            <h4 className="font-medium">Travel & Packing Notes</h4>
-            <p>EU Type C adapters available on site; carry your deck on USB.</p>
+
+          <div className="bg-stroke-primary h-px" />
+
+          <section className="group">
+            <div className="mb-3 flex items-center gap-3">
+              <div className="bg-wisp/10 text-wisp flex h-8 w-8 items-center justify-center rounded-full">
+                <Luggage className="h-4 w-4" />
+              </div>
+              <h4 className="text-h4 text-primary font-medium">Travel & Packing Notes</h4>
+            </div>
+            <div className="pl-11">
+              <p className="text-p1">EU Type C adapters available on site; carry your deck on USB.</p>
+            </div>
           </section>
         </div>
       </DialogContent>
