@@ -139,7 +139,7 @@ export default function SessionsCards({ items, allSessionsSubscribeUrl, calendar
               <div className="flex gap-2 pt-2">
                 {/* Primary CTA Button - Add My Sessions to Calendar */}
                 {calendarUrl && (
-                  <Button size="sm" variant="mint" asChild className="w-full sm:w-auto">
+                  <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                     <a href={calendarUrl} target="_blank" rel="noopener noreferrer">
                       <Calendar className="mr-2 h-4 w-4" />+ Add My Sessions to Calendar
                     </a>
@@ -148,7 +148,7 @@ export default function SessionsCards({ items, allSessionsSubscribeUrl, calendar
 
                 {/* Keep existing subscribe button as secondary option */}
                 {session.subscribeUrl && (
-                  <Button size="sm" variant="lime" asChild className="w-full sm:w-auto">
+                  <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                     <a href={session.subscribeUrl} target="_blank" rel="noopener noreferrer">
                       <Calendar className="mr-2 h-4 w-4" />+ Add All BP25 Sessions to Calendar
                     </a>

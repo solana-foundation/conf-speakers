@@ -5,6 +5,9 @@
   --font-macan-mono: var(--font-macan-mono);
 
   --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
 
   /* Optimized font sizes for information-heavy content */
   --text-4xs: 0.625rem; /* 10px - for very small labels */
@@ -26,21 +29,30 @@
   --text-9xl: 5rem; /* 80px - kept same */
   --text-10xl: 7.5rem; /* 120px - kept same */
 
-  /* ... existing scaling font calculations ... */
-  --text-h1: clamp(var(--text-8xl), 3.648rem + 1.502vw, var(--text-9xl));
-  --text-h1--line-height: clamp(4.75rem, 4.592rem + 0.676vw, 5.2rem);
-  --text-h1--letter-spacing: clamp(-0.12rem, -0.145rem + 0.105vw, -0.05rem);
+  --text-h1: var(--text-2xl);
+  --text-h1--line-height: 2.4rem;
+  --text-h1--letter-spacing: -0.06rem;
   --text-h1--font-weight: var(--font-medium);
 
-  --text-h2: clamp(var(--text-6xl), 2.148rem + 1.502vw, var(--text-7xl));
-  --text-h2--line-height: clamp(2.6rem, 2.234rem + 1.562vw, 3.64rem);
-  --text-h2--letter-spacing: -0.05rem;
+  --text-h2: var(--text-xl);
+  --text-h2--line-height: 2rem;
+  --text-h2--letter-spacing: -0.03rem;
   --text-h2--font-weight: var(--font-medium);
 
-  --text-h3: clamp(var(--text-5xl), 2.162rem + 0.376vw, var(--text-6xl));
-  --text-h3--line-height: clamp(2.655rem, 2.551rem + 0.443vw, 2.95rem);
-  --text-h3--letter-spacing: clamp(-0.025rem, -0.026rem + 0.004vw, -0.022rem);
+  --text-h3: var(--text-lg);
+  --text-h3--line-height: 1.6rem;
+  --text-h3--letter-spacing: -0.015rem;
   --text-h3--font-weight: var(--font-medium);
+
+  --text-h4: var(--text-md);
+  --text-h4--line-height: 1.4rem;
+  --text-h4--letter-spacing: -0.005rem;
+  --text-h4--font-weight: var(--font-medium);
+
+  --text-h5: var(--text-sm);
+  --text-h5--line-height: 1.2rem;
+  --text-h5--letter-spacing: 0;
+  --text-h5--font-weight: var(--font-regular);
 
   --text-xl: clamp(var(--text-4xl), 1.5rem + 2vw, var(--text-6xl));
   --text-xl--line-height: clamp(2.2rem, 1.8rem + 1.5vw, 2.8rem);
@@ -51,17 +63,6 @@
   --text-stat-display--line-height: clamp(4.16rem, 3.794rem + 1.562vw, 5.2rem);
   --text-stat-display--letter-spacing: clamp(-0.25rem, -0.282rem + 0.135vw, -0.16rem);
   --text-stat-display--font-weight: var(--font-regular);
-
-  /* Optimized static fonts for information density */
-  --text-h4: var(--text-3xl);
-  --text-h4--line-height: 2.065rem;
-  --text-h4--letter-spacing: -0.0175rem;
-  --text-h4--font-weight: var(--font-medium);
-
-  --text-h5: var(--text-2xl);
-  --text-h5--line-height: 1.475rem;
-  --text-h5--letter-spacing: 0;
-  --text-h5--font-weight: var(--font-regular);
 
   /* Improved body text for better readability in dense content */
   --text-p1: var(--text-base); /* Now 15px instead of 16px */
@@ -108,14 +109,6 @@
 
 @media (min-width: 23.5rem) {
   :root {
-    --text-h4: var(--text-4xl);
-    --text-h4--line-height: 2.36rem;
-    --text-h4--letter-spacing: -0.02rem;
-
-    --text-h5: var(--text-3xl);
-    --text-h5--line-height: 2.065rem;
-    --text-h5--letter-spacing: -0.00438rem;
-
     --text-p1: var(--text-md); /* Now 16px on larger screens */
     --text-p1--line-height: 1.6rem; /* Improved line height */
     --text-p1--letter-spacing: -0.00438rem;

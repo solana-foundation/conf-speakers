@@ -12,9 +12,5 @@ export function getStageBadgeClass(title: string): string {
 }
 
 export default function StageBadge({ title }: { title: StageTitle }) {
-  return (
-    <Badge variant="default" className={`${getStageBadgeClass(title)} font-mono text-[12px]`}>
-      {title}
-    </Badge>
-  );
+  return <Badge className={`${getStageBadgeClass(title)} rounded-full font-mono text-[12px]`}>{title}</Badge>;
 }

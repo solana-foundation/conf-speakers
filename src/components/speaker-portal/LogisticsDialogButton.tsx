@@ -8,8 +8,8 @@ export default function LogisticsDialogButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
-          View Logistics
+        <Button size="lg" variant="mint">
+          Key Information
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-xl">

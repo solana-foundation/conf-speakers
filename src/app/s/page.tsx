@@ -11,7 +11,7 @@ import { Speaker } from "@/lib/airtable/types";
 import { getSessionsCalendarUrl } from "@/lib/ics/utils";
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
-import ActionsDialogButton from "@/components/speaker-portal/ActionsDialogButton";
+import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
 import TicketsSection from "@/components/speaker-portal/TicketsSection";
 import PostEventSection from "@/components/speaker-portal/PostEventSection";
 
@@ -81,7 +81,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <h2 className="text-lg font-semibold">Your Schedule</h2>
+        <h2 className="text-h5 uppercase">Your Schedule</h2>
 
         <SessionsCards
           items={sessionsData}
@@ -91,8 +91,11 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <div className="flex gap-3">
           <LogisticsDialogButton />
-          <ActionsDialogButton />
         </div>
+
+        <Separator />
+
+        <ActionsChecklist />
 
         <Separator />
         <TicketsSection />

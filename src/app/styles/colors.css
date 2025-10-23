@@ -44,6 +44,8 @@
   --color-stroke-primary: var(--color-transparent-wisp-10);
   --color-stroke-secondary: var(--color-transparent-wisp-40);
   --color-stroke-tertiary: var(--color-primary-wisp);
+  --color-stroke-mint: var(--color-secondary-mint);
+  --color-stroke-azure: var(--color-secondary-azure);
 
   /* Button Tokens */
   --color-button-fill: var(--color-primary-byte);
