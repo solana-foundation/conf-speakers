@@ -93,7 +93,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
         <SessionsCards items={sessionsData} calendarUrl={speakerCalendarUrl} />
 
         <div className="flex gap-3">
-          <LogisticsDialogButton stage={sessionsData[0].stage} />
+          <LogisticsDialogButton stage={sessionsData[0]?.stage} />
         </div>
 
         <Separator />
