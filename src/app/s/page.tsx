@@ -76,15 +76,12 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
     };
   });
 
-  // Get speaker-level data from first session (assuming consistent across sessions)
-  const firstSession = sessionsData[0];
-  const speakerTelegramGroup = firstSession?.portalTelegramGroup;
-
   // Prepare sessions data for ActionsChecklist
   const sessionsForChecklist = sessionsData.map((session) => ({
     id: session.id,
     name: session.name,
     deckStatus: session.actionsDeckReceived,
+    greenlightTime: session.greenlightTime,
   }));
 
   // Extract telegram groups from sessions
@@ -98,12 +95,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   return (
     <div className="min-h-screen p-8 font-sans">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
-        <SpeakerCard
-          {...speakerData}
-          sessions={sessionsForChecklist}
-          dietaryStatus={speakerData.dietary}
-          greenlightTime={firstSession?.greenlightTime}
-        />
+        <SpeakerCard {...speakerData} sessions={sessionsForChecklist} dietaryStatus={speakerData.dietary} />
 
         <Separator />
 
@@ -120,7 +112,6 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
         <ActionsChecklist
           sessions={sessionsForChecklist}
           dietaryStatus={speakerData.dietary}
-          speakerTelegramGroup={speakerTelegramGroup}
           telegramGroups={sessionTelegramGroups}
         />
 

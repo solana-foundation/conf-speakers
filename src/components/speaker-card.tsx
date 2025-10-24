@@ -16,9 +16,9 @@ export interface SpeakerCardProps {
     id: string;
     name: string;
     deckStatus?: string;
+    greenlightTime?: string;
   }>;
   dietaryStatus?: string;
-  greenlightTime?: string;
 }
 
 interface StatusBadge {
@@ -38,7 +38,6 @@ export default function SpeakerCard({
   xName,
   sessions = [],
   dietaryStatus = "To Do",
-  greenlightTime,
 }: SpeakerCardProps) {
   const getStatusBadges = (): StatusBadge[] => {
     const badges: StatusBadge[] = [];
@@ -63,7 +62,7 @@ export default function SpeakerCard({
     }
 
     // Check for schedule pending (if greenlightTime is true)
-    if (greenlightTime) {
+    if (sessions.some((session) => session.greenlightTime && session.greenlightTime !== "Completed")) {
       badges.push({
         label: "Schedule Pending",
         variant: "schedule-pending",
