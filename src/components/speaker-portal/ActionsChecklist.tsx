@@ -55,7 +55,7 @@ export default function ActionsChecklist({
     {
       id: "speaker-permit-approval",
       title: "Speaker Permit Approval",
-      description: "Required for international speakers or work authorization.",
+      description: "We're arranging this for you with UAE government. Contact us if you have any questions.",
       status: getApprovalStatus(speakerPermitApproval),
       link: null,
       linkText: null,
