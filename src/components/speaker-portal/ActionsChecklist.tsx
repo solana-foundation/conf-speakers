@@ -3,7 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Check, CircleMinus, Info } from "lucide-react";
 
 interface ActionsChecklistProps {
-  deckStatus?: string;
+  sessions?: Array<{
+    id: string;
+    name: string;
+    deckStatus?: string;
+  }>;
   dietaryStatus?: string;
   speakerTelegramGroup?: string;
   telegramGroups?: Array<{
@@ -13,21 +17,24 @@ interface ActionsChecklistProps {
 }
 
 export default function ActionsChecklist({
-  deckStatus = "To Do",
+  sessions = [],
   dietaryStatus = "To Do",
   speakerTelegramGroup,
   telegramGroups = [],
 }: ActionsChecklistProps) {
+  // Create deck upload tasks for each session
+  const deckTasks = sessions.map((session) => ({
+    id: `upload-deck-${session.id}`,
+    title: `Deck received by Events Team - ${session.name}`,
+    description: "Use 16:9 aspect, embed fonts, and export a PDF as backup.",
+    completed: session.deckStatus === "Completed",
+    link: "#",
+    linkText: "Upload Deck",
+    type: "task" as const,
+  }));
+
   const tasks = [
-    {
-      id: "upload-deck",
-      title: "Deck received by Events Team",
-      description: "Use 16:9 aspect, embed fonts, and export a PDF as backup.",
-      completed: deckStatus === "Completed",
-      link: "#",
-      linkText: "Upload Deck",
-      type: "task" as const,
-    },
+    ...deckTasks,
     {
       id: "content-dietary-form",
       title: "On‑stage Content & Dietary Form",
