@@ -184,7 +184,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">Your speaker ticket provides complimentary access to the event.</p>
                     <p className="text-p2 text-secondary">
-                      Click the "Redeem Ticket" button above to claim your speaker access on Luma.
+                      Click the &#34;Redeem Ticket&#34; button above to claim your speaker access on Luma.
                     </p>
                   </div>
                 </section>
@@ -201,7 +201,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">Your plus-one ticket allows you to bring a guest to the event.</p>
                     <p className="text-p2 text-secondary">
-                      Click the "Redeem Guest Ticket" button above to claim your plus-one access on Luma.
+                      Click the &#34;Redeem Guest Ticket&#34; button above to claim your plus-one access on Luma.
                     </p>
                   </div>
                 </section>
@@ -221,7 +221,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                       Copy the code above and paste it when prompted during registration.
                     </p>
                     <p className="text-p2 text-secondary">
-                      Look for the "Use a Coupon" option on the event registration page.
+                      Look for the &#34;Use a Coupon&#34; option on the event registration page.
                     </p>
                   </div>
                 </section>

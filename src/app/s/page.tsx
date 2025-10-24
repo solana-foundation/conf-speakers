@@ -12,7 +12,6 @@ import { getSessionCalendarHttpUrl, getSessionsCalendarUrl } from "@/lib/ics/uti
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
 import TicketsSection from "@/components/speaker-portal/TicketsSection";
-import PostEventSection from "@/components/speaker-portal/PostEventSection";
 
 export const generateMetadata = async ({
   searchParams,
