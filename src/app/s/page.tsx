@@ -122,8 +122,8 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           invitationCode={speakerData.invitationCode}
         />
 
-        <Separator />
-        <PostEventSection />
+        {/* <Separator />
+        <PostEventSection /> */}
       </main>
     </div>
   );
