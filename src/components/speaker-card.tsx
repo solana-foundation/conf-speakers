@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Separator } from "./ui/separator";
-import { Twitter, TriangleAlert } from "lucide-react";
+import { Badge } from "./ui/badge";
+import { Twitter, Check, CircleMinus, Clock } from "lucide-react";
 
 export interface SpeakerCardProps {
   imageUrl?: string;
@@ -11,14 +11,20 @@ export interface SpeakerCardProps {
   bio?: string;
   xLink?: string;
   xName?: string;
-  status?: "awaiting-deck" | "all-set" | "schedule-pending";
-  dueDate?: string;
+  // ActionsChecklist data
+  sessions?: Array<{
+    id: string;
+    name: string;
+    deckStatus?: string;
+  }>;
+  dietaryStatus?: string;
+  greenlightTime?: string;
 }
 
-interface StatusVariant {
+interface StatusBadge {
   label: string;
-  variant: "urgent" | "warning" | "default";
-  dueDate?: string;
+  variant: "awaiting-deck" | "awaiting-dietary" | "schedule-pending" | "all-set";
+  icon: React.ReactNode;
 }
 
 export default function SpeakerCard({
@@ -30,62 +36,57 @@ export default function SpeakerCard({
   bio,
   xLink,
   xName,
-  status = "awaiting-deck",
-  dueDate = "10 Nov, 2025",
+  sessions = [],
+  dietaryStatus = "To Do",
+  greenlightTime,
 }: SpeakerCardProps) {
-  const getStatusConfig = (status?: string, dueDate?: string): StatusVariant | null => {
-    switch (status) {
-      case "awaiting-deck":
-        return {
-          label: "Awaiting Deck",
-          variant: "default",
-          dueDate: dueDate ? `Due: ${dueDate}` : "",
-        };
-      case "all-set":
-        return {
-          label: "All Set",
-          variant: "default",
-          dueDate: dueDate ? `Due: ${dueDate}` : "",
-        };
-      case "schedule-pending":
-        return {
-          label: "Schedule Pending",
-          variant: "warning",
-          dueDate: dueDate ? `Due: ${dueDate}` : "",
-        };
-      default:
-        return null;
+  const getStatusBadges = (): StatusBadge[] => {
+    const badges: StatusBadge[] = [];
+
+    // Check for awaiting deck status (multiple sessions)
+    const awaitingDeckSessions = sessions.filter((session) => session.deckStatus !== "Completed");
+    if (awaitingDeckSessions.length > 0) {
+      badges.push({
+        label: `Awaiting Deck${awaitingDeckSessions.length > 1 ? ` (${awaitingDeckSessions.length})` : ""}`,
+        variant: "awaiting-deck",
+        icon: <CircleMinus className="h-3 w-3" />,
+      });
     }
+
+    // Check for awaiting dietary requirements
+    if (dietaryStatus !== "Completed") {
+      badges.push({
+        label: "Awaiting Dietary Req.",
+        variant: "awaiting-dietary",
+        icon: <CircleMinus className="h-3 w-3" />,
+      });
+    }
+
+    // Check for schedule pending (if greenlightTime is true)
+    if (greenlightTime) {
+      badges.push({
+        label: "Schedule Pending",
+        variant: "schedule-pending",
+        icon: <Clock className="h-3 w-3" />,
+      });
+    }
+
+    // If no other badges, show "All Set"
+    if (badges.length === 0) {
+      badges.push({
+        label: "All Set",
+        variant: "all-set",
+        icon: <Check className="h-3 w-3" />,
+      });
+    }
+
+    return badges;
   };
 
-  const statusConfig = getStatusConfig(status, dueDate);
+  const statusBadges = getStatusBadges();
 
   return (
     <div>
-      {/* Status Badge Banner - moved to top */}
-      {statusConfig && (
-        <>
-          <div className="mb-6 w-full">
-            <div
-              className={`text-md flex w-full items-center justify-center gap-2 px-6 py-2 text-center font-semibold ${
-                statusConfig.variant === "urgent"
-                  ? "bg-red-500 text-black"
-                  : statusConfig.variant === "warning"
-                    ? "bg-lime text-black"
-                    : statusConfig.variant === "default"
-                      ? "bg-byte text-black"
-                      : "bg-background text-primary border-0"
-              }`}
-            >
-              <TriangleAlert className="size-4" />
-              <span>{statusConfig.label}</span>
-              {statusConfig.dueDate && <span className="text-sm font-normal opacity-80">{statusConfig.dueDate}</span>}
-            </div>
-          </div>
-          <Separator className="my-4" />
-        </>
-      )}
-
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
         <div className="flex flex-col items-center gap-4 lg:items-start">
           <div className="relative">
@@ -101,9 +102,31 @@ export default function SpeakerCard({
 
         <div className="flex-1 space-y-4">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight">
-              {firstName} {lastName}
-            </h1>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-3xl font-semibold tracking-tight">
+                {firstName} {lastName}
+              </h1>
+              {/* Inline Status Badges */}
+              <div className="flex flex-wrap items-center gap-2">
+                {statusBadges.map((badge, index) => (
+                  <Badge
+                    key={index}
+                    className={`gap-1.5 ${
+                      badge.variant === "awaiting-deck"
+                        ? "bg-azure text-black"
+                        : badge.variant === "awaiting-dietary"
+                          ? "bg-azure text-black"
+                          : badge.variant === "schedule-pending"
+                            ? "bg-lime text-black"
+                            : "bg-mint text-mint-foreground"
+                    }`}
+                  >
+                    {badge.icon}
+                    <span>{badge.label}</span>
+                  </Badge>
+                ))}
+              </div>
+            </div>
             <p className="text-p2-mono mt-2 uppercase">
               {jobTitle && <span className="text-foreground/80 mt-2">{jobTitle}</span>}
               <br />

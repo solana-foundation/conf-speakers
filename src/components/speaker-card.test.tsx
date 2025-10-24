@@ -9,12 +9,13 @@ describe("SpeakerCard", () => {
         imageUrl={mockSpeaker.imageUrl}
         lastName={mockSpeaker.lastName!}
         firstName={mockSpeaker.firstName!}
-        subscribeUrl={"#"}
         jobTitle={mockSpeaker.jobTitle}
         company={mockSpeaker.company}
         bio={mockSpeaker.bio}
         xLink={mockSpeaker.xLink}
         xName={mockSpeaker.xName}
+        sessions={[]}
+        dietaryStatus="To Do"
       />,
     );
   });

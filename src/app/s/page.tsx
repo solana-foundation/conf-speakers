@@ -76,11 +76,6 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
     };
   });
 
-  // Calculate speaker status based on deck upload and dietary form completion
-  const hasSlideDeck = !!speakerData.slideDeckUrl;
-  const hasDietaryForm = speakerData.dietary === "Completed";
-  const speakerStatus = hasSlideDeck && hasDietaryForm ? "all-set" : "awaiting-deck";
-
   // Get speaker-level data from first session (assuming consistent across sessions)
   const firstSession = sessionsData[0];
   const speakerTelegramGroup = firstSession?.portalTelegramGroup;
@@ -103,7 +98,12 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   return (
     <div className="min-h-screen p-8 font-sans">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
-        <SpeakerCard {...speakerData} status={speakerStatus} />
+        <SpeakerCard
+          {...speakerData}
+          sessions={sessionsForChecklist}
+          dietaryStatus={speakerData.dietary}
+          greenlightTime={firstSession?.greenlightTime}
+        />
 
         <Separator />
 
