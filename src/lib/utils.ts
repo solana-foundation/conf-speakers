@@ -18,8 +18,8 @@ export function sanitizeXName(input: string): string | null {
   // Remove protocol and www if present
   handle = handle.replace(/^https?:\/\/(www\.)?/i, "");
 
-  // Remove domain if present
-  handle = handle.replace(/^x\.com\//i, "");
+  // Remove domain if present (both x.com and twitter.com)
+  handle = handle.replace(/^(x\.com|twitter\.com)\//i, "");
 
   // Remove leading @ if present
   handle = handle.replace(/^@/, "");
