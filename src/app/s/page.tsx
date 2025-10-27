@@ -115,7 +115,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <SessionsCards items={sessionsData} calendarUrl={speakerCalendarUrl} />
+        <SessionsCards items={allSessionsData} calendarUrl={speakerCalendarUrl} />
 
         {sessionsData.length > 0 && (
           <div className="flex gap-3">

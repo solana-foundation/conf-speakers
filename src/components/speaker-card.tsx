@@ -38,14 +38,13 @@ export default function SpeakerCard({
   xLink,
   xName,
   sessions = [],
-  dietaryStatus = "To Do",
 }: SpeakerCardProps) {
   const getStatusBadges = (): StatusBadge[] => {
     const badges: StatusBadge[] = [];
 
     // Check for awaiting deck status (multiple sessions)
     const awaitingDeckSessions = sessions.filter((session) => session.deckStatus !== "Completed");
-    if (awaitingDeckSessions.length > 0) {
+    if (awaitingDeckSessions.length > 0 || !(sessions.length > 0)) {
       badges.push({
         label: `Awaiting Deck${awaitingDeckSessions.length > 1 ? ` (${awaitingDeckSessions.length})` : ""}`,
         variant: "awaiting-deck",
@@ -54,7 +53,10 @@ export default function SpeakerCard({
     }
 
     // Check for schedule pending (if greenlightTime is true)
-    if (sessions.some((session) => session.greenlightTime && session.greenlightTime !== "Completed")) {
+    if (
+      sessions.some((session) => session.greenlightTime && session.greenlightTime !== "Completed") ||
+      !(sessions.length > 0)
+    ) {
       badges.push({
         label: "Schedule Pending",
         variant: "schedule-pending",
@@ -63,7 +65,7 @@ export default function SpeakerCard({
     }
 
     // If no other badges, show "All Set"
-    if (badges.length === 0) {
+    if (badges.length === 0 && sessions.length > 0) {
       badges.push({
         label: "All Set",
         variant: "all-set",
@@ -107,7 +109,7 @@ export default function SpeakerCard({
                         ? "bg-azure text-black"
                         : badge.variant === "schedule-pending"
                           ? "bg-lime text-black"
-                          : "bg-mint text-mint-foreground"
+                          : "bg-mint text-black"
                     }`}
                   >
                     {badge.icon}
