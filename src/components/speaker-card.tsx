@@ -16,7 +16,6 @@ export interface SpeakerCardProps {
     id: string;
     name: string;
     deckStatus?: string;
-    deckUrl?: string;
     greenlightTime?: string;
   }>;
   dietaryStatus?: string;
@@ -43,8 +42,8 @@ export default function SpeakerCard({
     const badges: StatusBadge[] = [];
 
     // Check for awaiting deck status (multiple sessions)
-    const awaitingDeckSessions = sessions.filter((session) => session.deckStatus !== "Completed");
-    if (awaitingDeckSessions.length > 0 || !(sessions.length > 0)) {
+    const awaitingDeckSessions = sessions.filter((session) => session.deckStatus === undefined);
+    if (awaitingDeckSessions.length > 0) {
       badges.push({
         label: `Awaiting Deck${awaitingDeckSessions.length > 1 ? ` (${awaitingDeckSessions.length})` : ""}`,
         variant: "awaiting-deck",
