@@ -23,7 +23,7 @@ export interface SpeakerCardProps {
 
 interface StatusBadge {
   label: string;
-  variant: "awaiting-deck" | "awaiting-dietary" | "schedule-pending" | "all-set";
+  variant: "awaiting-deck" | "schedule-pending" | "all-set";
   icon: React.ReactNode;
 }
 
@@ -48,15 +48,6 @@ export default function SpeakerCard({
       badges.push({
         label: `Awaiting Deck${awaitingDeckSessions.length > 1 ? ` (${awaitingDeckSessions.length})` : ""}`,
         variant: "awaiting-deck",
-        icon: <CircleMinus className="h-3 w-3" />,
-      });
-    }
-
-    // Check for awaiting dietary requirements
-    if (dietaryStatus !== "Completed") {
-      badges.push({
-        label: "Awaiting Dietary Req.",
-        variant: "awaiting-dietary",
         icon: <CircleMinus className="h-3 w-3" />,
       });
     }
@@ -113,11 +104,9 @@ export default function SpeakerCard({
                     className={`gap-1.5 ${
                       badge.variant === "awaiting-deck"
                         ? "bg-azure text-black"
-                        : badge.variant === "awaiting-dietary"
-                          ? "bg-azure text-black"
-                          : badge.variant === "schedule-pending"
-                            ? "bg-lime text-black"
-                            : "bg-mint text-mint-foreground"
+                        : badge.variant === "schedule-pending"
+                          ? "bg-lime text-black"
+                          : "bg-mint text-mint-foreground"
                     }`}
                   >
                     {badge.icon}

@@ -8,7 +8,7 @@ interface ActionsChecklistProps {
     name: string;
     deckStatus?: string;
   }>;
-  dietaryStatus?: string;
+  dietaryStatus?: string | null;
   speakerTelegramGroup?: string;
   telegramGroups?: Array<{
     sessionName: string;
@@ -19,7 +19,7 @@ interface ActionsChecklistProps {
 
 export default function ActionsChecklist({
   sessions = [],
-  dietaryStatus = "To Do",
+  dietaryStatus,
   telegramGroups = [],
   speakerPermitApproval,
 }: ActionsChecklistProps) {
@@ -28,6 +28,14 @@ export default function ActionsChecklist({
     if (approval === "approved") return "approved";
     if (approval === "denied") return "declined";
     return "pending"; // null or any other value
+  };
+
+  // Helper function to get dietary description
+  const getDietaryDescription = (): string => {
+    if (!dietaryStatus || dietaryStatus.toLowerCase() === "none") {
+      return "No requirements";
+    }
+    return dietaryStatus;
   };
 
   // Create deck upload tasks for each session
@@ -44,15 +52,6 @@ export default function ActionsChecklist({
   const tasks = [
     ...deckTasks,
     {
-      id: "content-dietary-form",
-      title: "On‑stage Content & Dietary Form",
-      description: "Share any content caveats and dietary needs.",
-      status: dietaryStatus === "Completed" ? "approved" : "todo",
-      link: "#",
-      linkText: "Fill Form",
-      type: "task" as const,
-    },
-    {
       id: "speaker-permit-approval",
       title: "Speaker Permit Approval",
       description: "We're arranging this for you with UAE government. Contact us if you have any questions.",
@@ -60,6 +59,15 @@ export default function ActionsChecklist({
       link: null,
       linkText: null,
       type: "task" as const,
+    },
+    {
+      id: "dietary-requirements",
+      title: "Dietary Requirements",
+      description: getDietaryDescription(),
+      status: "approved" as const,
+      link: null,
+      linkText: null,
+      type: "info" as const,
     },
     {
       id: "stage-team-questions",
