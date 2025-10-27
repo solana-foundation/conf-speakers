@@ -7,6 +7,7 @@ interface ActionsChecklistProps {
     id: string;
     name: string;
     deckStatus?: string;
+    deckUrl?: string;
   }>;
   dietaryStatus?: string | null;
   speakerTelegramGroup?: string;
@@ -39,15 +40,18 @@ export default function ActionsChecklist({
   };
 
   // Create deck upload tasks for each session
-  const deckTasks = sessions.map((session) => ({
-    id: `upload-deck-${session.id}`,
-    title: `Deck received by Events Team - ${session.name}`,
-    description: "Use 16:9 aspect, embed fonts, and export a PDF as backup.",
-    status: session.deckStatus === "Completed" ? "approved" : "todo",
-    link: "#",
-    linkText: "Upload Deck",
-    type: "task" as const,
-  }));
+  const deckTasks = sessions.map((session) => {
+    const isApproved = session.deckStatus === "Completed";
+    return {
+      id: `upload-deck-${session.id}`,
+      title: `Deck upload status for - ${session.name}`,
+      description: "Use 16:9 aspect, embed fonts, and export a PDF as backup.",
+      status: isApproved ? ("approved" as const) : ("todo" as const),
+      link: isApproved ? session.deckUrl : "#",
+      linkText: isApproved ? "View Deck" : "Upload Deck",
+      type: "task" as const,
+    };
+  });
 
   const tasks = [
     ...deckTasks,
@@ -145,7 +149,7 @@ export default function ActionsChecklist({
                     </span>
                   )}
                 </div>
-                {task.link && task.linkText && (task.status !== "approved" || task.type === "info") && (
+                {task.link && task.linkText && (
                   <Button size="sm" variant="azure" asChild>
                     <a target="_blank" rel="noopener noreferrer" href={task.link}>
                       {task.linkText}

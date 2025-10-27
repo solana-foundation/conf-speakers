@@ -16,6 +16,7 @@ export interface SpeakerCardProps {
     id: string;
     name: string;
     deckStatus?: string;
+    deckUrl?: string;
     greenlightTime?: string;
   }>;
   dietaryStatus?: string;

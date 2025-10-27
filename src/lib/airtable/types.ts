@@ -34,7 +34,7 @@ export type Session = {
   moderatorIds?: string[];
   format?: string[];
   webPublishingStatus?: string;
-  actionsDeckReceived?: string;
+  slideDeckUrl?: string;
   portalTelegramGroup?: string;
   greenlightTime?: string;
 };

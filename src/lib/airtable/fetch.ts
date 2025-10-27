@@ -27,7 +27,7 @@ export const fetchSessions = (params: SessionParams = {}) => {
         "Speakers",
         "Moderator",
         "Format",
-        "Actions_Deck Received",
+        "Slide Deck File",
         "Portal_Telegram Group",
         "Portal_Greenlight Time",
       ],

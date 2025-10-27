@@ -14,7 +14,7 @@ export const SessionFieldsSchema = z
       Speakers: z.array(z.string()).optional(),
       Moderator: z.array(z.string()).optional(),
       Format: z.array(z.string()).optional(),
-      "Actions_Deck Received": z.string().optional(),
+      "Slide Deck File": z.string().optional(),
       "Portal_Telegram Group": z.string().optional(),
       "Portal_Greenlight Time": z.string().optional(),
     }),
@@ -29,7 +29,7 @@ export const SessionFieldsSchema = z
     speakerIds: data.fields["Speakers"],
     moderatorIds: data.fields["Moderator"],
     format: data.fields["Format"],
-    actionsDeckReceived: data.fields["Actions_Deck Received"],
+    slideDeckUrl: data.fields["Slide Deck File"],
     portalTelegramGroup: data.fields["Portal_Telegram Group"],
     greenlightTime: data.fields["Portal_Greenlight Time"],
   }));
