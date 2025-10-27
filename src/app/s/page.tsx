@@ -131,12 +131,12 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           telegramGroups={sessionTelegramGroups}
         />
 
-        <Separator />
+        {/* <Separator />
         <TicketsSection
           speakerTicket={speakerData.lumaTicketSpeaker}
           plusOneTicket={speakerData.lumaTicketPlusOne}
           invitationCode={speakerData.invitationCode}
-        />
+        /> */}
 
         {/* <Separator />
         <PostEventSection /> */}

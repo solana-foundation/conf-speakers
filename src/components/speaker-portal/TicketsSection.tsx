@@ -237,7 +237,15 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                   </div>
                   <div className="pl-11">
                     <p className="text-p1">
-                      If you encounter any issues with ticket redemption, please contact the event organizers.
+                      If you encounter any issues with ticket redemption, please contact the event organizers at{" "}
+                      <a
+                        href="mailto:events@solana.org"
+                        className="text-azure hover:underline"
+                        aria-label="Contact event organizers via email"
+                      >
+                        events@solana.org
+                      </a>
+                      .
                     </p>
                   </div>
                 </section>
