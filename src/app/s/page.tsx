@@ -116,14 +116,12 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <SessionsCards items={allSessionsData} calendarUrl={speakerCalendarUrl} />
 
-        {sessionsData.length > 0 && (
-          <div className="flex gap-3">
-            <LogisticsDialogButton
-              stage={sessionsData[0]?.stage || "Main Stage"}
-              stages={Array.from(new Set(sessionsData.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
-            />
-          </div>
-        )}
+        <div className="flex gap-3">
+          <LogisticsDialogButton
+            stage={sessionsData[0]?.stage || "Main Stage"}
+            stages={Array.from(new Set(sessionsData.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
+          />
+        </div>
 
         <Separator />
 
