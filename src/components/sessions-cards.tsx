@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { formatVenueTime } from "@/lib/time/tz";
-import { Session, Speaker } from "@/lib/airtable/types";
+import { Session, Speaker, StageValues } from "@/lib/airtable/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
 import { Calendar, Clock, Users, AlertTriangle, Info } from "lucide-react";
@@ -102,6 +102,17 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
                   <div className="border-lime bg-lime/10 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
                     <AlertTriangle className="text-lime h-4 w-4" />
                     <span className="font-medium text-white">{session.greenlightTime}</span>
+                  </div>
+                )}
+
+                {/* Arrival Time Alert */}
+                {getPublishingStatusFlags(session)?.hasTime && (
+                  <div className="border-mint bg-mint/10 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
+                    <AlertTriangle className="text-mint h-4 w-4" />
+                    <span className="font-medium text-white">
+                      Please arrive {session.stage === StageValues.Main ? "45 minutes" : "30 minutes"} before your
+                      session starts
+                    </span>
                   </div>
                 )}
 
