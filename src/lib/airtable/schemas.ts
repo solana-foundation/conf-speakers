@@ -14,7 +14,7 @@ export const SessionFieldsSchema = z
       Speakers: z.array(z.string()).optional(),
       Moderator: z.array(z.string()).optional(),
       Format: z.array(z.string()).optional(),
-      "Slide Deck File": z.string().optional(),
+      "Slide Deck File (from Speakers)": z.string().optional(),
       "Portal_Telegram Group": z.string().optional(),
       "Portal_Greenlight Time": z.string().optional(),
       "Web Publishing Status": z.array(z.string()).optional(),
@@ -30,7 +30,7 @@ export const SessionFieldsSchema = z
     speakerIds: data.fields["Speakers"],
     moderatorIds: data.fields["Moderator"],
     format: data.fields["Format"],
-    slideDeckUrl: data.fields["Slide Deck File"],
+    slideDeckUrl: data.fields["Slide Deck File (from Speakers)"],
     portalTelegramGroup: data.fields["Portal_Telegram Group"],
     greenlightTime: data.fields["Portal_Greenlight Time"],
     webPublishingStatus: data.fields["Web Publishing Status"],
@@ -59,16 +59,7 @@ export const SpeakerFieldsSchema = z
       "Luma Ticket_Speaker": z.string().optional(),
       "Luma Ticket_Plus One": z.string().optional(),
       "Invitation Code": z.string().optional(),
-      "Slide Deck File": z
-        .array(
-          z
-            .object({
-              url: z.string().optional(),
-            })
-            .optional(),
-        )
-        .optional(),
-      "Slide Deck File_String": z.string().optional(),
+      "Slide Deck File (from Speakers)": z.string().optional(),
       Dietary: z.string().optional(),
     }),
   })
@@ -86,7 +77,7 @@ export const SpeakerFieldsSchema = z
     lumaTicketSpeaker: data.fields["Luma Ticket_Speaker"],
     lumaTicketPlusOne: data.fields["Luma Ticket_Plus One"],
     invitationCode: data.fields["Invitation Code"],
-    slideDeckUrl: data.fields["Slide Deck File"]?.[0]?.url || data.fields["Slide Deck File_String"],
+    slideDeckUrl: data.fields["Slide Deck File (from Speakers)"],
     dietary: data.fields["Dietary"],
   }));
 
