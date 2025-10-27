@@ -33,7 +33,7 @@ export type Session = {
   speakerIds?: string[];
   moderatorIds?: string[];
   format?: string[];
-  webPublishingStatus?: string;
+  webPublishingStatus?: string[];
   slideDeckUrl?: string;
   portalTelegramGroup?: string;
   greenlightTime?: string;

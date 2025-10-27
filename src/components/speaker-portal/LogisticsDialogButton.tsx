@@ -32,8 +32,9 @@ const LOGISTICS_CONFIG = {
   },
 };
 
-export default function LogisticsDialogButton({ stage }: { stage: StageTitle }) {
-  const stageConfig = LOGISTICS_CONFIG.stages[stage];
+export default function LogisticsDialogButton({ stage, stages }: { stage: StageTitle; stages?: StageTitle[] }) {
+  const uniqueStages = stages?.filter((s, index, self) => self.indexOf(s) === index) || [stage];
+  const stageConfigs = uniqueStages.map((s) => LOGISTICS_CONFIG.stages[s]).filter(Boolean);
 
   return (
     <Dialog>
@@ -47,33 +48,43 @@ export default function LogisticsDialogButton({ stage }: { stage: StageTitle }) 
           <DialogTitle className="text-h2 text-center">Speaker Logistics</DialogTitle>
         </DialogHeader>
         <div className="space-y-6">
-          <section className="group">
-            <div className="mb-3 flex items-center gap-3">
-              <div className="bg-mint/10 text-mint flex h-8 w-8 items-center justify-center rounded-full">
-                <MapPin className="h-4 w-4" />
-              </div>
-              <h4 className="text-h3 text-primary font-medium uppercase">Venue & Stage Location</h4>
-            </div>
-            <div className="space-y-2 pl-11">
-              <p className="text-p1 font-medium">{stageConfig.name}</p>
-              <p className="text-p2 text-secondary">{stageConfig.entrance}</p>
-            </div>
-          </section>
+          {stageConfigs.map((stageConfig, index) => (
+            <React.Fragment key={index}>
+              <section className="group">
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-mint/10 text-mint flex h-8 w-8 items-center justify-center rounded-full">
+                    <MapPin className="h-4 w-4" />
+                  </div>
+                  <h4 className="text-h3 text-primary font-medium uppercase">
+                    Venue & Stage Location{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
+                  </h4>
+                </div>
+                <div className="space-y-2 pl-11">
+                  <p className="text-p1 font-medium">{stageConfig.name}</p>
+                  <p className="text-p2 text-secondary">{stageConfig.entrance}</p>
+                </div>
+              </section>
 
-          <div className="bg-stroke-primary h-px" />
+              <div className="bg-stroke-primary h-px" />
 
-          <section className="group">
-            <div className="mb-3 flex items-center gap-3">
-              <div className="bg-azure/10 text-azure flex h-8 w-8 items-center justify-center rounded-full">
-                <Clock className="h-4 w-4" />
-              </div>
-              <h4 className="text-h3 text-primary font-medium uppercase">Arrival</h4>
-            </div>
-            <div className="space-y-2 pl-11">
-              <p className="text-p1">Please arrive {stageConfig.arrivalTime}.</p>
-              <p className="text-p2 text-secondary">Check in at {stageConfig.checkInLocation}.</p>
-            </div>
-          </section>
+              <section className="group">
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-azure/10 text-azure flex h-8 w-8 items-center justify-center rounded-full">
+                    <Clock className="h-4 w-4" />
+                  </div>
+                  <h4 className="text-h3 text-primary font-medium uppercase">
+                    Arrival{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
+                  </h4>
+                </div>
+                <div className="space-y-2 pl-11">
+                  <p className="text-p1">Please arrive {stageConfig.arrivalTime}.</p>
+                  <p className="text-p2 text-secondary">Check in at {stageConfig.checkInLocation}.</p>
+                </div>
+              </section>
+
+              {index < stageConfigs.length - 1 && <div className="bg-stroke-primary h-px" />}
+            </React.Fragment>
+          ))}
 
           <div className="bg-stroke-primary h-px" />
 

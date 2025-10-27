@@ -17,6 +17,7 @@ export const SessionFieldsSchema = z
       "Slide Deck File": z.string().optional(),
       "Portal_Telegram Group": z.string().optional(),
       "Portal_Greenlight Time": z.string().optional(),
+      "Web Publishing Status": z.array(z.string()).optional(),
     }),
   })
   .transform((data) => ({
@@ -32,6 +33,7 @@ export const SessionFieldsSchema = z
     slideDeckUrl: data.fields["Slide Deck File"],
     portalTelegramGroup: data.fields["Portal_Telegram Group"],
     greenlightTime: data.fields["Portal_Greenlight Time"],
+    webPublishingStatus: data.fields["Web Publishing Status"],
   }));
 
 export const SpeakerFieldsSchema = z

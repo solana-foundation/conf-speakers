@@ -19,7 +19,7 @@ export interface SessionSheetProps {
   speakers?: Speaker[];
   children: React.ReactNode;
   format?: string;
-  webPublishingStatus?: string;
+  webPublishingStatus?: string[];
 }
 
 export default function SessionSheet({
@@ -78,15 +78,6 @@ export default function SessionSheet({
             <p className="mt-2">
               <StageBadge title={stage} />
             </p>
-
-            {/* Web Publishing Status */}
-            {webPublishingStatus && (
-              <div className="mt-2">
-                <p className="text-sm">
-                  <span className="font-medium">Publishing Status:</span> {webPublishingStatus}
-                </p>
-              </div>
-            )}
           </div>
 
           {speakers && (

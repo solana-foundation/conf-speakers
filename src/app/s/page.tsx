@@ -6,7 +6,7 @@ import { getCachedFormats, getCachedSessions, getCachedSpeakers } from "@/lib/ai
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
-import { Speaker } from "@/lib/airtable/types";
+import { Speaker, StageTitle } from "@/lib/airtable/types";
 import { getSessionCalendarHttpUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
@@ -61,7 +61,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
   const sessions = await getCachedSessions({ speakerName: speakerData._name });
   const formats = await getCachedFormats();
-  const sessionsData = sessions.map((session) => {
+  const allSessionsData = sessions.map((session) => {
     const sessionData = SessionFieldsSchema.parse(session);
     return {
       ...sessionData,
@@ -73,6 +73,22 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
         ?.map((formatId) => formats.find((item) => item.id === formatId)?.fields["Format"])
         .filter(Boolean) as string[],
     };
+  });
+
+  // Filter sessions based on webPublishingStatus
+  // Show only if all 4 flags (Time, Title, Description, Speaker) are present and "Do not publish" is not present
+  const sessionsData = allSessionsData.filter((session) => {
+    const status = session.webPublishingStatus;
+    if (!status) return false;
+
+    const hasDoNotPublish = status.includes("Do not publish");
+    const hasTime = status.includes("Time");
+    const hasTitle = status.includes("Title");
+    const hasDescription = status.includes("Description");
+    const hasSpeaker = status.includes("Speaker");
+
+    // Show if has all 4 flags and not "Do not publish"
+    return hasTime && hasTitle && hasDescription && hasSpeaker && !hasDoNotPublish;
   });
 
   // Prepare sessions data for ActionsChecklist
@@ -99,13 +115,16 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <h2 className="text-h5 uppercase">Your Schedule</h2>
-
         <SessionsCards items={sessionsData} calendarUrl={speakerCalendarUrl} />
 
-        <div className="flex gap-3">
-          <LogisticsDialogButton stage={sessionsData[0]?.stage || "Main Stage"} />
-        </div>
+        {sessionsData.length > 0 && (
+          <div className="flex gap-3">
+            <LogisticsDialogButton
+              stage={sessionsData[0]?.stage || "Main Stage"}
+              stages={Array.from(new Set(sessionsData.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
+            />
+          </div>
+        )}
 
         <Separator />
 
