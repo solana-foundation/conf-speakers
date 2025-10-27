@@ -76,7 +76,7 @@ export default function ActionsChecklist({
     {
       id: "stage-team-questions",
       title: "Questions for Stage Team",
-      description: "Email: events@solana.org. DMs okay during event week.",
+      description: "Email: speakers@solana.org. DMs okay during event week.",
       status: "pending" as const,
       link: null,
       linkText: null,
