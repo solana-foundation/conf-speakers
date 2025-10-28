@@ -59,7 +59,6 @@ export const SpeakerFieldsSchema = z
       "Luma Ticket_Speaker": z.string().optional(),
       "Luma Ticket_Plus One": z.string().optional(),
       "Invitation Code": z.string().optional(),
-      "Slide Deck File (from Speakers)": z.string().optional(),
       Dietary: z.string().optional(),
     }),
   })
@@ -77,7 +76,6 @@ export const SpeakerFieldsSchema = z
     lumaTicketSpeaker: data.fields["Luma Ticket_Speaker"],
     lumaTicketPlusOne: data.fields["Luma Ticket_Plus One"],
     invitationCode: data.fields["Invitation Code"],
-    slideDeckUrl: data.fields["Slide Deck File (from Speakers)"],
     dietary: data.fields["Dietary"],
   }));
 
