@@ -35,6 +35,22 @@ export default function SessionSheet({
   format,
   webPublishingStatus,
 }: SessionSheetProps) {
+  // Check if any required publishing flags are missing or if "Do not publish" is set
+  if (!webPublishingStatus || webPublishingStatus.length === 0) {
+    return null;
+  }
+
+  const flags = webPublishingStatus;
+  const hasTime = flags.includes("Time");
+  const hasTitle = flags.includes("Title");
+  const hasDescription = flags.includes("Description");
+  const hasSpeaker = flags.includes("Speaker");
+  const hasDoNotPublish = flags.includes("Do not publish");
+
+  // Return null if "Do not publish" is true OR if any required flags are missing
+  if (hasDoNotPublish || !hasTime || !hasTitle || !hasDescription || !hasSpeaker) {
+    return null;
+  }
   return (
     <Sheet>
       <SheetTrigger asChild>
