@@ -11,7 +11,6 @@ import { getSessionCalendarHttpUrl, getSessionsCalendarUrl } from "@/lib/ics/uti
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
-import TicketsSection from "@/components/speaker-portal/TicketsSection";
 
 export const generateMetadata = async ({
   searchParams,
@@ -101,9 +100,9 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
   // Extract telegram groups from sessions
   const sessionTelegramGroups = sessionsData
-    .filter((session) => session.portalTelegramGroup)
+    .filter((session) => session.portalTelegramGroup && session.name)
     .map((session) => ({
-      sessionName: session.name,
+      sessionName: session.name!,
       telegramGroup: session.portalTelegramGroup!,
     }));
 

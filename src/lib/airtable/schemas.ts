@@ -6,11 +6,11 @@ export const SessionFieldsSchema = z
   .object({
     id: z.string(),
     fields: z.object({
-      "⚙️ Session Name": z.string(),
+      "⚙️ Session Name": z.string().optional(),
       Description: z.string().optional(),
       "Start Time": z.string().optional(),
       "End Time": z.string().optional(),
-      Stage: z.enum(Object.values(StageValues)),
+      Stage: z.enum(Object.values(StageValues)).optional(),
       Speakers: z.array(z.string()).optional(),
       Moderator: z.array(z.string()).optional(),
       Format: z.array(z.string()).optional(),

@@ -11,13 +11,15 @@ import { Calendar, Clock, Users, AlertTriangle, Info } from "lucide-react";
 import { useCallback } from "react";
 
 export interface SessionsCardsProps {
-  items: (Session & {
-    subscribeUrl?: string;
-    speakers?: Speaker[];
-    format?: string[];
-    greenlightTime?: string;
-    webPublishingStatus?: string[];
-  })[];
+  items: Array<
+    Session & {
+      subscribeUrl?: string;
+      speakers?: Speaker[];
+      format?: string[] | null;
+      greenlightTime?: string | null;
+      webPublishingStatus?: string[] | null;
+    }
+  >;
   calendarUrl?: string;
 }
 

@@ -25,7 +25,7 @@ export type Speaker = {
 
 export type Session = {
   id: string;
-  name: string;
+  name?: string;
   description?: string;
   startTime?: string;
   endTime?: string;

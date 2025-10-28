@@ -30,7 +30,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     const sessionRecords = await fetchSessions({ speakerName: speaker._name });
     const sessions = sessionRecords
       .map((record) => SessionFieldsSchema.parse(record))
-      .filter((session) => session.startTime && session.endTime);
+      .filter((session) => session.name && session.startTime && session.endTime);
 
     if (sessions.length === 0) {
       return NextResponse.json({ error: "No sessions found for speaker" }, { status: 404 });
@@ -39,7 +39,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     const icsContent = generateSpeakerIcsContent(
       sessions.map((session) => ({
         id: sessionRecords.find((r) => SessionFieldsSchema.parse(r).name === session.name)?.id || "",
-        name: session.name,
+        name: session.name!,
         description: session.description,
         startTime: session.startTime!,
         endTime: session.endTime!,

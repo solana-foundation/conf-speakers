@@ -15,14 +15,14 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     const record = await fetchSession(sessionId);
     const session = SessionFieldsSchema.parse(record);
 
-    if (!session.startTime || !session.endTime) {
+    if (!session.name || !session.startTime || !session.endTime) {
       return NextResponse.json({ error: "Session missing start or end time" }, { status: 400 });
     }
 
     const icsContent = generateIcsContent([
       {
         id: sessionId,
-        name: session.name,
+        name: session.name!,
         description: session.description,
         startTime: session.startTime,
         endTime: session.endTime,

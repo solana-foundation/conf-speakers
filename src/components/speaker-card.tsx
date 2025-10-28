@@ -13,12 +13,12 @@ export interface SpeakerCardProps {
   xName?: string;
   // ActionsChecklist data
   sessions?: Array<{
-    id: string;
-    name: string;
-    deckStatus?: string;
-    greenlightTime?: string;
+    id?: string;
+    name?: string;
+    deckStatus?: string | null;
+    greenlightTime?: string | null;
   }>;
-  dietaryStatus?: string;
+  dietaryStatus?: string | null;
 }
 
 interface StatusBadge {

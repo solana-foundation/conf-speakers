@@ -4,9 +4,9 @@ import { Check, CircleMinus, Info, X } from "lucide-react";
 
 interface ActionsChecklistProps {
   sessions?: Array<{
-    id: string;
-    name: string;
-    deckStatus?: string;
+    id?: string;
+    name?: string;
+    deckStatus?: string | null;
   }>;
   dietaryStatus?: string | null;
   speakerTelegramGroup?: string;
