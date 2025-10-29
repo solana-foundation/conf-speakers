@@ -19,7 +19,7 @@ const LOGISTICS_CONFIG = {
       name: "Conference Room B — Stage B",
       entrance: "Direct entrance via Main Hall. Look for Stage B signage.",
       arrivalTime: "30 minutes before your session start time",
-      checkInLocation: "Side Stage Ops for equipment check and brief",
+      checkInLocation: "Lock In Stage Ops for equipment check and brief",
     },
   },
   shared: {

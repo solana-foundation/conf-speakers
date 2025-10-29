@@ -117,7 +117,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <div className="flex gap-3">
           <LogisticsDialogButton
-            stage={sessionsData[0]?.stage || "Main Stage"}
+            stage={sessionsData[0]?.stage || "Absolute Cinema"}
             stages={Array.from(new Set(sessionsData.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
           />
         </div>

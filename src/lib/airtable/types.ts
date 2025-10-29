@@ -1,8 +1,8 @@
-export type StageTitle = "Main Stage" | "Side Stage";
+export type StageTitle = "Absolute Cinema" | "Lock In";
 
 export enum StageValues {
-  Main = "Main Stage",
-  Side = "Side Stage",
+  Main = "Absolute Cinema",
+  Side = "Lock In",
 }
 
 export type Speaker = {
