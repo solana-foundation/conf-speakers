@@ -6,7 +6,7 @@ interface ActionsChecklistProps {
   sessions?: Array<{
     id?: string;
     name?: string;
-    deckStatus?: string | null;
+    actionsDeckReceived?: string | null;
   }>;
   dietaryStatus?: string | null;
   speakerTelegramGroup?: string;
@@ -38,17 +38,21 @@ export default function ActionsChecklist({
     return dietaryStatus;
   };
 
-  // Create deck upload tasks for each session - only show if status is "To Do" (deckStatus is undefined)
+  // Create deck upload tasks for each session
+  // Show "To Do" tasks with upload button
+  // Show "Completed" tasks with green check
+  // Hide if undefined
   const deckTasks = sessions
-    .filter((session) => session.deckStatus === undefined)
+    .filter((session) => session.actionsDeckReceived !== undefined)
     .map((session) => {
+      const isCompleted = session.actionsDeckReceived === "Completed";
       return {
         id: `upload-deck-${session.id}`,
         title: `Deck upload status for - ${session.name}`,
         description: "Use 16:9 aspect, embed fonts, and export a PDF as backup.",
-        status: "todo" as const,
-        link: "#",
-        linkText: "Upload Deck",
+        status: isCompleted ? ("approved" as const) : ("todo" as const),
+        link: isCompleted ? null : "#",
+        linkText: isCompleted ? null : "Upload Deck",
         type: "task" as const,
       };
     });

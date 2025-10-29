@@ -94,7 +94,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const sessionsForChecklist = sessionsData.map((session) => ({
     id: session.id,
     name: session.name,
-    deckStatus: session.actionsDeckReceived === "To Do" ? undefined : "Completed",
+    actionsDeckReceived: session.actionsDeckReceived,
     greenlightTime: session.greenlightTime,
   }));
 

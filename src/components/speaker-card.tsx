@@ -15,7 +15,7 @@ export interface SpeakerCardProps {
   sessions?: Array<{
     id?: string;
     name?: string;
-    deckStatus?: string | null;
+    actionsDeckReceived?: string | null;
     greenlightTime?: string | null;
   }>;
   dietaryStatus?: string | null;
@@ -42,12 +42,21 @@ export default function SpeakerCard({
     const badges: StatusBadge[] = [];
 
     // Check for awaiting deck status (multiple sessions)
-    const awaitingDeckSessions = sessions.filter((session) => session.deckStatus === undefined);
+    const awaitingDeckSessions = sessions.filter((session) => session.actionsDeckReceived === "To Do");
     if (awaitingDeckSessions.length > 0) {
       badges.push({
         label: `Awaiting Deck${awaitingDeckSessions.length > 1 ? ` (${awaitingDeckSessions.length})` : ""}`,
         variant: "awaiting-deck",
         icon: <CircleMinus className="h-3 w-3" />,
+      });
+    }
+
+    const approvedDeckSessions = sessions.filter((session) => session.actionsDeckReceived === "Completed");
+    if (approvedDeckSessions.length > 0) {
+      badges.push({
+        label: `Approved Deck${approvedDeckSessions.length > 1 ? ` (${approvedDeckSessions.length})` : ""}`,
+        variant: "all-set",
+        icon: <Check className="h-3 w-3" />,
       });
     }
 
@@ -63,8 +72,11 @@ export default function SpeakerCard({
       });
     }
 
-    // If no other badges, show "All Set"
-    if (badges.length === 0 && sessions.length > 0) {
+    // If no other badges and all sessions are completed or have no deck requirement, show "All Set"
+    const allCompletedSessions = sessions.filter(
+      (session) => session.actionsDeckReceived === "Completed" || session.actionsDeckReceived === undefined,
+    );
+    if (badges.length === 0 && sessions.length > 0 && allCompletedSessions.length === sessions.length) {
       badges.push({
         label: "All Set",
         variant: "all-set",
