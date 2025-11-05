@@ -19,14 +19,14 @@ export const metadata: Metadata = {
 const DUMMY_DATA = {
   speaker: {
     id: "rec123abc",
-    firstName: "Alex",
-    lastName: "Chen",
-    jobTitle: "Senior Developer Advocate",
-    company: "Solana Labs",
-    bio: "Alex is a passionate blockchain developer with over 10 years of experience in Web3. They specialize in smart contract development and have contributed to numerous open-source projects. When not coding, Alex enjoys speaking at conferences and mentoring new developers in the ecosystem.",
+    firstName: "Hero",
+    lastName: "Protagonist",
+    jobTitle: "Legendary Hero",
+    company: "Hero Labs",
+    bio: "Hero is a passionate blockchain developer with over 10 years of experience in Web3. They specialize in smart contract development and have contributed to numerous open-source projects. When not coding, Hero enjoys speaking at conferences and mentoring new developers in the ecosystem.",
     imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    xLink: "https://twitter.com/alexchen",
-    xName: "alexchen",
+    xLink: "https://twitter.com/hero_p",
+    xName: "hero_p",
     dietary: "Vegetarian",
   },
   sessions: [
@@ -45,8 +45,8 @@ const DUMMY_DATA = {
       speakers: [
         {
           id: "rec123abc",
-          firstName: "Alex",
-          lastName: "Chen",
+          firstName: "Hero",
+          lastName: "Protagonist",
           imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
         },
         {
@@ -72,8 +72,8 @@ const DUMMY_DATA = {
       speakers: [
         {
           id: "rec123abc",
-          firstName: "Alex",
-          lastName: "Chen",
+          firstName: "Hero",
+          lastName: "Protagonist",
           imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
         },
         {
@@ -105,8 +105,8 @@ const DUMMY_DATA = {
       speakers: [
         {
           id: "rec123abc",
-          firstName: "Alex",
-          lastName: "Chen",
+          firstName: "Hero",
+          lastName: "Protagonist",
           imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
         },
       ] as Speaker[],
