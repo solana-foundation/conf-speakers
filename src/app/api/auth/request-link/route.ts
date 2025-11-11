@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { airtable } from "@/lib/airtable/client";
 import { generateKey } from "@/lib/sign.server";
-// import { Resend } from "resend";
 import { isZodError } from "@/lib/airtable/utils";
+import { sendMagicLinkEmail } from "@/lib/sendgrid";
 
 const tableSpeakers = process.env.AIRTABLE_TABLE_SPEAKERS || "Onboarded Speakers";
 const columnEmail = "fldXAPcvQhbruspxA"; // "Speaker's Email"
@@ -21,9 +21,27 @@ type ActionState = {
   cooldownMs?: number;
 };
 
+const eventTitle = "Breakpoint Speaker Dashboard";
+
+function formatExpiresIn(expirationMs: number) {
+  if (!Number.isFinite(expirationMs) || expirationMs <= 0) return undefined;
+
+  const minutes = Math.round(expirationMs / 60000);
+  if (minutes < 60) return `${minutes} minute${minutes === 1 ? "" : "s"}`;
+
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"}`;
+
+  const days = Math.round(hours / 24);
+  return `${days} day${days === 1 ? "" : "s"}`;
+}
+
+function buildDelimitedSearchFormula(fieldId: string, emailValue: string) {
+  return `FIND("," & "${emailValue}" & ",", "," & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(LOWER({${fieldId}}), " ", ""), "\n", ""), "\r", "") & ",") > 0`;
+}
+
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
-  console.log(formData);
 
   const data = {
     email: formData.get("email")?.toString() ?? "",
@@ -54,12 +72,16 @@ export async function POST(request: NextRequest) {
   }
 
   const { email } = parsed;
+  const trimmedEmail = email.trim();
+  const normalizedEmail = trimmedEmail.toLowerCase();
+  const emailFormulaValue = normalizedEmail.replace(/"/g, '\\"');
+  const filterFormula = `OR(${buildDelimitedSearchFormula(columnEmail, emailFormulaValue)}, ${buildDelimitedSearchFormula(columnAssistantEmail, emailFormulaValue)})`;
 
   try {
     const records = await airtable
       .table(tableSpeakers)
       .select({
-        filterByFormula: `OR(LOWER({${columnEmail}}) = '${email.toLowerCase()}', LOWER({${columnAssistantEmail}}) = '${email.toLowerCase()}')`,
+        filterByFormula: filterFormula,
         maxRecords: 2,
       })
       .firstPage();
@@ -82,31 +104,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const speakerId = records[0].id;
+    const record = records[0];
+    const speakerId = record.id;
 
-    const exp = Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP!); // Default 3M
+    const now = Date.now();
+    const expiresInMs = Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0);
+    const exp = now + expiresInMs; // Default 3M
     const token = generateKey(exp, "auth", speakerId);
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
     const link = `${baseUrl}/s?key=${token}`;
 
-    console.log(link);
+    const fields = record.fields as Record<string, unknown>;
+    const recipientName =
+      (fields["Speaker Name"] as string | undefined) ??
+      (fields["Speaker's Name"] as string | undefined) ??
+      (fields["Full Name"] as string | undefined) ??
+      (fields["Name"] as string | undefined);
 
-    // const resend = new Resend(process.env.RESEND_API_KEY);
-    // const { error } = await resend.emails.send({
-    //   from: "Breakpoint Speakers <no-reply@bpspeakers.com>", // Adjust domain as needed
-    //   to: [email],
-    //   subject: "Your Speaker Portal Login Link",
-    //   html: `<p>Click <a href="${link}">here</a> to access your speaker portal.</p><p>This link will expire in 1 hour.</p>`,
-    // });
-
-    // if (error) {
-    //   console.error(error);
-    //   return NextResponse.json<ActionState>(
-    //     { ok: false, message: "Failed to send email. Please try again." },
-    //     { status: 500 },
-    //   );
-    // }
+    try {
+      await sendMagicLinkEmail({
+        to: trimmedEmail,
+        magicLink: link,
+        recipientName,
+        expiresInLabel: formatExpiresIn(expiresInMs),
+        eventTitle,
+      });
+    } catch (sendError) {
+      console.error(sendError);
+      return NextResponse.json<ActionState>(
+        { ok: false, message: "Failed to send email. Please try again." },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json<ActionState>({
       ok: true,

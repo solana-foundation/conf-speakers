@@ -21,7 +21,7 @@ export const mockSessions: Session[] = [
     description: "Learn how to build web applications that can handle millions of users.",
     startTime: "2025-01-15T10:00:00.000Z",
     endTime: "2025-01-15T11:00:00.000Z",
-    stage: "Stage A",
+    stage: "Absolute Cinema",
     speakerIds: ["test-speaker-1"],
   },
   {
@@ -30,7 +30,7 @@ export const mockSessions: Session[] = [
     description: "Deep dive into advanced React patterns and best practices.",
     startTime: "2025-01-15T14:00:00.000Z",
     endTime: "2025-01-15T15:00:00.000Z",
-    stage: "Stage B",
+    stage: "Lock In",
     speakerIds: ["test-speaker-1"],
   },
 ];

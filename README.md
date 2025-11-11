@@ -53,9 +53,25 @@ VENUE_TZ=Asia/Dubai
 API_KEY=server_only_random_value
 # Milliseconds a token is valid from "now" when issued -eg. 3M
 NEXT_PUBLIC_KEY_EXP=7776000000
+
+# SendGrid transactional email
+SENDGRID_API_KEY=SG.xxxxxx
+SENDGRID_TEMPLATE_ID=d-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+SENDGRID_FROM_EMAIL=speakers@solana.org
+SENDGRID_FROM_NAME="Breakpoint Events Team"
+# Optional: keep true while developing to avoid sending real mail
+SENDGRID_SANDBOX_MODE=true
 ```
 
 Never expose `AIRTABLE_PAT` to the client. All Airtable reads happen server-side.
+
+### 2.1) Verify the email flow locally or on preview
+
+1. Ensure `.env.local` includes the SendGrid variables above and restart the dev server after changes.
+2. Run `pnpm dev` and submit the email form at `/email-link` (or any page rendering `EmailForm`).
+3. Watch the server logs: you should see `POST /api/auth/request-link` followed by a `202` response from SendGrid. In sandbox mode the HTML payload is logged in the SendGrid dashboard without being delivered.
+4. Disable sandbox mode and use a real inbox to confirm the dynamic template renders correctly, the button links to `/s?key=…`, and the link expires after the configured window.
+5. If the email fails to send, check the Vercel logs (or Next.js console locally) for the thrown error, verify the template ID, sender identity, and that the API key has Mail Send permission.
 
 ### 3) shadcn/ui
 
