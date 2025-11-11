@@ -9,18 +9,12 @@ interface ActionsChecklistProps {
     actionsDeckReceived?: string | null;
   }>;
   dietaryStatus?: string | null;
-  speakerTelegramGroup?: string;
-  telegramGroups?: Array<{
-    sessionName: string;
-    telegramGroup: string;
-  }>;
   speakerPermitApproval?: string;
 }
 
 export default function ActionsChecklist({
   sessions = [],
   dietaryStatus,
-  telegramGroups = [],
   speakerPermitApproval,
 }: ActionsChecklistProps) {
   // Helper function to determine status based on approval value
@@ -96,16 +90,6 @@ export default function ActionsChecklist({
       linkText: null,
       type: "info" as const,
     },
-    // Add session-specific Telegram groups
-    ...telegramGroups.map((group, index) => ({
-      id: `telegram-group-${index}`,
-      title: `Join ${group.sessionName} Telegram Group (optional)`,
-      description: "Casual updates and coordination with fellow speakers.",
-      status: "approved" as const,
-      link: group.telegramGroup,
-      linkText: "Open Group",
-      type: "info" as const,
-    })),
   ];
 
   const getTaskIcon = (task: (typeof tasks)[0]) => {

@@ -98,14 +98,6 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
     greenlightTime: session.greenlightTime,
   }));
 
-  // Extract telegram groups from sessions
-  const sessionTelegramGroups = sessionsData
-    .filter((session) => session.portalTelegramGroup && session.name)
-    .map((session) => ({
-      sessionName: session.name!,
-      telegramGroup: session.portalTelegramGroup!,
-    }));
-
   return (
     <div className="min-h-screen p-8 font-sans">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
@@ -124,11 +116,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <ActionsChecklist
-          sessions={sessionsForChecklist}
-          dietaryStatus={speakerData.dietary}
-          telegramGroups={sessionTelegramGroups}
-        />
+        <ActionsChecklist sessions={sessionsForChecklist} dietaryStatus={speakerData.dietary} />
 
         {/* <Separator />
         <TicketsSection

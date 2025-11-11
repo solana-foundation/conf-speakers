@@ -41,6 +41,7 @@ const DUMMY_DATA = {
       webPublishingStatus: ["Title", "Description", "Speaker"],
       format: ["Talk"],
       greenlightTime: "Between 10am and 11am",
+      portalTelegramGroup: "https://t.me/bp25_dapps_session",
       actionsDeckReceived: "To Do",
       speakers: [
         {
@@ -68,6 +69,7 @@ const DUMMY_DATA = {
       webPublishingStatus: ["Time", "Title", "Description", "Speaker"],
       format: ["Panel"],
       greenlightTime: undefined,
+      portalTelegramGroup: "https://t.me/bp25_web3_panel",
       actionsDeckReceived: "Completed",
       speakers: [
         {
@@ -112,20 +114,10 @@ const DUMMY_DATA = {
       ] as Speaker[],
     },
   ],
-  telegramGroups: [
-    {
-      sessionName: "Building the Next Generation of dApps",
-      telegramGroup: "https://t.me/bp25_dapps_session",
-    },
-    {
-      sessionName: "Panel: The Future of Web3 Infrastructure",
-      telegramGroup: "https://t.me/bp25_web3_panel",
-    },
-  ],
 };
 
 export default function DemoSpeakerPage() {
-  const { speaker, sessions, telegramGroups } = DUMMY_DATA;
+  const { speaker, sessions } = DUMMY_DATA;
 
   // Dummy calendar URL
   const calendarUrl = "https://breakpoint.solana.org/api/ics/speaker/dummy-token";
@@ -140,9 +132,6 @@ export default function DemoSpeakerPage() {
 
   // Filter sessions based on webPublishingStatus (for display in cards)
   const allSessionsData = sessions;
-
-  // Extract telegram groups from sessions
-  const sessionTelegramGroups = telegramGroups;
 
   return (
     <div className="min-h-screen p-8 font-sans">
@@ -162,11 +151,7 @@ export default function DemoSpeakerPage() {
 
         <Separator />
 
-        <ActionsChecklist
-          sessions={sessionsForChecklist}
-          dietaryStatus={speaker.dietary}
-          telegramGroups={sessionTelegramGroups}
-        />
+        <ActionsChecklist sessions={sessionsForChecklist} dietaryStatus={speaker.dietary} />
 
         {/* <Separator />
         <TicketsSection

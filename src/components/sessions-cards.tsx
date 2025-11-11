@@ -7,7 +7,7 @@ import { formatVenueTime } from "@/lib/time/tz";
 import { Session, Speaker, StageValues } from "@/lib/airtable/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
-import { Calendar, Clock, Users, AlertTriangle, Info } from "lucide-react";
+import { Calendar, Clock, Users, AlertTriangle, Info, MessageCircle } from "lucide-react";
 import { useCallback } from "react";
 
 const VENUE_OPENING_TIMES: Record<string, string> = {
@@ -202,7 +202,7 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
 
                   {/* Calendar Buttons */}
                   {publishingStatusFlags?.hasTime && (
-                    <div className="flex gap-2 pt-2">
+                    <div className="flex flex-col gap-2 pt-2 sm:flex-row">
                       {/* Primary CTA Button - Add My Sessions to Calendar */}
                       {calendarUrl && (
                         <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
@@ -217,6 +217,21 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
                         <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                           <a href={session.subscribeUrl} target="_blank" rel="noopener noreferrer">
                             <Calendar className="mr-2 h-4 w-4" />+ Add All BP25 Sessions to Calendar
+                          </a>
+                        </Button>
+                      )}
+
+                      {/* Session Telegram Group */}
+                      {session.portalTelegramGroup && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          asChild
+                          className="border-azure text-azure hover:bg-azure/10 hover:text-azure w-full sm:w-auto"
+                        >
+                          <a href={session.portalTelegramGroup} target="_blank" rel="noopener noreferrer">
+                            <MessageCircle className="mr-2 h-4 w-4" />
+                            Join Speaker Telegram Group
                           </a>
                         </Button>
                       )}
