@@ -49,7 +49,8 @@ export default function ActionsChecklist({
       return {
         id: `upload-deck-${session.id}`,
         title: `Deck upload status for - ${session.name}`,
-        description: "Use 16:9 aspect, embed fonts, and export a PDF as backup.",
+        description:
+          "Use 16:9 aspect, embed fonts, and upload as Keynote or Powerpoint file. Upload any video files seperately.",
         status: isCompleted ? ("approved" as const) : ("todo" as const),
         link: isCompleted ? null : "#",
         linkText: isCompleted ? null : "Upload Deck",
@@ -79,8 +80,8 @@ export default function ActionsChecklist({
     },
     {
       id: "stage-team-questions",
-      title: "Questions for Stage Team",
-      description: "Email: speakers@solana.org. DMs okay during event week.",
+      title: "Questions",
+      description: "Email: speakers@solana.org",
       status: "pending" as const,
       link: null,
       linkText: null,
