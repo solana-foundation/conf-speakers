@@ -111,10 +111,7 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
                 {getPublishingStatusFlags(session)?.hasTime && (
                   <div className="border-mint bg-mint/10 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
                     <AlertTriangle className="text-mint h-4 w-4" />
-                    <span className="font-medium text-white">
-                      Please arrive {session.stage === StageValues.Main ? "45 minutes" : "30 minutes"} before your
-                      session starts
-                    </span>
+                    <span className="font-medium text-white">Please arrive 45 minutes before your session starts</span>
                   </div>
                 )}
 
