@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { MapPin, Clock, Coffee, Shirt, Luggage } from "lucide-react";
+import { MapPin, Clock, Coffee, Shirt, Luggage, ExternalLink } from "lucide-react";
 import { StageTitle, StageValues } from "@/lib/airtable/types";
 
 // Hardcoded configuration data
@@ -128,6 +128,25 @@ export default function LogisticsDialogButton({ stage, stages }: { stage: StageT
               <p className="text-p1">{LOGISTICS_CONFIG.shared.travel}</p>
             </div>
           </section>
+          {/* TODO: uncomment speaker link to best practices guide when completed */}
+          {/* <div className="bg-stroke-primary h-px" />
+
+          <section className="group">
+            <div className="pl-11">
+              <a
+                href="https://docs.google.com/document/d/1rNZDBHYexKpWl-eumsiExXqTYr5BIXwkGBt_mhGlvXU/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-p1 text-primary hover:text-azure inline-flex items-center gap-2 font-medium transition-colors"
+              >
+                View full speaker information & best practices guide
+                <ExternalLink className="h-4 w-4" />
+              </a>
+              <p className="text-p2 text-secondary mt-2">
+                For more detailed information about speaking at BP25, including best practices and additional resources.
+              </p>
+            </div>
+          </section> */}
         </div>
       </DialogContent>
     </Dialog>
