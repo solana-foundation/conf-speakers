@@ -21,6 +21,7 @@ export type Speaker = {
   invitationCode?: string;
   slideDeckFile?: string;
   dietary?: string;
+  speakerPermitApproval?: string;
 };
 
 export type Session = {

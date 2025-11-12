@@ -29,6 +29,7 @@ const DUMMY_DATA = {
     xName: "hero_p",
     dietary: "Vegetarian",
     slideDeckFile: "https://google.com",
+    speakerPermitApproval: null,
   },
   sessions: [
     {
@@ -156,6 +157,7 @@ export default function DemoSpeakerPage() {
           sessions={sessionsForChecklist}
           dietaryStatus={speaker.dietary}
           slideDeckFile={speaker.slideDeckFile}
+          speakerPermitApproval={speaker.speakerPermitApproval}
         />
 
         {/* <Separator />

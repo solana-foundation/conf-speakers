@@ -61,6 +61,7 @@ export const SpeakerFieldsSchema = z
       "Luma Ticket_Plus One": z.string().optional(),
       "Invitation Code": z.string().optional(),
       Dietary: z.string().optional(),
+      "Speaker Permit Approval": z.string().optional(),
     }),
   })
   .transform((data) => ({
@@ -79,6 +80,7 @@ export const SpeakerFieldsSchema = z
     lumaTicketPlusOne: data.fields["Luma Ticket_Plus One"],
     invitationCode: data.fields["Invitation Code"],
     dietary: data.fields["Dietary"],
+    speakerPermitApproval: data.fields["Speaker Permit Approval"],
   }));
 
 export const FormatFieldsSchema = z
