@@ -5,6 +5,12 @@ export enum StageValues {
   Side = "Lock In",
 }
 
+export enum DeckStatus {
+  ToUpload = "to upload deck",
+  Uploaded = "uploaded deck",
+  Approved = "approved deck",
+}
+
 export type Speaker = {
   id: string;
   _name?: string;
@@ -35,7 +41,7 @@ export type Session = {
   moderatorIds?: string[];
   format?: string[];
   webPublishingStatus?: string[];
-  actionsDeckReceived?: string | null;
+  actionsDeckReceived?: DeckStatus | null;
   portalTelegramGroup?: string;
   greenlightTime?: string;
 };

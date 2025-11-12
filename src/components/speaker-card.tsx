@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Twitter, Check, CircleMinus, Clock } from "lucide-react";
+import { DeckStatus } from "@/lib/airtable/types";
 
 export interface SpeakerCardProps {
   imageUrl?: string;
@@ -15,7 +16,7 @@ export interface SpeakerCardProps {
   sessions?: Array<{
     id?: string;
     name?: string;
-    actionsDeckReceived?: string | null;
+    actionsDeckReceived?: DeckStatus | null;
     greenlightTime?: string | null;
   }>;
   dietaryStatus?: string | null;
@@ -42,10 +43,8 @@ export default function SpeakerCard({
     const badges: StatusBadge[] = [];
 
     // Check for awaiting deck status (multiple sessions)
-    // States: null, "Pending Deck", "Uploaded Deck", "Approved Deck"
-    const pendingDeckSessions = sessions.filter(
-      (session) => session.actionsDeckReceived === "Pending Deck" || session.actionsDeckReceived === "Uploaded Deck",
-    );
+    // States: null, DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved
+    const pendingDeckSessions = sessions.filter((session) => session.actionsDeckReceived === DeckStatus.ToUpload);
     if (pendingDeckSessions.length > 0) {
       badges.push({
         label: `Awaiting Deck${pendingDeckSessions.length > 1 ? ` (${pendingDeckSessions.length})` : ""}`,
@@ -54,7 +53,7 @@ export default function SpeakerCard({
       });
     }
 
-    const approvedDeckSessions = sessions.filter((session) => session.actionsDeckReceived === "Approved Deck");
+    const approvedDeckSessions = sessions.filter((session) => session.actionsDeckReceived === DeckStatus.Approved);
     if (approvedDeckSessions.length > 0) {
       badges.push({
         label: `Approved Deck${approvedDeckSessions.length > 1 ? ` (${approvedDeckSessions.length})` : ""}`,
@@ -78,7 +77,7 @@ export default function SpeakerCard({
     // If no other badges and all sessions are approved or have no deck requirement (null), show "All Set"
     const allCompletedSessions = sessions.filter(
       (session) =>
-        session.actionsDeckReceived === "Approved Deck" ||
+        session.actionsDeckReceived === DeckStatus.Approved ||
         session.actionsDeckReceived === null ||
         session.actionsDeckReceived === undefined,
     );

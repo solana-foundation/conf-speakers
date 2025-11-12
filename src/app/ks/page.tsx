@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
-import { Speaker, StageTitle } from "@/lib/airtable/types";
+import { Speaker, StageTitle, DeckStatus } from "@/lib/airtable/types";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
 
@@ -44,7 +44,7 @@ const DUMMY_DATA = {
       format: ["Product Keynote (5 min)"],
       greenlightTime: "Between 10am and 11am",
       portalTelegramGroup: "https://t.me/bp25_dapps_session",
-      actionsDeckReceived: "Pending Deck",
+      actionsDeckReceived: DeckStatus.ToUpload,
       speakers: [
         {
           id: "rec123abc",
@@ -72,7 +72,7 @@ const DUMMY_DATA = {
       format: ["Debate (30 min)"],
       greenlightTime: undefined,
       portalTelegramGroup: "https://t.me/bp25_web3_panel",
-      actionsDeckReceived: "Approved Deck",
+      actionsDeckReceived: DeckStatus.Approved,
       speakers: [
         {
           id: "rec123abc",
@@ -105,7 +105,7 @@ const DUMMY_DATA = {
       webPublishingStatus: ["Time", "Title", "Description", "Speaker"],
       format: ["Keynote (10 min)"],
       greenlightTime: undefined,
-      actionsDeckReceived: "Uploaded Deck",
+      actionsDeckReceived: DeckStatus.Uploaded,
       speakers: [
         {
           id: "rec123abc",

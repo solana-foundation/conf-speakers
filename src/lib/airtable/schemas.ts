@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { sanitizeXLink, sanitizeXName } from "@/lib/utils";
-import { StageValues } from "@/lib/airtable/types";
+import { StageValues, DeckStatus } from "@/lib/airtable/types";
 
 export const SessionFieldsSchema = z
   .object({
@@ -14,7 +14,9 @@ export const SessionFieldsSchema = z
       Speakers: z.array(z.string()).optional(),
       Moderator: z.array(z.string()).optional(),
       Format: z.array(z.string()).optional(),
-      "Actions_Deck Received": z.union([z.string(), z.null()]).optional(),
+      "Actions_Deck Received": z
+        .union([z.enum([DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved]), z.null()])
+        .optional(),
       "Portal_Telegram Group": z.string().optional(),
       "Portal_Greenlight Time": z.string().optional(),
       "Web Publishing Status": z.array(z.string()).optional(),

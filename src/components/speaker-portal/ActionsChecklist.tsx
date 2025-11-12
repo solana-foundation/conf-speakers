@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Check, CircleMinus, Info, X } from "lucide-react";
+import { DeckStatus } from "@/lib/airtable/types";
 
 interface ActionsChecklistProps {
   sessions?: Array<{
     id?: string;
     name?: string;
-    actionsDeckReceived?: string | null;
+    actionsDeckReceived?: DeckStatus | null;
   }>;
   dietaryStatus?: string | null;
   speakerPermitApproval?: string;
@@ -35,15 +36,15 @@ export default function ActionsChecklist({
   };
 
   // Create deck upload tasks for each session
-  // States: null, "Pending Deck", "Uploaded Deck", "Approved Deck"
+  // States: null, DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved
   // Show tasks for all states except null
   const deckTasks = sessions
     .filter((session) => session.actionsDeckReceived !== null && session.actionsDeckReceived !== undefined)
     .map((session) => {
       const deckStatus = session.actionsDeckReceived;
-      const isApproved = deckStatus === "Approved Deck";
-      const isUploaded = deckStatus === "Uploaded Deck";
-      const isPending = deckStatus === "Pending Deck";
+      const isApproved = deckStatus === DeckStatus.Approved;
+      const isUploaded = deckStatus === DeckStatus.Uploaded;
+      const isPending = deckStatus === DeckStatus.ToUpload;
 
       // Determine task status
       let status: "approved" | "todo" | "pending";
@@ -52,7 +53,7 @@ export default function ActionsChecklist({
       } else if (isUploaded) {
         status = "pending"; // Uploaded but awaiting approval
       } else {
-        status = "todo"; // Pending Deck
+        status = "todo"; // DeckStatus.ToUpload
       }
 
       return {
