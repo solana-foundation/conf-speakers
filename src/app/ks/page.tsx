@@ -29,7 +29,7 @@ const DUMMY_DATA = {
     xName: "hero_p",
     dietary: "Vegetarian",
     slideDeckFile: "https://google.com",
-    speakerPermitApproval: null,
+    speakerPermitApproval: undefined,
   },
   sessions: [
     {
@@ -44,7 +44,7 @@ const DUMMY_DATA = {
       format: ["Product Keynote (5 min)"],
       greenlightTime: "Between 10am and 11am",
       portalTelegramGroup: "https://t.me/bp25_dapps_session",
-      actionsDeckReceived: "To Do",
+      actionsDeckReceived: "Pending Deck",
       speakers: [
         {
           id: "rec123abc",
@@ -72,7 +72,7 @@ const DUMMY_DATA = {
       format: ["Debate (30 min)"],
       greenlightTime: undefined,
       portalTelegramGroup: "https://t.me/bp25_web3_panel",
-      actionsDeckReceived: "Completed",
+      actionsDeckReceived: "Approved Deck",
       speakers: [
         {
           id: "rec123abc",
@@ -105,7 +105,7 @@ const DUMMY_DATA = {
       webPublishingStatus: ["Time", "Title", "Description", "Speaker"],
       format: ["Keynote (10 min)"],
       greenlightTime: undefined,
-      actionsDeckReceived: "Completed",
+      actionsDeckReceived: "Uploaded Deck",
       speakers: [
         {
           id: "rec123abc",

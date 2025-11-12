@@ -42,16 +42,19 @@ export default function SpeakerCard({
     const badges: StatusBadge[] = [];
 
     // Check for awaiting deck status (multiple sessions)
-    const awaitingDeckSessions = sessions.filter((session) => session.actionsDeckReceived === "To Do");
-    if (awaitingDeckSessions.length > 0) {
+    // States: null, "Pending Deck", "Uploaded Deck", "Approved Deck"
+    const pendingDeckSessions = sessions.filter(
+      (session) => session.actionsDeckReceived === "Pending Deck" || session.actionsDeckReceived === "Uploaded Deck",
+    );
+    if (pendingDeckSessions.length > 0) {
       badges.push({
-        label: `Awaiting Deck${awaitingDeckSessions.length > 1 ? ` (${awaitingDeckSessions.length})` : ""}`,
+        label: `Awaiting Deck${pendingDeckSessions.length > 1 ? ` (${pendingDeckSessions.length})` : ""}`,
         variant: "awaiting-deck",
         icon: <CircleMinus className="h-3 w-3" />,
       });
     }
 
-    const approvedDeckSessions = sessions.filter((session) => session.actionsDeckReceived === "Completed");
+    const approvedDeckSessions = sessions.filter((session) => session.actionsDeckReceived === "Approved Deck");
     if (approvedDeckSessions.length > 0) {
       badges.push({
         label: `Approved Deck${approvedDeckSessions.length > 1 ? ` (${approvedDeckSessions.length})` : ""}`,
@@ -72,9 +75,12 @@ export default function SpeakerCard({
       });
     }
 
-    // If no other badges and all sessions are completed or have no deck requirement, show "All Set"
+    // If no other badges and all sessions are approved or have no deck requirement (null), show "All Set"
     const allCompletedSessions = sessions.filter(
-      (session) => session.actionsDeckReceived === "Completed" || session.actionsDeckReceived === undefined,
+      (session) =>
+        session.actionsDeckReceived === "Approved Deck" ||
+        session.actionsDeckReceived === null ||
+        session.actionsDeckReceived === undefined,
     );
     if (badges.length === 0 && sessions.length > 0 && allCompletedSessions.length === sessions.length) {
       badges.push({

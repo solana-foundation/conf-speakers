@@ -35,21 +35,34 @@ export default function ActionsChecklist({
   };
 
   // Create deck upload tasks for each session
-  // Show "To Do" tasks with upload button
-  // Show "Completed" tasks with green check
-  // Hide if undefined
+  // States: null, "Pending Deck", "Uploaded Deck", "Approved Deck"
+  // Show tasks for all states except null
   const deckTasks = sessions
-    .filter((session) => session.actionsDeckReceived !== undefined)
+    .filter((session) => session.actionsDeckReceived !== null && session.actionsDeckReceived !== undefined)
     .map((session) => {
-      const isCompleted = session.actionsDeckReceived === "Completed";
+      const deckStatus = session.actionsDeckReceived;
+      const isApproved = deckStatus === "Approved Deck";
+      const isUploaded = deckStatus === "Uploaded Deck";
+      const isPending = deckStatus === "Pending Deck";
+
+      // Determine task status
+      let status: "approved" | "todo" | "pending";
+      if (isApproved) {
+        status = "approved";
+      } else if (isUploaded) {
+        status = "pending"; // Uploaded but awaiting approval
+      } else {
+        status = "todo"; // Pending Deck
+      }
+
       return {
         id: `upload-deck-${session.id}`,
         title: `Deck upload status for - ${session.name}`,
         description:
           "Use 16:9 aspect, embed fonts, and upload as Keynote or Powerpoint file. Upload any video files seperately.",
-        status: isCompleted ? ("approved" as const) : ("todo" as const),
-        link: isCompleted ? null : slideDeckFile || "#",
-        linkText: isCompleted ? null : "Upload Deck",
+        status,
+        link: isApproved ? null : slideDeckFile || "#",
+        linkText: isApproved ? null : "Deck Files Dropbox",
         type: "task" as const,
       };
     });
@@ -123,15 +136,11 @@ export default function ActionsChecklist({
             className={`flex items-start gap-3 rounded-lg border p-3 ${
               task.type === "info"
                 ? "bg-azure/10 border-0"
-                : task.status === "approved" || task.status === "Approved"
-                  ? "border-green-500"
-                  : task.status === "Denied"
-                    ? "border-red-500"
-                    : task.status === "Pending"
-                      ? "border-yellow-500"
-                      : task.status === "todo"
-                        ? "border-stroke-primary"
-                        : "border-stroke-primary"
+                : task.status === "Denied"
+                  ? "border-red-500"
+                  : task.status === "todo"
+                    ? "border-stroke-primary"
+                    : "border-stroke-primary"
             }`}
           >
             <div className="flex items-start justify-center">{getTaskIcon(task)}</div>
@@ -147,7 +156,7 @@ export default function ActionsChecklist({
                   {task.type === "task" && task.status === "todo" && (
                     <span className="bg-azure rounded-full px-2 py-0.5 font-mono text-[12px] text-black">To Do</span>
                   )}
-                  {task.type === "task" && task.status === "Pending" && (
+                  {task.type === "task" && (task.status === "pending" || task.status === "Pending") && (
                     <span className="rounded-full bg-yellow-500 px-2 py-0.5 font-mono text-[12px] text-black">
                       Pending
                     </span>
