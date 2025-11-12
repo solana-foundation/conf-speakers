@@ -10,12 +10,14 @@ interface ActionsChecklistProps {
   }>;
   dietaryStatus?: string | null;
   speakerPermitApproval?: string;
+  slideDeckFile?: string | null;
 }
 
 export default function ActionsChecklist({
   sessions = [],
   dietaryStatus,
   speakerPermitApproval,
+  slideDeckFile,
 }: ActionsChecklistProps) {
   // Helper function to determine status based on approval value
   const getApprovalStatus = (approval?: string): "approved" | "pending" | "declined" => {
@@ -46,7 +48,7 @@ export default function ActionsChecklist({
         description:
           "Use 16:9 aspect, embed fonts, and upload as Keynote or Powerpoint file. Upload any video files seperately.",
         status: isCompleted ? ("approved" as const) : ("todo" as const),
-        link: isCompleted ? null : "#",
+        link: isCompleted ? null : slideDeckFile || "#",
         linkText: isCompleted ? null : "Upload Deck",
         type: "task" as const,
       };

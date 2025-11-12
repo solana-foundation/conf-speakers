@@ -56,6 +56,7 @@ export const SpeakerFieldsSchema = z
         )
         .optional(),
       Twitter: z.string().optional(),
+      "Slide Deck File": z.string().optional(),
       "Luma Ticket_Speaker": z.string().optional(),
       "Luma Ticket_Plus One": z.string().optional(),
       "Invitation Code": z.string().optional(),
@@ -73,6 +74,7 @@ export const SpeakerFieldsSchema = z
     imageUrl: data.fields["Headshot_For Web"]?.[0]?.url,
     xLink: data.fields["Twitter"] ? (sanitizeXLink(data.fields["Twitter"]) ?? undefined) : undefined,
     xName: data.fields["Twitter"] ? (sanitizeXName(data.fields["Twitter"]) ?? undefined) : undefined,
+    slideDeckFile: data.fields["Slide Deck File"],
     lumaTicketSpeaker: data.fields["Luma Ticket_Speaker"],
     lumaTicketPlusOne: data.fields["Luma Ticket_Plus One"],
     invitationCode: data.fields["Invitation Code"],

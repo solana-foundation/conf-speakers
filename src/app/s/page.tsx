@@ -116,7 +116,11 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <ActionsChecklist sessions={sessionsForChecklist} dietaryStatus={speakerData.dietary} />
+        <ActionsChecklist
+          sessions={sessionsForChecklist}
+          dietaryStatus={speakerData.dietary}
+          slideDeckFile={speakerData.slideDeckFile}
+        />
 
         {/* <Separator />
         <TicketsSection

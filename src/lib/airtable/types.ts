@@ -19,7 +19,7 @@ export type Speaker = {
   lumaTicketSpeaker?: string;
   lumaTicketPlusOne?: string;
   invitationCode?: string;
-  slideDeckUrl?: string;
+  slideDeckFile?: string;
   dietary?: string;
 };
 

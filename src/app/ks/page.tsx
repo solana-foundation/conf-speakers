@@ -28,6 +28,7 @@ const DUMMY_DATA = {
     xLink: "https://twitter.com/hero_p",
     xName: "hero_p",
     dietary: "Vegetarian",
+    slideDeckFile: "https://google.com",
   },
   sessions: [
     {
@@ -151,7 +152,11 @@ export default function DemoSpeakerPage() {
 
         <Separator />
 
-        <ActionsChecklist sessions={sessionsForChecklist} dietaryStatus={speaker.dietary} />
+        <ActionsChecklist
+          sessions={sessionsForChecklist}
+          dietaryStatus={speaker.dietary}
+          slideDeckFile={speaker.slideDeckFile}
+        />
 
         {/* <Separator />
         <TicketsSection
