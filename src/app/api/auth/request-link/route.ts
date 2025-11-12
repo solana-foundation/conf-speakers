@@ -97,13 +97,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (records.length > 1) {
-      return NextResponse.json<ActionState>(
-        { ok: false, message: "Multiple accounts found for this email. Please contact support." },
-        { status: 400 },
-      );
-    }
-
     const record = records[0];
     const speakerId = record.id;
 
