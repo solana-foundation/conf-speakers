@@ -92,7 +92,7 @@ export function EmailForm() {
           Email address
         </label>
         <Input id="email" name="email" type="email" placeholder="you@example.com" required />
-        <p className="text-muted-foreground text-xs">We&apos;ll send a magic link from Breakpoint Speakers.</p>
+        <p className="text-muted-foreground text-xs">You&apos;ll receive a magic link from Breakpoint Events Team.</p>
         <EmailFieldError error={state.fieldErrors?.email} />
       </div>
       <SubmitButton pending={pending} cooldownMs={state.cooldownMs} />
