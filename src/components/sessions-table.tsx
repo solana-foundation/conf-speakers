@@ -2,7 +2,6 @@
 
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { Checkbox } from "./ui/checkbox";
 import { formatVenueTime } from "@/lib/time/tz";
 import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from "./ui/table";
@@ -105,18 +104,31 @@ export default function SessionsTable({
             />
           </TableHead>
         ),
-        cell: (info) => (
-          <TableCell className="pl-6">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="relative w-96 overflow-hidden font-bold text-nowrap text-ellipsis max-md:w-48">
-                  {info.getValue()}
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>{info.getValue()}</TooltipContent>
-            </Tooltip>
-          </TableCell>
-        ),
+        cell: (info) => {
+          const speakers = info.row.original.speakers || [];
+          const speakerNames = speakers
+            .map((speaker) => {
+              if (speaker.firstName && speaker.lastName) {
+                return `${speaker.firstName} ${speaker.lastName}`;
+              }
+              return speaker._name || "";
+            })
+            .filter(Boolean)
+            .join(", ");
+
+          return (
+            <TableCell className="pl-6">
+              <div className="relative w-96 max-md:w-48">
+                <div className="overflow-hidden font-bold text-nowrap text-ellipsis">{info.getValue()}</div>
+                {speakerNames && (
+                  <div className="text-muted-foreground mt-1 overflow-hidden text-sm text-nowrap text-ellipsis">
+                    {speakerNames}
+                  </div>
+                )}
+              </div>
+            </TableCell>
+          );
+        },
       }),
       columnHelper.accessor("startTime", {
         id: "startTime",
