@@ -44,7 +44,6 @@ export default function ActionsChecklist({
       const deckStatus = session.actionsDeckReceived;
       const isApproved = deckStatus === DeckStatus.Approved;
       const isUploaded = deckStatus === DeckStatus.Uploaded;
-      const isPending = deckStatus === DeckStatus.ToUpload;
 
       // Determine task status
       let status: "approved" | "todo" | "pending";
