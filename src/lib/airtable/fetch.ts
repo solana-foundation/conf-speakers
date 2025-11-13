@@ -31,6 +31,7 @@ export const fetchSessions = (params: SessionParams = {}) => {
         "Portal_Telegram Group",
         "Portal_Greenlight Time",
         "Web Publishing Status",
+        "Publish to web",
       ],
       ...(params.speakerName ? { filterByFormula: `FIND("${params.speakerName}", {Speakers}&"")` } : undefined),
       sort: [{ field: "Start Time", direction: "asc" }],

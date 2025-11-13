@@ -41,6 +41,7 @@ export type Session = {
   moderatorIds?: string[];
   format?: string[];
   webPublishingStatus?: string[];
+  publishToWeb?: boolean;
   actionsDeckReceived?: DeckStatus | null;
   portalTelegramGroup?: string;
   greenlightTime?: string;

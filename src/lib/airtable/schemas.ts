@@ -20,6 +20,7 @@ export const SessionFieldsSchema = z
       "Portal_Telegram Group": z.string().optional(),
       "Portal_Greenlight Time": z.string().optional(),
       "Web Publishing Status": z.array(z.string()).optional(),
+      "Publish to web": z.boolean().optional(),
     }),
   })
   .transform((data) => ({
@@ -36,6 +37,7 @@ export const SessionFieldsSchema = z
     portalTelegramGroup: data.fields["Portal_Telegram Group"],
     greenlightTime: data.fields["Portal_Greenlight Time"],
     webPublishingStatus: data.fields["Web Publishing Status"],
+    publishToWeb: data.fields["Publish to web"],
   }));
 
 export const SpeakerFieldsSchema = z
