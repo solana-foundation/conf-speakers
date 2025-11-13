@@ -56,11 +56,11 @@ export default async function SchedulePage() {
           {filteredSessionsData.length === 0 ? (
             <div className="flex flex-col gap-6 py-16">
               <div className="text-center">
-                <h2 className="font-fh-lecturis mb-3 text-2xl">Sessions Coming Soon</h2>
+                <h2 className="mb-3 text-2xl">Sessions Coming Soon</h2>
                 <p className="text-muted-foreground text-p1">Sessions are being finalized and will appear here soon.</p>
               </div>
               <div className="border-stroke-primary bg-background-secondary mx-auto space-y-4 rounded-lg border p-6 text-left">
-                <h3 className="font-fh-lecturis text-xl">What you&apos;ll be able to do</h3>
+                <h3>What you&apos;ll be able to do</h3>
                 <ul className="text-p1 text-muted-foreground space-y-2">
                   <li>Browse the complete conference schedule</li>
                   <li>Filter sessions by name, date, and stage</li>
@@ -69,7 +69,7 @@ export default async function SchedulePage() {
                   <li>Subscribe to calendar updates for selected sessions</li>
                 </ul>
                 <div className="pt-2">
-                  <h3 className="font-fh-lecturis mb-2 text-xl">Available information</h3>
+                  <h3 className="mb-2">Available information</h3>
                   <ul className="text-p1 text-muted-foreground space-y-2">
                     <li>Session titles and descriptions</li>
                     <li>Speaker names and details</li>
