@@ -60,7 +60,7 @@ export default async function SchedulePage() {
                 <p className="text-muted-foreground text-p1">Sessions are being finalized and will appear here soon.</p>
               </div>
               <div className="border-stroke-primary bg-background-secondary mx-auto space-y-4 rounded-lg border p-6 text-left">
-                <h3 className="font-fh-lecturis text-xl">What you'll be able to do</h3>
+                <h3 className="font-fh-lecturis text-xl">What you&apos;ll be able to do</h3>
                 <ul className="text-p1 text-muted-foreground space-y-2">
                   <li>Browse the complete conference schedule</li>
                   <li>Filter sessions by name, date, and stage</li>
