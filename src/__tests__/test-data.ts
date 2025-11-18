@@ -59,7 +59,7 @@ export const mockSessionRecords = [
       "Start Time": "2025-01-15T10:00:00.000Z",
       "End Time": "2025-01-15T11:00:00.000Z",
       Stage: "Stage A",
-      Speakers: ["Jane Smith"],
+      "Onboarded Speakers": ["Jane Smith"],
     },
   },
   {
@@ -70,7 +70,7 @@ export const mockSessionRecords = [
       "Start Time": "2025-01-15T14:00:00.000Z",
       "End Time": "2025-01-15T15:00:00.000Z",
       Stage: "Stage B",
-      Speakers: ["Jane Smith"],
+      "Onboarded Speakers": ["Jane Smith"],
     },
   },
 ];

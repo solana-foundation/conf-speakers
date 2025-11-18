@@ -24,7 +24,7 @@ export const fetchSessions = (params: SessionParams = {}) => {
         "Start Time",
         "End Time",
         "Stage",
-        "Speakers",
+        "Onboarded Speakers",
         "Moderator",
         "Format",
         "Actions_Deck Received",
@@ -33,7 +33,9 @@ export const fetchSessions = (params: SessionParams = {}) => {
         "Web Publishing Status",
         "Publish to web",
       ],
-      ...(params.speakerName ? { filterByFormula: `FIND("${params.speakerName}", {Speakers}&"")` } : undefined),
+      ...(params.speakerName
+        ? { filterByFormula: `FIND("${params.speakerName}", {Onboarded Speakers}&"")` }
+        : undefined),
       sort: [{ field: "Start Time", direction: "asc" }],
     })
     .all();

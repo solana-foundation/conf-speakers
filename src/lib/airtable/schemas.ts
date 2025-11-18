@@ -11,7 +11,7 @@ export const SessionFieldsSchema = z
       "Start Time": z.string().optional(),
       "End Time": z.string().optional(),
       Stage: z.union([z.enum(Object.values(StageValues)), z.array(z.enum(Object.values(StageValues)))]).optional(),
-      Speakers: z.array(z.string()).optional(),
+      "Onboarded Speakers": z.array(z.string()).optional(),
       Moderator: z.array(z.string()).optional(),
       Format: z.array(z.string()).optional(),
       "Actions_Deck Received": z
@@ -30,7 +30,7 @@ export const SessionFieldsSchema = z
     startTime: data.fields["Start Time"],
     endTime: data.fields["End Time"],
     stage: Array.isArray(data.fields["Stage"]) ? data.fields["Stage"][0] : data.fields["Stage"],
-    speakerIds: data.fields["Speakers"],
+    speakerIds: data.fields["Onboarded Speakers"],
     moderatorIds: data.fields["Moderator"],
     format: data.fields["Format"],
     actionsDeckReceived: data.fields["Actions_Deck Received"],
