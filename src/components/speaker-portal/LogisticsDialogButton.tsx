@@ -133,7 +133,7 @@ export default function LogisticsDialogButton({ stage, stages }: { stage: StageT
           <section className="group">
             <div className="pl-11">
               <a
-                href="https://docs.google.com/document/d/1rNZDBHYexKpWl-eumsiExXqTYr5BIXwkGBt_mhGlvXU/edit?usp=sharing"
+                href="https://docs.google.com/document/d/1rNZDBHYexKpWl-eumsiExXqTYr5BIXwkGBt_mhGlvXU"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-p1 text-primary hover:text-azure inline-flex items-center gap-2 font-medium transition-colors"
