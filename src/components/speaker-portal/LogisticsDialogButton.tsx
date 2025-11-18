@@ -128,8 +128,7 @@ export default function LogisticsDialogButton({ stage, stages }: { stage: StageT
               <p className="text-p1">{LOGISTICS_CONFIG.shared.travel}</p>
             </div>
           </section>
-          {/* TODO: uncomment speaker link to best practices guide when completed */}
-          {/* <div className="bg-stroke-primary h-px" />
+          <div className="bg-stroke-primary h-px" />
 
           <section className="group">
             <div className="pl-11">
@@ -146,7 +145,7 @@ export default function LogisticsDialogButton({ stage, stages }: { stage: StageT
                 For more detailed information about speaking at BP25, including best practices and additional resources.
               </p>
             </div>
-          </section> */}
+          </section>
         </div>
       </DialogContent>
     </Dialog>
