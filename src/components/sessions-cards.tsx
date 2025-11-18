@@ -179,39 +179,42 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
                   )}
 
                   {/* Logistics */}
-                  {publishingStatusFlags?.hasTime && (
-                    <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
-                      {session.startTime && (
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>{formatVenueTime(session.startTime, "MMM d")}</span>
-                        </div>
-                      )}
+                  <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
+                    {publishingStatusFlags?.hasTime && (
+                      <>
+                        {session.startTime && (
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4" />
+                            <span>{formatVenueTime(session.startTime, "MMM d")}</span>
+                          </div>
+                        )}
 
-                      {session.startTime && session.endTime && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          <span>
-                            {formatVenueTime(session.startTime, "HH:mm")} - {formatVenueTime(session.endTime, "HH:mm")}
-                          </span>
-                        </div>
-                      )}
+                        {session.startTime && session.endTime && (
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            <span>
+                              {formatVenueTime(session.startTime, "HH:mm")} -{" "}
+                              {formatVenueTime(session.endTime, "HH:mm")}
+                            </span>
+                          </div>
+                        )}
 
-                      {sessionDuration && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          <span>
-                            {sessionDuration}
-                            {doorsOpenTime ? ` - ${doorsOpenTime}` : ""}
-                          </span>
-                        </div>
-                      )}
+                        {sessionDuration && (
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            <span>
+                              {sessionDuration}
+                              {doorsOpenTime ? ` - ${doorsOpenTime}` : ""}
+                            </span>
+                          </div>
+                        )}
+                      </>
+                    )}
 
-                      <div className="flex items-center gap-1">
-                        <StageBadge title={session.stage} />
-                      </div>
+                    <div className="flex items-center gap-1">
+                      stage: <StageBadge title={session.stage} />
                     </div>
-                  )}
+                  </div>
 
                   {/* Participants */}
                   {session.speakers && session.speakers.length > 0 && (
