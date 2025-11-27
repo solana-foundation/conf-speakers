@@ -82,6 +82,17 @@
   tr {
     @apply border-stroke-primary bg-background border-t;
   }
+  ul:not(.unstyled-list) li {
+    position: relative;
+    padding-left: 1rem;
+  }
+  ul:not(.unstyled-list) li::before {
+    content: "◼";
+    font-size: 6px;
+    position: absolute;
+    left: 0;
+    top: 1em;
+  }
 }
 
 @custom-variant touch {

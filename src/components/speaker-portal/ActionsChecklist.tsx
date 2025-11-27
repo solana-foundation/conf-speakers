@@ -81,21 +81,20 @@ export default function ActionsChecklist({
     });
   }
 
-  // Discount Codes
+  // Discount Codes - single action item with list of codes
   const discountCodes = parseDiscountCodes(discountCode);
-  discountCodes.forEach((code, index) => {
-    const encodedCode = encodeURIComponent(code);
-    const discountUrl = `https://luma.com/breakpoint2025?coupon=${encodedCode}`;
+  if (discountCodes.length > 0) {
     ticketTasks.push({
-      id: `discount-code-${index}`,
-      title: `25% Discount Code: ${code}`,
-      description: "Use this discount code when purchasing tickets.",
+      id: "discount-codes",
+      title: "25% Discount Codes",
+      description: "Use these discount codes when purchasing tickets.",
       status: "approved" as const,
-      link: discountUrl,
-      linkText: "Use Discount Code",
+      link: null,
+      linkText: null,
       type: "task" as const,
+      codes: discountCodes,
     });
-  });
+  }
 
   // Create deck upload tasks for each session
   // States: null, DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved
@@ -230,6 +229,26 @@ export default function ActionsChecklist({
                 )}
               </div>
               <p className={`text-muted-foreground text-sm`}>{task.description}</p>
+              {(task as any).codes && Array.isArray((task as any).codes) && (
+                <ul className="text-muted-foreground mt-2 space-y-1 text-sm">
+                  {(task as any).codes.map((code: string, index: number) => {
+                    const encodedCode = encodeURIComponent(code);
+                    const lumaUrl = `https://luma.com/breakpoint2025?coupon=${encodedCode}`;
+                    return (
+                      <li key={index} className="font-mono">
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={lumaUrl}
+                          className="text-azure hover:underline"
+                        >
+                          {code}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </div>
           </div>
         ))}
