@@ -17,6 +17,19 @@ interface ActionsChecklistProps {
   discountCode?: string | null;
 }
 
+type TaskStatus = "approved" | "todo" | "pending" | "Approved" | "Denied" | "Pending";
+
+type Task = {
+  id: string;
+  title: string;
+  description: string;
+  status: TaskStatus;
+  link: string | null;
+  linkText: string | null;
+  type: "task" | "info";
+  codes?: string[];
+};
+
 export default function ActionsChecklist({
   sessions = [],
   dietaryStatus,
@@ -128,7 +141,7 @@ export default function ActionsChecklist({
       };
     });
 
-  const tasks = [
+  const tasks: Task[] = [
     ...deckTasks,
     ...ticketTasks,
     {
@@ -160,7 +173,7 @@ export default function ActionsChecklist({
     },
   ];
 
-  const getTaskIcon = (task: (typeof tasks)[0]) => {
+  const getTaskIcon = (task: Task) => {
     if (task.type === "info") {
       return <Info className="text-azure h-5 w-5" />;
     }
@@ -229,9 +242,9 @@ export default function ActionsChecklist({
                 )}
               </div>
               <p className={`text-muted-foreground text-sm`}>{task.description}</p>
-              {(task as any).codes && Array.isArray((task as any).codes) && (
+              {task.codes && task.codes.length > 0 && (
                 <ul className="text-muted-foreground mt-2 space-y-1 text-sm">
-                  {(task as any).codes.map((code: string, index: number) => {
+                  {task.codes.map((code: string, index: number) => {
                     const encodedCode = encodeURIComponent(code);
                     const lumaUrl = `https://luma.com/breakpoint2025?coupon=${encodedCode}`;
                     return (
