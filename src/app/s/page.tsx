@@ -121,14 +121,10 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           dietaryStatus={speakerData.dietary}
           speakerPermitApproval={speakerData.speakerPermitApproval}
           slideDeckFile={speakerData.slideDeckFile}
+          speakerTicketLink={speakerData.lumaTicketSpeaker}
+          plusOneTicketLink={speakerData.invitationCode}
+          discountCode={speakerData.discountCode}
         />
-
-        {/* <Separator />
-        <TicketsSection
-          speakerTicket={speakerData.lumaTicketSpeaker}
-          plusOneTicket={speakerData.lumaTicketPlusOne}
-          invitationCode={speakerData.invitationCode}
-        /> */}
 
         {/* <Separator />
         <PostEventSection /> */}

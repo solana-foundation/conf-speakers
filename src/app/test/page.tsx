@@ -30,6 +30,9 @@ const DUMMY_DATA = {
     dietary: "Vegetarian",
     slideDeckFile: "https://google.com",
     speakerPermitApproval: undefined,
+    lumaTicketSpeaker: "https://luma.com/breakpoint2025/tickets/speaker-123",
+    invitationCode: "SPEAKER+1-NNNNN",
+    discountCode: "GA25-NNNNN, GA25-NNNNN",
   },
   sessions: [
     {
@@ -158,14 +161,10 @@ export default function DemoSpeakerPage() {
           dietaryStatus={speaker.dietary}
           slideDeckFile={speaker.slideDeckFile}
           speakerPermitApproval={speaker.speakerPermitApproval}
+          speakerTicketLink={speaker.lumaTicketSpeaker}
+          plusOneTicketLink={speaker.invitationCode}
+          discountCode={speaker.discountCode}
         />
-
-        {/* <Separator />
-        <TicketsSection
-          speakerTicket={speakerData.lumaTicketSpeaker}
-          plusOneTicket={speakerData.lumaTicketPlusOne}
-          invitationCode={speakerData.invitationCode}
-        /> */}
 
         {/* <Separator />
         <PostEventSection /> */}

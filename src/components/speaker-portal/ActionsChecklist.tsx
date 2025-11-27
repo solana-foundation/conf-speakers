@@ -12,6 +12,9 @@ interface ActionsChecklistProps {
   dietaryStatus?: string | null;
   speakerPermitApproval?: string;
   slideDeckFile?: string | null;
+  speakerTicketLink?: string | null;
+  plusOneTicketLink?: string | null;
+  discountCode?: string | null;
 }
 
 export default function ActionsChecklist({
@@ -19,6 +22,9 @@ export default function ActionsChecklist({
   dietaryStatus,
   speakerPermitApproval,
   slideDeckFile,
+  speakerTicketLink,
+  plusOneTicketLink,
+  discountCode,
 }: ActionsChecklistProps) {
   // Helper function to determine status based on approval value
   const getApprovalStatus = (approval?: string): "Approved" | "Denied" | "Pending" => {
@@ -34,6 +40,62 @@ export default function ActionsChecklist({
     }
     return dietaryStatus;
   };
+
+  // Parse discount codes from comma-separated string
+  const parseDiscountCodes = (codes?: string | null): string[] => {
+    if (!codes) return [];
+    return codes
+      .split(",")
+      .map((code) => code.trim())
+      .filter((code) => code.length > 0);
+  };
+
+  // Create ticket tasks
+  const ticketTasks = [];
+
+  // Speaker Ticket
+  if (speakerTicketLink) {
+    ticketTasks.push({
+      id: "speaker-ticket",
+      title: "Speaker Ticket",
+      description: "You can open your ticket QR code directly from the button.",
+      status: "approved" as const,
+      link: speakerTicketLink,
+      linkText: "Open Ticket",
+      type: "task" as const,
+    });
+  }
+
+  // Plus One Ticket
+  if (plusOneTicketLink) {
+    const encodedCode = encodeURIComponent(plusOneTicketLink);
+    const plusOneUrl = `https://luma.com/breakpoint2025?coupon=${encodedCode}`;
+    ticketTasks.push({
+      id: "plus-one-ticket",
+      title: "Plus One Ticket",
+      description: "Use this link to claim your plus-one ticket.",
+      status: "approved" as const,
+      link: plusOneUrl,
+      linkText: "Claim Plus One Ticket",
+      type: "task" as const,
+    });
+  }
+
+  // Discount Codes
+  const discountCodes = parseDiscountCodes(discountCode);
+  discountCodes.forEach((code, index) => {
+    const encodedCode = encodeURIComponent(code);
+    const discountUrl = `https://luma.com/breakpoint2025?coupon=${encodedCode}`;
+    ticketTasks.push({
+      id: `discount-code-${index}`,
+      title: `25% Discount Code: ${code}`,
+      description: "Use this discount code when purchasing tickets.",
+      status: "approved" as const,
+      link: discountUrl,
+      linkText: "Use Discount Code",
+      type: "task" as const,
+    });
+  });
 
   // Create deck upload tasks for each session
   // States: null, DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved
@@ -69,6 +131,7 @@ export default function ActionsChecklist({
 
   const tasks = [
     ...deckTasks,
+    ...ticketTasks,
     {
       id: "speaker-permit-approval",
       title: "Speaker Permit Approval",
@@ -91,15 +154,6 @@ export default function ActionsChecklist({
       id: "stage-team-questions",
       title: "Questions",
       description: "Email: speakers@solana.org",
-      status: "pending" as const,
-      link: null,
-      linkText: null,
-      type: "info" as const,
-    },
-    {
-      id: "tickets-pending",
-      title: "Tickets Pending",
-      description: "All speaker and plus-one tickets are pending. Please wait for confirmation.",
       status: "pending" as const,
       link: null,
       linkText: null,

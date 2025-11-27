@@ -25,6 +25,7 @@ export type Speaker = {
   lumaTicketSpeaker?: string;
   lumaTicketPlusOne?: string;
   invitationCode?: string;
+  discountCode?: string;
   slideDeckFile?: string;
   dietary?: string;
   speakerPermitApproval?: string;
