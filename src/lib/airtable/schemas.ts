@@ -21,6 +21,7 @@ export const SessionFieldsSchema = z
       "Portal_Greenlight Time": z.string().optional(),
       "Web Publishing Status": z.array(z.string()).optional(),
       "Publish to web": z.boolean().optional(),
+      "Slide Deck File (from Speakers)": z.string().optional(),
     }),
   })
   .transform((data) => ({
@@ -38,6 +39,7 @@ export const SessionFieldsSchema = z
     greenlightTime: data.fields["Portal_Greenlight Time"],
     webPublishingStatus: data.fields["Web Publishing Status"],
     publishToWeb: data.fields["Publish to web"],
+    slideDeckFile: data.fields["Slide Deck File (from Speakers)"],
   }));
 
 export const SpeakerFieldsSchema = z
@@ -100,3 +102,8 @@ export const FormatFieldsSchema = z
     id: data.id,
     label: data.fields["Format Label"],
   }));
+
+// Export inferred types from schemas
+export type Session = z.output<typeof SessionFieldsSchema>;
+export type Speaker = z.output<typeof SpeakerFieldsSchema>;
+export type Format = z.output<typeof FormatFieldsSchema>;

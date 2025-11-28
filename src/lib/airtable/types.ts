@@ -11,39 +11,5 @@ export enum DeckStatus {
   Approved = "Deck Approved",
 }
 
-export type Speaker = {
-  id: string;
-  _name?: string;
-  firstName?: string;
-  lastName?: string;
-  jobTitle?: string;
-  company?: string;
-  bio?: string;
-  imageUrl?: string;
-  xLink?: string;
-  xName?: string;
-  lumaTicketSpeaker?: string;
-  lumaTicketPlusOne?: string;
-  invitationCode?: string;
-  discountCode?: string;
-  slideDeckFile?: string;
-  dietary?: string;
-  speakerPermitApproval?: string;
-};
-
-export type Session = {
-  id: string;
-  name?: string;
-  description?: string;
-  startTime?: string;
-  endTime?: string;
-  stage?: StageTitle | undefined;
-  speakerIds?: string[];
-  moderatorIds?: string[];
-  format?: string[];
-  webPublishingStatus?: string[];
-  publishToWeb?: boolean;
-  actionsDeckReceived?: DeckStatus | null;
-  portalTelegramGroup?: string;
-  greenlightTime?: string;
-};
+// Re-export types derived from schemas (single source of truth)
+export type { Session, Speaker, Format } from "./schemas";
