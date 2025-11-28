@@ -21,7 +21,6 @@ export const SessionFieldsSchema = z
       "Portal_Greenlight Time": z.string().optional(),
       "Web Publishing Status": z.array(z.string()).optional(),
       "Publish to web": z.boolean().optional(),
-      "Slide Deck File (from Speakers)": z.string().optional(),
     }),
   })
   .transform((data) => ({
@@ -39,7 +38,6 @@ export const SessionFieldsSchema = z
     greenlightTime: data.fields["Portal_Greenlight Time"],
     webPublishingStatus: data.fields["Web Publishing Status"],
     publishToWeb: data.fields["Publish to web"],
-    slideDeckFile: data.fields["Slide Deck File (from Speakers)"],
   }));
 
 export const SpeakerFieldsSchema = z
