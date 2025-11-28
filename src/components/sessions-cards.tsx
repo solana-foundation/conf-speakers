@@ -12,7 +12,6 @@ import { useCallback } from "react";
 
 // TODO: check opening times for each day
 const VENUE_OPENING_TIMES: Record<string, string> = {
-  "Nov 16": "Doors open 9am",
   "Dec 11": "Doors open 9:30am",
   "Dec 12": "Doors open 10am",
   "Dec 13": "Doors open 10am",
@@ -243,10 +242,10 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
                   )}
 
                   {/* Calendar Buttons */}
-                  {publishingStatusFlags?.hasTime && (
+                  {(publishingStatusFlags?.hasTime || session.portalTelegramGroup) && (
                     <div className="flex flex-col gap-2 pt-2 sm:flex-row">
                       {/* Primary CTA Button - Add My Sessions to Calendar */}
-                      {calendarUrl && (
+                      {publishingStatusFlags?.hasTime && calendarUrl && (
                         <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                           <a href={calendarUrl} target="_blank" rel="noopener noreferrer">
                             <Calendar className="mr-2 h-4 w-4" />+ Add My Sessions to Calendar
@@ -255,7 +254,7 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
                       )}
 
                       {/* Keep existing subscribe button as secondary option */}
-                      {session.subscribeUrl && (
+                      {publishingStatusFlags?.hasTime && session.subscribeUrl && (
                         <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                           <a href={session.subscribeUrl} target="_blank" rel="noopener noreferrer">
                             <Calendar className="mr-2 h-4 w-4" />+ Add All BP25 Sessions to Calendar
