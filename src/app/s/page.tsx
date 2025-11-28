@@ -74,24 +74,8 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
     };
   });
 
-  // Filter sessions based on webPublishingStatus
-  // Show only if all 4 flags (Time, Title, Description, Speaker) are present and "Do not publish" is not present
-  const sessionsData = allSessionsData.filter((session) => {
-    const status = session.webPublishingStatus;
-    if (!status) return false;
-
-    const hasDoNotPublish = status.includes("Do not publish");
-    const hasTime = status.includes("Time");
-    const hasTitle = status.includes("Title");
-    const hasDescription = status.includes("Description");
-    const hasSpeaker = status.includes("Speaker");
-
-    // Show if has all 4 flags and not "Do not publish"
-    return hasTime && hasTitle && hasDescription && hasSpeaker && !hasDoNotPublish;
-  });
-
   // Prepare sessions data for ActionsChecklist
-  const sessionsForChecklist = sessionsData.map((session) => ({
+  const sessionsForChecklist = allSessionsData.map((session) => ({
     id: session.id,
     name: session.name,
     actionsDeckReceived: session.actionsDeckReceived,
@@ -109,8 +93,8 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <div className="flex gap-3">
           <LogisticsDialogButton
-            stage={sessionsData[0]?.stage || "Absolute Cinema"}
-            stages={Array.from(new Set(sessionsData.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
+            stage={allSessionsData[0]?.stage || "Absolute Cinema"}
+            stages={Array.from(new Set(allSessionsData.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
           />
         </div>
 
