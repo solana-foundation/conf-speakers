@@ -6,9 +6,9 @@ export enum StageValues {
 }
 
 export enum DeckStatus {
-  ToUpload = "to upload deck",
-  Uploaded = "uploaded deck",
-  Approved = "approved deck",
+  ToUpload = "To Upload Deck",
+  Uploaded = "Deck Uploaded",
+  Approved = "Deck Approved",
 }
 
 export type Speaker = {
