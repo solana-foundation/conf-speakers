@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { airtable } from "./client";
+import { speakerFieldNames, sessionFieldNames, formatFieldNames } from "./schemas";
 
 const tableSessions = process.env.AIRTABLE_TABLE_AGENDA;
 const tableSpeakers = process.env.AIRTABLE_TABLE_SPEAKERS;
@@ -18,21 +19,7 @@ export const fetchSessions = (params: SessionParams = {}) => {
   return airtable
     .table(tableSessions)
     .select({
-      fields: [
-        "⚙️ Session Name",
-        "Description",
-        "Start Time",
-        "End Time",
-        "Stage",
-        "Onboarded Speakers",
-        "Moderator",
-        "Format",
-        "Actions_Deck Received",
-        "Portal_Telegram Group",
-        "Portal_Greenlight Time",
-        "Web Publishing Status",
-        "Publish to web",
-      ],
+      fields: sessionFieldNames,
       ...(params.speakerName
         ? { filterByFormula: `FIND("${params.speakerName}", {Onboarded Speakers}&"")` }
         : undefined),
@@ -53,22 +40,7 @@ export const fetchSpeakers = () => {
   return airtable
     .table(tableSpeakers)
     .select({
-      fields: [
-        "Name",
-        "First Name",
-        "Last Name",
-        "Role or Title",
-        "Company",
-        "Bio",
-        "Headshot_For Web",
-        "Twitter",
-        "Luma Speaker Ticket",
-        "Luma Ticket_Plus One",
-        "Invitation Code",
-        "25% Discount Code",
-        "Dietary",
-        "Speaker Permit Approval",
-      ],
+      fields: speakerFieldNames,
       sort: [{ field: "Name", direction: "asc" }],
     })
     .all();
@@ -78,7 +50,7 @@ export const fetchFormats = () => {
   return airtable
     .table(tableFormats)
     .select({
-      fields: ["Format"],
+      fields: formatFieldNames,
     })
     .all();
 };

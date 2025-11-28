@@ -2,26 +2,64 @@ import { z } from "zod";
 import { sanitizeXLink, sanitizeXName } from "@/lib/utils";
 import { StageValues, DeckStatus } from "@/lib/airtable/types";
 
+// Define field schemas separately so we can extract field names
+const sessionFieldsSchema = z.object({
+  "⚙️ Session Name": z.string().optional(),
+  Description: z.string().optional(),
+  "Start Time": z.string().optional(),
+  "End Time": z.string().optional(),
+  Stage: z.union([z.enum(Object.values(StageValues)), z.array(z.enum(Object.values(StageValues)))]).optional(),
+  "Onboarded Speakers": z.array(z.string()).optional(),
+  Moderator: z.array(z.string()).optional(),
+  Format: z.array(z.string()).optional(),
+  "Actions_Deck Received": z
+    .union([z.enum([DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved]), z.null()])
+    .optional(),
+  "Portal_Telegram Group": z.string().optional(),
+  "Portal_Greenlight Time": z.string().optional(),
+  "Web Publishing Status": z.array(z.string()).optional(),
+  "Publish to web": z.boolean().optional(),
+});
+
+const speakerFieldsSchema = z.object({
+  Name: z.string().optional(),
+  "First Name": z.string().optional(),
+  "Last Name": z.string().optional(),
+  "Role or Title": z.string().optional(),
+  Company: z.string().optional(),
+  Bio: z.string().optional(),
+  "Headshot_For Web": z
+    .array(
+      z
+        .object({
+          url: z.string().optional(),
+        })
+        .optional(),
+    )
+    .optional(),
+  Twitter: z.string().optional(),
+  "Slide Deck File": z.string().optional(),
+  "Luma Speaker Ticket": z.string().optional(),
+  "Luma Ticket_Plus One": z.string().optional(),
+  "Invitation Code": z.string().optional(),
+  "25% Discount Code": z.string().optional(),
+  Dietary: z.string().optional(),
+  "Speaker Permit Approval": z.string().optional(),
+});
+
+const formatFieldsSchema = z.object({
+  "Format Label": z.string(),
+});
+
+// Export field names arrays for use in fetch functions
+export const sessionFieldNames = Object.keys(sessionFieldsSchema.shape);
+export const speakerFieldNames = Object.keys(speakerFieldsSchema.shape);
+export const formatFieldNames = Object.keys(formatFieldsSchema.shape);
+
 export const SessionFieldsSchema = z
   .object({
     id: z.string(),
-    fields: z.object({
-      "⚙️ Session Name": z.string().optional(),
-      Description: z.string().optional(),
-      "Start Time": z.string().optional(),
-      "End Time": z.string().optional(),
-      Stage: z.union([z.enum(Object.values(StageValues)), z.array(z.enum(Object.values(StageValues)))]).optional(),
-      "Onboarded Speakers": z.array(z.string()).optional(),
-      Moderator: z.array(z.string()).optional(),
-      Format: z.array(z.string()).optional(),
-      "Actions_Deck Received": z
-        .union([z.enum([DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved]), z.null()])
-        .optional(),
-      "Portal_Telegram Group": z.string().optional(),
-      "Portal_Greenlight Time": z.string().optional(),
-      "Web Publishing Status": z.array(z.string()).optional(),
-      "Publish to web": z.boolean().optional(),
-    }),
+    fields: sessionFieldsSchema,
   })
   .transform((data) => ({
     id: data.id,
@@ -43,31 +81,7 @@ export const SessionFieldsSchema = z
 export const SpeakerFieldsSchema = z
   .object({
     id: z.string(),
-    fields: z.object({
-      Name: z.string().optional(),
-      "First Name": z.string().optional(),
-      "Last Name": z.string().optional(),
-      "Role or Title": z.string().optional(),
-      Company: z.string().optional(),
-      Bio: z.string().optional(),
-      "Headshot_For Web": z
-        .array(
-          z
-            .object({
-              url: z.string().optional(),
-            })
-            .optional(),
-        )
-        .optional(),
-      Twitter: z.string().optional(),
-      "Slide Deck File": z.string().optional(),
-      "Luma Speaker Ticket": z.string().optional(),
-      "Luma Ticket_Plus One": z.string().optional(),
-      "Invitation Code": z.string().optional(),
-      "25% Discount Code": z.string().optional(),
-      Dietary: z.string().optional(),
-      "Speaker Permit Approval": z.string().optional(),
-    }),
+    fields: speakerFieldsSchema,
   })
   .transform((data) => ({
     id: data.id,
@@ -92,9 +106,7 @@ export const SpeakerFieldsSchema = z
 export const FormatFieldsSchema = z
   .object({
     id: z.string(),
-    fields: z.object({
-      "Format Label": z.string(),
-    }),
+    fields: formatFieldsSchema,
   })
   .transform((data) => ({
     id: data.id,
