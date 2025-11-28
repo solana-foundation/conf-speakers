@@ -48,7 +48,7 @@ const speakerFieldsSchema = z.object({
 });
 
 const formatFieldsSchema = z.object({
-  "Format Label": z.string(),
+  Format: z.string(),
 });
 
 // Export field names arrays for use in fetch functions
@@ -110,7 +110,7 @@ export const FormatFieldsSchema = z
   })
   .transform((data) => ({
     id: data.id,
-    label: data.fields["Format Label"],
+    label: data.fields["Format"],
   }));
 
 // Export inferred types from schemas
