@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
-import { Speaker, StageTitle, DeckStatus } from "@/lib/airtable/types";
+import { Speaker, StageTitle, StageValues, DeckStatus } from "@/lib/airtable/types";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
 
@@ -41,7 +41,10 @@ const DUMMY_DATA = {
       description: "Join us for a deep dive into building scalable decentralized applications on Solana.",
       startTime: "2025-11-15T14:00:00Z",
       endTime: "2025-11-15T15:30:00Z",
-      stage: "Absolute Cinema" as StageTitle,
+      stage: StageValues.Main,
+      speakerIds: ["rec123abc", "rec456def"],
+      moderatorIds: undefined,
+      publishToWeb: undefined,
       subscribeUrl: "https://breakpoint.solana.org/calendar/session_1",
       webPublishingStatus: ["Title", "Description", "Speaker"],
       format: ["Product Keynote (5 min)"],
@@ -69,7 +72,10 @@ const DUMMY_DATA = {
       description: "A panel discussion with industry leaders on the future of blockchain infrastructure.",
       startTime: "2025-11-16T10:00:00Z",
       endTime: "2025-11-16T11:00:00Z",
-      stage: "Lock In" as StageTitle,
+      stage: StageValues.Side,
+      speakerIds: ["rec123abc", "rec789ghi", "rec012jkl"],
+      moderatorIds: undefined,
+      publishToWeb: undefined,
       subscribeUrl: "https://breakpoint.solana.org/calendar/session_2",
       webPublishingStatus: ["Time", "Title", "Description", "Speaker"],
       format: ["Debate (30 min)"],
@@ -103,11 +109,15 @@ const DUMMY_DATA = {
       description: "An annual review of Solana's growth, achievements, and what's coming next.",
       startTime: "2025-11-15T09:00:00Z",
       endTime: "2025-11-15T10:30:00Z",
-      stage: "Absolute Cinema" as StageTitle,
+      stage: StageValues.Main,
+      speakerIds: ["rec123abc"],
+      moderatorIds: undefined,
+      publishToWeb: undefined,
       subscribeUrl: "https://breakpoint.solana.org/calendar/session_4",
       webPublishingStatus: ["Time", "Title", "Description", "Speaker"],
       format: ["Keynote (10 min)"],
       greenlightTime: undefined,
+      portalTelegramGroup: undefined,
       actionsDeckReceived: DeckStatus.Uploaded,
       speakers: [
         {
@@ -149,7 +159,7 @@ export default function DemoSpeakerPage() {
 
         <div className="flex gap-3">
           <LogisticsDialogButton
-            stage={sessions[0]?.stage || "Absolute Cinema"}
+            stage={(sessions[0]?.stage as StageTitle) || "Absolute Cinema"}
             stages={Array.from(new Set(sessions.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
           />
         </div>
