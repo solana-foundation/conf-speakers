@@ -34,6 +34,7 @@ const DUMMY_DATA = {
     lumaTicketSpeaker: "https://luma.com/breakpoint2025/tickets/speaker-123",
     invitationCode: "SPEAKER+1-NNNNN",
     discountCode: "GA25-NNNNN, GA25-NNNNN",
+    mcInfo: "https://docs.google.com/document/d/example-mc-info-doc",
   },
   sessions: [
     {
@@ -175,6 +176,7 @@ export default function DemoSpeakerPage() {
           speakerTicketLink={speaker.lumaTicketSpeaker}
           plusOneTicketLink={speaker.invitationCode}
           discountCode={speaker.discountCode}
+          mcInfo={speaker.mcInfo}
         />
 
         {/* <Separator />

@@ -113,6 +113,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           speakerTicketLink={speakerData.lumaTicketSpeaker}
           plusOneTicketLink={speakerData.invitationCode}
           discountCode={speakerData.discountCode}
+          mcInfo={speakerData.mcInfo}
         />
 
         {/* <Separator />

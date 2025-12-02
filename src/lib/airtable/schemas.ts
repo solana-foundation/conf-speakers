@@ -54,6 +54,7 @@ const speakerFieldsSchema = z.object({
   "25% Discount Code": z.string().optional(),
   Dietary: z.string().optional(),
   "Speaker Permit Approval": z.string().optional(),
+  "MC Info": z.string().optional(),
 });
 
 const formatFieldsSchema = z.object({
@@ -111,6 +112,7 @@ export const SpeakerFieldsSchema = z
     discountCode: data.fields["25% Discount Code"],
     dietary: data.fields["Dietary"],
     speakerPermitApproval: data.fields["Speaker Permit Approval"],
+    mcInfo: data.fields["MC Info"],
   }));
 
 export const FormatFieldsSchema = z

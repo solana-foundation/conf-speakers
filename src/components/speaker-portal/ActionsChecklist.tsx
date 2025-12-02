@@ -15,6 +15,7 @@ interface ActionsChecklistProps {
   speakerTicketLink?: string | null;
   plusOneTicketLink?: string | null;
   discountCode?: string | null;
+  mcInfo?: string | null;
 }
 
 type TaskStatus = "approved" | "todo" | "pending" | "Approved" | "Denied" | "Pending";
@@ -38,6 +39,7 @@ export default function ActionsChecklist({
   speakerTicketLink,
   plusOneTicketLink,
   discountCode,
+  mcInfo,
 }: ActionsChecklistProps) {
   // Helper function to determine status based on approval value
   const getApprovalStatus = (approval?: string): "Approved" | "Denied" | "Pending" => {
@@ -106,6 +108,19 @@ export default function ActionsChecklist({
       linkText: null,
       type: "task" as const,
       codes: discountCodes,
+    });
+  }
+
+  // MC Info - Google Doc link
+  if (mcInfo) {
+    ticketTasks.push({
+      id: "mc-info",
+      title: "MC Information",
+      description: "Important logistics, venue locations, and guidelines for you as a MC.",
+      status: "approved" as const,
+      link: mcInfo,
+      linkText: "View MC Info",
+      type: "info" as const,
     });
   }
 
