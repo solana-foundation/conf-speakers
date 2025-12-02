@@ -85,7 +85,12 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   return (
     <div className="min-h-screen p-8 font-sans">
       <main className="mx-auto flex max-w-6xl flex-col gap-8">
-        <SpeakerCard {...speakerData} sessions={sessionsForChecklist} dietaryStatus={speakerData.dietary} />
+        <SpeakerCard
+          {...speakerData}
+          sessions={sessionsForChecklist}
+          dietaryStatus={speakerData.dietary}
+          speakerCardUrl={speakerData.speakerCardUrl}
+        />
 
         <Separator />
 

@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import { Twitter, Check, CircleMinus, Clock } from "lucide-react";
+import { Button } from "./ui/button";
+import { Twitter, Check, CircleMinus, Clock, Download } from "lucide-react";
 import { DeckStatus } from "@/lib/airtable/types";
 
 export interface SpeakerCardProps {
@@ -12,6 +13,7 @@ export interface SpeakerCardProps {
   bio?: string;
   xLink?: string;
   xName?: string;
+  speakerCardUrl?: string;
   // ActionsChecklist data
   sessions?: Array<{
     id?: string;
@@ -37,6 +39,7 @@ export default function SpeakerCard({
   bio,
   xLink,
   xName,
+  speakerCardUrl,
   sessions = [],
 }: SpeakerCardProps) {
   const getStatusBadges = (): StatusBadge[] => {
@@ -107,6 +110,14 @@ export default function SpeakerCard({
               </AvatarFallback>
             </Avatar>
           </div>
+          {speakerCardUrl && (
+            <Button size="sm" variant="outline" className="w-24 lg:w-32" asChild>
+              <a href={speakerCardUrl} download target="_blank" rel="noopener noreferrer" title="Download Speaker Card">
+                <Download className="h-4 w-4" />
+                Speaker Card
+              </a>
+            </Button>
+          )}
         </div>
 
         <div className="flex-1 space-y-4">

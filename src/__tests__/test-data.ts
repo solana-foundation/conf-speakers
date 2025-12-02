@@ -1,4 +1,4 @@
-import { Speaker, Session } from "@/lib/airtable/types";
+import { Speaker, Session, StageValues } from "@/lib/airtable/types";
 
 // Mock test data for smoke testing
 export const mockSpeaker: Speaker = {
@@ -10,8 +10,16 @@ export const mockSpeaker: Speaker = {
   company: "Tech Corp",
   bio: "Jane is a passionate developer with 10+ years of experience in web technologies.",
   imageUrl: "https://example.com/jane-smith.jpg",
+  speakerCardUrl: "https://example.com/jane-smith-card.jpg",
   xLink: "https://x.com/janesmith",
   xName: "@janesmith",
+  slideDeckFile: undefined,
+  lumaTicketSpeaker: undefined,
+  lumaTicketPlusOne: undefined,
+  invitationCode: undefined,
+  discountCode: undefined,
+  dietary: undefined,
+  speakerPermitApproval: undefined,
 };
 
 export const mockSessions: Session[] = [
@@ -21,8 +29,15 @@ export const mockSessions: Session[] = [
     description: "Learn how to build web applications that can handle millions of users.",
     startTime: "2025-01-15T10:00:00.000Z",
     endTime: "2025-01-15T11:00:00.000Z",
-    stage: "Absolute Cinema",
+    stage: StageValues.Main,
     speakerIds: ["test-speaker-1"],
+    moderatorIds: undefined,
+    format: undefined,
+    actionsDeckReceived: undefined,
+    portalTelegramGroup: undefined,
+    greenlightTime: undefined,
+    webPublishingStatus: undefined,
+    publishToWeb: undefined,
   },
   {
     id: "session-2",
@@ -30,8 +45,15 @@ export const mockSessions: Session[] = [
     description: "Deep dive into advanced React patterns and best practices.",
     startTime: "2025-01-15T14:00:00.000Z",
     endTime: "2025-01-15T15:00:00.000Z",
-    stage: "Lock In",
+    stage: StageValues.Side,
     speakerIds: ["test-speaker-1"],
+    moderatorIds: undefined,
+    format: undefined,
+    actionsDeckReceived: undefined,
+    portalTelegramGroup: undefined,
+    greenlightTime: undefined,
+    webPublishingStatus: undefined,
+    publishToWeb: undefined,
   },
 ];
 
@@ -46,6 +68,7 @@ export const mockSpeakerRecord = {
     Company: "Tech Corp",
     Bio: "Jane is a passionate developer with 10+ years of experience in web technologies.",
     "Headshot_For Web": [{ url: "https://example.com/jane-smith.jpg" }],
+    "Speaker Card": [{ url: "https://example.com/jane-smith-card.jpg" }],
     Twitter: "https://x.com/janesmith",
   },
 };

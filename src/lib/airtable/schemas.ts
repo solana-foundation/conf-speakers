@@ -37,6 +37,15 @@ const speakerFieldsSchema = z.object({
         .optional(),
     )
     .optional(),
+  "Speaker Card": z
+    .array(
+      z
+        .object({
+          url: z.string().optional(),
+        })
+        .optional(),
+    )
+    .optional(),
   Twitter: z.string().optional(),
   "Slide Deck File": z.string().optional(),
   "Luma Speaker Ticket": z.string().optional(),
@@ -92,6 +101,7 @@ export const SpeakerFieldsSchema = z
     company: data.fields["Company"],
     bio: data.fields["Bio"],
     imageUrl: data.fields["Headshot_For Web"]?.[0]?.url,
+    speakerCardUrl: data.fields["Speaker Card"]?.[0]?.url,
     xLink: data.fields["Twitter"] ? (sanitizeXLink(data.fields["Twitter"]) ?? undefined) : undefined,
     xName: data.fields["Twitter"] ? (sanitizeXName(data.fields["Twitter"]) ?? undefined) : undefined,
     slideDeckFile: data.fields["Slide Deck File"],
