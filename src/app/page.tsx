@@ -3,7 +3,7 @@ import { Metadata } from "next/types";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import { generateKey } from "@/lib/sign.server";
-import { getSessionsFilters } from "@/lib/airtable/utils";
+import { getSessionsFilters, getWebPublishingStatus } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
 import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 import { GlobalStateProvider } from "@/lib/state";
@@ -37,7 +37,11 @@ export default async function SchedulePage() {
         .filter(Boolean) as Speaker[],
     };
   });
-  const filters = getSessionsFilters(sessionsData);
+  const filteredSessionsData = sessionsData.filter((session) => {
+    const publishingStatus = getWebPublishingStatus(session.webPublishingStatus);
+    return publishingStatus?.hasDoNotPublish === false;
+  });
+  const filters = getSessionsFilters(filteredSessionsData);
 
   return (
     <GlobalStateProvider>
@@ -45,12 +49,12 @@ export default async function SchedulePage() {
         <main className="mx-auto flex max-w-6xl flex-col gap-8">
           <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
             <h1 className="font-fh-lecturis text-3xl">Breakpoint 2025 Schedule</h1>
-            {sessionsData.length > 0 && <ScheduleSubscribeButton href={getSessionsCalendarUrl(calendarKey)} />}
+            {filteredSessionsData.length > 0 && <ScheduleSubscribeButton href={getSessionsCalendarUrl(calendarKey)} />}
           </div>
 
           <Separator />
 
-          {sessionsData.length === 0 ? (
+          {filteredSessionsData.length === 0 ? (
             <div className="flex flex-col gap-6 py-16">
               <div className="text-center">
                 <h2 className="mb-3 text-2xl">Sessions Coming Soon</h2>
@@ -78,7 +82,7 @@ export default async function SchedulePage() {
               </div>
             </div>
           ) : (
-            <ScheduleSessionsTable items={sessionsData} filters={filters} selectable />
+            <ScheduleSessionsTable items={filteredSessionsData} filters={filters} selectable />
           )}
         </main>
       </div>
