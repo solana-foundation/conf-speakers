@@ -4,7 +4,8 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { formatVenueTime } from "@/lib/time/tz";
-import { Session, Speaker, WEB_PUBLISHING_STATUS_MAP } from "@/lib/airtable/types";
+import { Session, Speaker } from "@/lib/airtable/types";
+import { getWebPublishingStatus } from "@/lib/airtable/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
 import { Calendar, Clock, Users, AlertTriangle, Info, MessageCircle } from "lucide-react";
@@ -69,27 +70,7 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
 
   // Get publishing status display info
   const getPublishingStatusFlags = useCallback(
-    (session: Session & { webPublishingStatus?: string[] }) => {
-      if (!session.webPublishingStatus || session.webPublishingStatus.length === 0) {
-        return null;
-      }
-
-      const flagIds = session.webPublishingStatus;
-      const flags = flagIds.map((id) => WEB_PUBLISHING_STATUS_MAP[id]).filter(Boolean);
-      const hasTime = flags.includes("Time");
-      const hasTitle = flags.includes("Title");
-      const hasDescription = flags.includes("Description");
-      const hasSpeaker = flags.includes("Speaker");
-      const hasDoNotPublish = flags.includes("Do not publish");
-
-      return {
-        hasTime,
-        hasTitle,
-        hasDescription,
-        hasSpeaker,
-        hasDoNotPublish,
-      };
-    },
+    (session: Session & { webPublishingStatus?: string[] }) => getWebPublishingStatus(session.webPublishingStatus),
     [items],
   );
 
@@ -161,7 +142,7 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
                   )}
 
                   {/* Greenlight Time Display */}
-                  {session.greenlightTime && (
+                  {session.greenlightTime && publishingStatusFlags?.hasDoNotPublish && (
                     <div className="border-lime bg-lime/10 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
                       <AlertTriangle className="text-lime h-4 w-4" />
                       <span className="font-medium text-white">{session.greenlightTime}</span>

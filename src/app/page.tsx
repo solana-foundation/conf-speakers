@@ -4,7 +4,7 @@ import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import { generateKey } from "@/lib/sign.server";
 import { getSessionsFilters } from "@/lib/airtable/utils";
-import { Speaker, WEB_PUBLISHING_STATUS_MAP } from "@/lib/airtable/types";
+import { Speaker } from "@/lib/airtable/types";
 import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 import { GlobalStateProvider } from "@/lib/state";
 import ScheduleSessionsTable from "@/components/schedule-sessions-table";

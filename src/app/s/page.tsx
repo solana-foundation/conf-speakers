@@ -80,6 +80,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
     name: session.name,
     actionsDeckReceived: session.actionsDeckReceived,
     greenlightTime: session.greenlightTime,
+    webPublishingStatus: session.webPublishingStatus,
   }));
 
   return (

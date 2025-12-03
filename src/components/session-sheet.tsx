@@ -3,7 +3,8 @@
 import { Button } from "./ui/button";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "./ui/sheet";
 import { formatVenueTime } from "@/lib/time/tz";
-import { Speaker, StageTitle, WEB_PUBLISHING_STATUS_MAP } from "@/lib/airtable/types";
+import { Speaker, StageTitle } from "@/lib/airtable/types";
+import { getWebPublishingStatus } from "@/lib/airtable/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
 import { Calendar, Clock } from "lucide-react";
@@ -36,17 +37,12 @@ export default function SessionSheet({
   webPublishingStatus,
 }: SessionSheetProps) {
   // Check if any required publishing flags are missing or if "Do not publish" is set
-  if (!webPublishingStatus || webPublishingStatus.length === 0) {
+  const publishingStatus = getWebPublishingStatus(webPublishingStatus);
+  if (!publishingStatus) {
     return null;
   }
 
-  const flagIds = webPublishingStatus;
-  const flags = flagIds.map((id) => WEB_PUBLISHING_STATUS_MAP[id]).filter(Boolean);
-  const hasTime = flags.includes("Time");
-  const hasTitle = flags.includes("Title");
-  const hasDescription = flags.includes("Description");
-  const hasSpeaker = flags.includes("Speaker");
-  const hasDoNotPublish = flags.includes("Do not publish");
+  const { hasTime, hasTitle, hasDescription, hasSpeaker, hasDoNotPublish } = publishingStatus;
 
   // Return null if "Do not publish" is true OR if any required flags are missing
   if (hasDoNotPublish || !hasTime || !hasTitle || !hasDescription || !hasSpeaker) {

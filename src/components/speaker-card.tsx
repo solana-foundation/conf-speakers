@@ -3,6 +3,7 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Twitter, Check, CircleMinus, Clock, Download } from "lucide-react";
 import { DeckStatus } from "@/lib/airtable/types";
+import { getWebPublishingStatus } from "@/lib/airtable/utils";
 
 export interface SpeakerCardProps {
   imageUrl?: string;
@@ -20,6 +21,7 @@ export interface SpeakerCardProps {
     name?: string;
     actionsDeckReceived?: DeckStatus | null;
     greenlightTime?: string | null;
+    webPublishingStatus?: string[] | null;
   }>;
   dietaryStatus?: string | null;
 }
@@ -65,11 +67,13 @@ export default function SpeakerCard({
       });
     }
 
-    // Check for schedule pending (if greenlightTime is true)
-    if (
-      sessions.some((session) => session.greenlightTime && session.greenlightTime !== "Completed") ||
-      !(sessions.length > 0)
-    ) {
+    // Check for schedule pending (if greenlightTime exists AND doNotPublish is true)
+    const hasDoNotPublishSession = sessions.some((session) => {
+      const status = getWebPublishingStatus(session.webPublishingStatus ?? undefined);
+      return status?.hasDoNotPublish === true;
+    });
+
+    if (hasDoNotPublishSession && sessions.some((session) => session.greenlightTime)) {
       badges.push({
         label: "Schedule Pending",
         variant: "schedule-pending",
