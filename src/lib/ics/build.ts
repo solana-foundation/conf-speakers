@@ -1,8 +1,6 @@
 import { createEvents, EventAttributes } from "ics";
 import { parseISO } from "@/lib/time/tz";
 
-const VENUE_TIMEZONE = process.env.NEXT_PUBLIC_VENUE_TZ || "Asia/Dubai";
-
 export interface SessionEvent {
   id: string;
   name: string;
@@ -29,7 +27,11 @@ export function sessionToIcsEvent(session: SessionEvent): EventAttributes {
     throw new Error(`Invalid date format for session ${session.id}`);
   }
 
-  const startArray = [start.year, start.month, start.day, start.hour, start.minute] as [
+  // Convert to UTC for proper timezone handling in ICS
+  const startUtc = start.toUTC();
+  const endUtc = end.toUTC();
+
+  const startArray = [startUtc.year, startUtc.month, startUtc.day, startUtc.hour, startUtc.minute] as [
     number,
     number,
     number,
@@ -37,7 +39,13 @@ export function sessionToIcsEvent(session: SessionEvent): EventAttributes {
     number,
   ];
 
-  const endArray = [end.year, end.month, end.day, end.hour, end.minute] as [number, number, number, number, number];
+  const endArray = [endUtc.year, endUtc.month, endUtc.day, endUtc.hour, endUtc.minute] as [
+    number,
+    number,
+    number,
+    number,
+    number,
+  ];
 
   const createdArray = [created.getFullYear(), created.getMonth() + 1, created.getDate()] as [number, number, number];
 
@@ -45,7 +53,11 @@ export function sessionToIcsEvent(session: SessionEvent): EventAttributes {
 
   return {
     start: startArray,
+    startInputType: "utc" as const,
+    startOutputType: "utc" as const,
     end: endArray,
+    endInputType: "utc" as const,
+    endOutputType: "utc" as const,
     title: `BP25 - ${session.name}`,
     description,
     location: session.stage ? session.stage : "Etihad Arena, Abu Dhabi, UAE",

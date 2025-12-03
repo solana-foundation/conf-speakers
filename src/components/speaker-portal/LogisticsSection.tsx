@@ -17,7 +17,7 @@ export default function LogisticsSection() {
       <div className="divide-y">
         <Row label="Venue & Stage Location">
           <InfoDialog title="Venue & Stage Location">
-            <p>Breakers Ballroom — Stage A</p>
+            <p>Breakers Ballroom — Main</p>
             <p>Backstage entrance via Hall C. Staff will guide you.</p>
             <p>Wayfinding signs posted at registration.</p>
           </InfoDialog>

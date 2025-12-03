@@ -10,7 +10,7 @@ import { StageTitle, StageValues } from "@/lib/airtable/types";
 const LOGISTICS_CONFIG = {
   stages: {
     [StageValues.Main]: {
-      name: "Breakers Ballroom — Stage A",
+      name: "Breakers Ballroom — Main",
       entrance: "Backstage entrance via Hall C. Staff will guide you.",
       arrivalTime: "45 minutes before your session start time",
       checkInLocation: "Speaker Ops for mic fitting and stage brief",
