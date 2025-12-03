@@ -4,7 +4,7 @@ import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import { generateKey } from "@/lib/sign.server";
 import { getSessionsFilters } from "@/lib/airtable/utils";
-import { Speaker } from "@/lib/airtable/types";
+import { Speaker, WEB_PUBLISHING_STATUS_MAP } from "@/lib/airtable/types";
 import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 import { GlobalStateProvider } from "@/lib/state";
 import ScheduleSessionsTable from "@/components/schedule-sessions-table";
@@ -12,7 +12,7 @@ import ScheduleSubscribeButton from "@/components/schedule-subscribe-button";
 
 export const metadata: Metadata = {
   title: "Breakpoint 2025 Schedule",
-  description: "The schedule of the Breakpoint conference",
+  description: "The schedule for the Breakpoint conference",
   robots: {
     index: false,
     follow: false,
@@ -37,10 +37,7 @@ export default async function SchedulePage() {
         .filter(Boolean) as Speaker[],
     };
   });
-  const filteredSessionsData = sessionsData.filter((session) => {
-    return session.publishToWeb === true;
-  });
-  const filters = getSessionsFilters(filteredSessionsData);
+  const filters = getSessionsFilters(sessionsData);
 
   return (
     <GlobalStateProvider>
@@ -48,12 +45,12 @@ export default async function SchedulePage() {
         <main className="mx-auto flex max-w-6xl flex-col gap-8">
           <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
             <h1 className="font-fh-lecturis text-3xl">Breakpoint 2025 Schedule</h1>
-            {filteredSessionsData.length > 0 && <ScheduleSubscribeButton href={getSessionsCalendarUrl(calendarKey)} />}
+            {sessionsData.length > 0 && <ScheduleSubscribeButton href={getSessionsCalendarUrl(calendarKey)} />}
           </div>
 
           <Separator />
 
-          {filteredSessionsData.length === 0 ? (
+          {sessionsData.length === 0 ? (
             <div className="flex flex-col gap-6 py-16">
               <div className="text-center">
                 <h2 className="mb-3 text-2xl">Sessions Coming Soon</h2>
@@ -81,7 +78,7 @@ export default async function SchedulePage() {
               </div>
             </div>
           ) : (
-            <ScheduleSessionsTable items={filteredSessionsData} filters={filters} selectable />
+            <ScheduleSessionsTable items={sessionsData} filters={filters} selectable />
           )}
         </main>
       </div>

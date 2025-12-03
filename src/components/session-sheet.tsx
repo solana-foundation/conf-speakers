@@ -3,7 +3,7 @@
 import { Button } from "./ui/button";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "./ui/sheet";
 import { formatVenueTime } from "@/lib/time/tz";
-import { Speaker, StageTitle } from "@/lib/airtable/types";
+import { Speaker, StageTitle, WEB_PUBLISHING_STATUS_MAP } from "@/lib/airtable/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
 import { Calendar, Clock } from "lucide-react";
@@ -40,7 +40,8 @@ export default function SessionSheet({
     return null;
   }
 
-  const flags = webPublishingStatus;
+  const flagIds = webPublishingStatus;
+  const flags = flagIds.map((id) => WEB_PUBLISHING_STATUS_MAP[id]).filter(Boolean);
   const hasTime = flags.includes("Time");
   const hasTitle = flags.includes("Title");
   const hasDescription = flags.includes("Description");

@@ -20,6 +20,7 @@ export const mockSpeaker: Speaker = {
   discountCode: undefined,
   dietary: undefined,
   speakerPermitApproval: undefined,
+  mcInfo: undefined,
 };
 
 export const mockSessions: Session[] = [
@@ -37,7 +38,6 @@ export const mockSessions: Session[] = [
     portalTelegramGroup: undefined,
     greenlightTime: undefined,
     webPublishingStatus: undefined,
-    publishToWeb: undefined,
   },
   {
     id: "session-2",
@@ -53,7 +53,6 @@ export const mockSessions: Session[] = [
     portalTelegramGroup: undefined,
     greenlightTime: undefined,
     webPublishingStatus: undefined,
-    publishToWeb: undefined,
   },
 ];
 

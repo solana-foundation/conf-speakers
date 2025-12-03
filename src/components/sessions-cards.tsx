@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { formatVenueTime } from "@/lib/time/tz";
-import { Session, Speaker } from "@/lib/airtable/types";
+import { Session, Speaker, WEB_PUBLISHING_STATUS_MAP } from "@/lib/airtable/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
 import { Calendar, Clock, Users, AlertTriangle, Info, MessageCircle } from "lucide-react";
@@ -74,7 +74,8 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
         return null;
       }
 
-      const flags = session.webPublishingStatus;
+      const flagIds = session.webPublishingStatus;
+      const flags = flagIds.map((id) => WEB_PUBLISHING_STATUS_MAP[id]).filter(Boolean);
       const hasTime = flags.includes("Time");
       const hasTitle = flags.includes("Title");
       const hasDescription = flags.includes("Description");
