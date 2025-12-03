@@ -3,14 +3,16 @@
  */
 function getBaseUrl(): string {
   if (typeof window !== "undefined") {
-    // Client-side
     return window.location.origin;
   }
 
-  // Server-side - use environment variable or default
-  return process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL;
+  if (baseUrl) {
+    // Strip protocol if already present
+    const cleanUrl = baseUrl.replace(/^https?:\/\//, "");
+    return `https://${cleanUrl}`;
+  }
+  return "http://localhost:3000";
 }
 
 /**

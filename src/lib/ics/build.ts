@@ -1,5 +1,7 @@
-import { createEvents } from "ics";
+import { createEvents, EventAttributes } from "ics";
 import { parseISO } from "@/lib/time/tz";
+
+const VENUE_TIMEZONE = process.env.NEXT_PUBLIC_VENUE_TZ || "Asia/Dubai";
 
 export interface SessionEvent {
   id: string;
@@ -18,7 +20,7 @@ export interface SpeakerEvent extends SessionEvent {
 /**
  * Convert a session to an ICS event
  */
-export function sessionToIcsEvent(session: SessionEvent) {
+export function sessionToIcsEvent(session: SessionEvent): EventAttributes {
   const start = parseISO(session.startTime);
   const end = parseISO(session.endTime);
   const created = new Date();
@@ -37,18 +39,20 @@ export function sessionToIcsEvent(session: SessionEvent) {
 
   const endArray = [end.year, end.month, end.day, end.hour, end.minute] as [number, number, number, number, number];
 
-  const createdArray = [created.getFullYear(), created.getMonth(), created.getDate()] as [number, number, number];
+  const createdArray = [created.getFullYear(), created.getMonth() + 1, created.getDate()] as [number, number, number];
 
   const description = [session.description].filter(Boolean).join("\n\n");
 
   return {
     start: startArray,
     end: endArray,
-    title: `Breakpoint 2025 - ${session.name}`,
+    title: `BP25 - ${session.name}`,
     description,
-    location: session.stage,
+    location: session.stage ? session.stage : "Etihad Arena, Abu Dhabi, UAE",
+    geo: { lat: 24.4539, lon: 54.3773 }, // Abu Dhabi coordinates
     uid: `session-${session.id}@speakers.solana.com`,
     productId: "speakers.solana.com//Breakpoint 2025//EN",
+    calName: "Breakpoint 2025",
     organizer: { name: "Breakpoint 2025", email: "noreply@speakers.solana.com" },
     status: "CONFIRMED" as const,
     busyStatus: "BUSY" as const,
