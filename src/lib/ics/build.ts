@@ -82,7 +82,7 @@ export function speakerSessionsToIcsEvents(sessions: SpeakerEvent[]) {
 
     // Add speaker name to title if available
     if (session.speakerName) {
-      event.title = `Breakpoint 2025 - ${session.name} - ${session.speakerName}`;
+      event.title = `${session.name} - ${session.speakerName} - BP25`;
     }
 
     return event;
