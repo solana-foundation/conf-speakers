@@ -58,7 +58,7 @@ export function sessionToIcsEvent(session: SessionEvent): EventAttributes {
     end: endArray,
     endInputType: "utc" as const,
     endOutputType: "utc" as const,
-    title: `BP25 - ${session.name}`,
+    title: `${session.name} - BP25`,
     description,
     location: session.stage ? session.stage : "Etihad Arena, Abu Dhabi, UAE",
     geo: { lat: 24.4539, lon: 54.3773 }, // Abu Dhabi coordinates
