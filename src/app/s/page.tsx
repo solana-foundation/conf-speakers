@@ -50,6 +50,10 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics", speakerId);
   const speakerCalendarUrl = getSessionsCalendarUrl(calendarKey);
 
+  // Generate all-sessions calendar URL (no speakerId filter)
+  const allSessionsCalendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
+  const allSessionsCalendarUrl = getSessionsCalendarUrl(allSessionsCalendarKey);
+
   // Fetch main speaker directly (cacheable - small payload)
   const speaker = await getCachedSpeaker(speakerId);
   const speakerData = SpeakerFieldsSchema.parse(speaker);
@@ -99,7 +103,11 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <Separator />
 
-        <SessionsCards items={allSessionsData} calendarUrl={speakerCalendarUrl} />
+        <SessionsCards
+          items={allSessionsData}
+          calendarUrl={speakerCalendarUrl}
+          allSessionsCalendarUrl={allSessionsCalendarUrl}
+        />
 
         <div className="flex gap-3">
           <LogisticsDialogButton

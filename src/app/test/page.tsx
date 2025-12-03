@@ -133,8 +133,9 @@ const DUMMY_DATA = {
 export default function DemoSpeakerPage() {
   const { speaker, sessions } = DUMMY_DATA;
 
-  // Dummy calendar URL
+  // Dummy calendar URLs
   const calendarUrl = "https://breakpoint.solana.org/api/ics/speaker/dummy-token";
+  const allSessionsCalendarUrl = "https://breakpoint.solana.org/api/ics/event/dummy-token";
 
   // Prepare sessions data for ActionsChecklist
   const sessionsForChecklist = sessions.map((session) => ({
@@ -154,7 +155,11 @@ export default function DemoSpeakerPage() {
 
         <Separator />
 
-        <SessionsCards items={allSessionsData} calendarUrl={calendarUrl} />
+        <SessionsCards
+          items={allSessionsData}
+          calendarUrl={calendarUrl}
+          allSessionsCalendarUrl={allSessionsCalendarUrl}
+        />
 
         <div className="flex gap-3">
           <LogisticsDialogButton

@@ -52,9 +52,10 @@ export interface SessionsCardsProps {
     }
   >;
   calendarUrl?: string;
+  allSessionsCalendarUrl?: string;
 }
 
-export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps) {
+export default function SessionsCards({ items, calendarUrl, allSessionsCalendarUrl }: SessionsCardsProps) {
   // Get duration from calculated times
   const getSessionDuration = (session: Session & { speakers?: Speaker[] }) => {
     if (session.startTime && session.endTime) {
@@ -235,10 +236,10 @@ export default function SessionsCards({ items, calendarUrl }: SessionsCardsProps
                         </Button>
                       )}
 
-                      {/* Keep existing subscribe button as secondary option */}
-                      {publishingStatusFlags?.hasTime && session.subscribeUrl && (
+                      {/* All BP25 Sessions button */}
+                      {publishingStatusFlags?.hasTime && allSessionsCalendarUrl && (
                         <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
-                          <a href={session.subscribeUrl} target="_blank" rel="noopener noreferrer">
+                          <a href={allSessionsCalendarUrl} target="_blank" rel="noopener noreferrer">
                             <Calendar className="mr-2 h-4 w-4" />+ Add All BP25 Sessions to Calendar
                           </a>
                         </Button>
