@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
 import { generateKey, isKeyValid, getTokenPayload } from "@/lib/sign.server";
 import { notFound, redirect } from "next/navigation";
-import { getCachedFormats, getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
+import { getCachedFormats, getCachedSessions, getCachedSpeaker, fetchSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
@@ -50,13 +50,17 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics", speakerId);
   const speakerCalendarUrl = getSessionsCalendarUrl(calendarKey);
 
-  const speakers = await getCachedSpeakers();
-  const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
-  const speakerData = speakersData.find((item) => item.id === speakerId);
+  // Fetch main speaker directly (cacheable - small payload)
+  const speaker = await getCachedSpeaker(speakerId);
+  const speakerData = SpeakerFieldsSchema.parse(speaker);
 
   if (!speakerData) {
     notFound();
   }
+
+  // Fetch all speakers for session mapping (uncached - payload exceeds 2MB cache limit)
+  const speakers = await fetchSpeakers();
+  const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
 
   const sessions = await getCachedSessions({ speakerName: speakerData._name });
   const formats = await getCachedFormats();

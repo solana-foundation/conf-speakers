@@ -5,7 +5,7 @@ import { speakerFieldNames, sessionFieldNames, formatFieldNames } from "./schema
 const tableSessions = process.env.AIRTABLE_TABLE_AGENDA;
 const tableSpeakers = process.env.AIRTABLE_TABLE_SPEAKERS;
 const tableFormats = process.env.AIRTABLE_TABLE_FORMATS;
-const REVALIDATE_TIME = 1800; // 30 minutes
+const REVALIDATE_TIME = 300; // 5 minutes
 
 if (!tableSessions || !tableSpeakers || !tableFormats) {
   throw new Error("AIRTABLE_TABLE_AGENDA or AIRTABLE_TABLE_SPEAKERS or AIRTABLE_TABLE_FORMATS is not set");
