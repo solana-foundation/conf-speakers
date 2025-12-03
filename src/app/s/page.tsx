@@ -7,7 +7,7 @@ import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
 import { Speaker, StageTitle } from "@/lib/airtable/types";
-import { getSessionCalendarHttpUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
+import { getSessionCalendarHttpUrl, getSessionsCalendarUrl, getSpeakerCalendarUrl } from "@/lib/ics/utils";
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
@@ -48,7 +48,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   }
 
   const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics", speakerId);
-  const speakerCalendarUrl = getSessionsCalendarUrl(calendarKey);
+  const speakerCalendarUrl = getSpeakerCalendarUrl(speakerId, calendarKey);
 
   // Generate all-sessions calendar URL (no speakerId filter)
   const allSessionsCalendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
