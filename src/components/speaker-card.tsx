@@ -118,7 +118,7 @@ export default function SpeakerCard({
             <Button size="sm" variant="outline" className="w-24 lg:w-32" asChild>
               <a href={speakerCardUrl} download target="_blank" rel="noopener noreferrer" title="Download Speaker Card">
                 <Download className="h-4 w-4" />
-                Speaker Card
+                Social Media Card
               </a>
             </Button>
           )}
