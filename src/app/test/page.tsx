@@ -35,6 +35,7 @@ const DUMMY_DATA = {
     invitationCode: "SPEAKER+1-NNNNN",
     discountCode: "GA25-NNNNN, GA25-NNNNN",
     mcInfo: "https://docs.google.com/document/d/example-mc-info-doc",
+    parkingTicket: "https://example.com/parking",
   },
   sessions: [
     {
@@ -179,6 +180,7 @@ export default function DemoSpeakerPage() {
           plusOneTicketLink={speaker.invitationCode}
           discountCode={speaker.discountCode}
           mcInfo={speaker.mcInfo}
+          parkingTicketUrl={speaker.parkingTicket}
         />
 
         {/* <Separator />

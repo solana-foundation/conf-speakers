@@ -16,6 +16,7 @@ interface ActionsChecklistProps {
   plusOneTicketLink?: string | null;
   discountCode?: string | null;
   mcInfo?: string | null;
+  parkingTicketUrl?: string | null;
 }
 
 type TaskStatus = "approved" | "todo" | "pending" | "Approved" | "Denied" | "Pending";
@@ -40,6 +41,7 @@ export default function ActionsChecklist({
   plusOneTicketLink,
   discountCode,
   mcInfo,
+  parkingTicketUrl,
 }: ActionsChecklistProps) {
   // Helper function to determine status based on approval value
   const getApprovalStatus = (approval?: string): "Approved" | "Denied" | "Pending" => {
@@ -120,6 +122,19 @@ export default function ActionsChecklist({
       status: "approved" as const,
       link: mcInfo,
       linkText: "View MC Info",
+      type: "info" as const,
+    });
+  }
+
+  // Parking Ticket - only shows if the URL field exists
+  if (parkingTicketUrl) {
+    ticketTasks.push({
+      id: "parking-ticket",
+      title: "Parking Access Ticket",
+      description: "Access your parking pass for the Etihad Arena.",
+      status: "approved" as const,
+      link: "https://drive.google.com/file/d/1CcH_qpYcrK_9QhRWBIXxMleZ12FfeyXH/view",
+      linkText: "View Parking Pass",
       type: "info" as const,
     });
   }
