@@ -115,12 +115,16 @@ export default function SpeakerCard({
             </Avatar>
           </div>
           {speakerCardUrl && (
-            <Button size="sm" variant="outline" className="w-24 lg:w-32" asChild>
-              <a href={speakerCardUrl} download target="_blank" rel="noopener noreferrer" title="Download Speaker Card">
-                <Download className="h-4 w-4" />
-                Social Media Card
-              </a>
-            </Button>
+            <a
+              href={speakerCardUrl}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Download Speaker Card"
+              className="flex items-center text-xs underline"
+            >
+              Social Media Card
+            </a>
           )}
         </div>
 
