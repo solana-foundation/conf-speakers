@@ -6,7 +6,7 @@ import { getCachedFormats, getCachedSessions, getCachedSpeaker, fetchSpeakers } 
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
-import { Speaker, StageTitle } from "@/lib/airtable/types";
+import { Speaker, StageTitle, DeckStatus } from "@/lib/airtable/types";
 import { getSessionCalendarHttpUrl, getSessionsCalendarUrl, getSpeakerCalendarUrl } from "@/lib/ics/utils";
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
@@ -83,13 +83,20 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   });
 
   // Prepare sessions data for ActionsChecklist
-  const sessionsForChecklist = allSessionsData.map((session) => ({
-    id: session.id,
-    name: session.name,
-    actionsDeckReceived: session.actionsDeckReceived,
-    greenlightTime: session.greenlightTime,
-    webPublishingStatus: session.webPublishingStatus,
-  }));
+  const sessionsForChecklist = allSessionsData.map((session) => {
+    let actionsDeckReceived: DeckStatus | null = null;
+    if (session.actionsDeckReceived) {
+      const deckValue = Object.values(DeckStatus).find((status) => status === session.actionsDeckReceived);
+      actionsDeckReceived = deckValue || null;
+    }
+    return {
+      id: session.id,
+      name: session.name,
+      actionsDeckReceived,
+      greenlightTime: session.greenlightTime,
+      webPublishingStatus: session.webPublishingStatus,
+    };
+  });
 
   return (
     <div className="min-h-screen p-8 font-sans">
