@@ -8,13 +8,11 @@ const sessionFieldsSchema = z.object({
   Description: z.string().optional(),
   "Start Time": z.string().optional(),
   "End Time": z.string().optional(),
-  Stage: z.union([z.enum(Object.values(StageValues)), z.array(z.enum(Object.values(StageValues)))]).optional(),
+  Stage: z.string().optional(),
   "Onboarded Speakers": z.array(z.string()).optional(),
   Moderator: z.array(z.string()).optional(),
   Format: z.array(z.string()).optional(),
-  "Actions_Deck Received": z
-    .union([z.enum([DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved]), z.null()])
-    .optional(),
+  "Actions_Deck Received": z.string().optional(),
   "Portal_Telegram Group": z.string().optional(),
   "Portal_Greenlight Time": z.string().optional(),
   "Web Publishing Status": z.array(z.string()).optional(),
