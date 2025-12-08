@@ -70,33 +70,33 @@ export default function ActionsChecklist({
   // Create ticket tasks
   const ticketTasks = [];
 
-  // Speaker Ticket
-  if (speakerTicketLink) {
-    ticketTasks.push({
-      id: "speaker-ticket",
-      title: "Speaker Ticket",
-      description: "You can open your ticket QR code directly from the button.",
-      status: "approved" as const,
-      link: speakerTicketLink,
-      linkText: "Open Ticket",
-      type: "task" as const,
-    });
-  }
+  // // Speaker Ticket
+  // if (speakerTicketLink) {
+  //   ticketTasks.push({
+  //     id: "speaker-ticket",
+  //     title: "Speaker Ticket",
+  //     description: "You can open your ticket QR code directly from the button.",
+  //     status: "approved" as const,
+  //     link: speakerTicketLink,
+  //     linkText: "Open Ticket",
+  //     type: "task" as const,
+  //   });
+  // }
 
-  // Plus One Ticket
-  if (plusOneTicketLink) {
-    const encodedCode = encodeURIComponent(plusOneTicketLink);
-    const plusOneUrl = `https://luma.com/breakpoint2025?coupon=${encodedCode}`;
-    ticketTasks.push({
-      id: "plus-one-ticket",
-      title: "Plus One Ticket",
-      description: "Use this link to claim your plus-one ticket.",
-      status: "approved" as const,
-      link: plusOneUrl,
-      linkText: "Claim Plus One Ticket",
-      type: "task" as const,
-    });
-  }
+  // // Plus One Ticket
+  // if (plusOneTicketLink) {
+  //   const encodedCode = encodeURIComponent(plusOneTicketLink);
+  //   const plusOneUrl = `https://luma.com/breakpoint2025?coupon=${encodedCode}`;
+  //   ticketTasks.push({
+  //     id: "plus-one-ticket",
+  //     title: "Plus One Ticket",
+  //     description: "Use this link to claim your plus-one ticket.",
+  //     status: "approved" as const,
+  //     link: plusOneUrl,
+  //     linkText: "Claim Plus One Ticket",
+  //     type: "task" as const,
+  //   });
+  // }
 
   // Discount Codes - single action item with list of codes
   const discountCodes = parseDiscountCodes(discountCode);
