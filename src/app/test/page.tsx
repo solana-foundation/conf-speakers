@@ -36,6 +36,8 @@ const DUMMY_DATA = {
     discountCode: "GA25-NNNNN, GA25-NNNNN",
     mcInfo: "https://docs.google.com/document/d/example-mc-info-doc",
     parkingTicket: "https://example.com/parking",
+    youtubeVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    speakerPhotoLink: "https://drive.google.com/file/d/example-speaker-photo",
   },
   sessions: [
     {
@@ -181,6 +183,8 @@ export default function DemoSpeakerPage() {
           discountCode={speaker.discountCode}
           mcInfo={speaker.mcInfo}
           parkingTicketUrl={speaker.parkingTicket}
+          youtubeVideoUrl={speaker.youtubeVideoUrl}
+          speakerPhotoLink={speaker.speakerPhotoLink}
         />
 
         {/* <Separator />

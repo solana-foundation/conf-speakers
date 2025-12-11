@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Check, CircleMinus, Info, X } from "lucide-react";
+import { Check, CircleMinus, Film, Info, X } from "lucide-react";
 import { DeckStatus } from "@/lib/airtable/types";
 
 interface ActionsChecklistProps {
@@ -17,9 +17,16 @@ interface ActionsChecklistProps {
   discountCode?: string | null;
   mcInfo?: string | null;
   parkingTicketUrl?: string | null;
+  youtubeVideoUrl?: string | null;
+  speakerPhotoLink?: string | null;
 }
 
 type TaskStatus = "approved" | "todo" | "pending" | "Approved" | "Denied" | "Pending";
+
+type MediaLink = {
+  label: string;
+  url: string;
+};
 
 type Task = {
   id: string;
@@ -28,8 +35,9 @@ type Task = {
   status: TaskStatus;
   link: string | null;
   linkText: string | null;
-  type: "task" | "info";
+  type: "task" | "info" | "media";
   codes?: string[];
+  mediaLinks?: MediaLink[];
 };
 
 export default function ActionsChecklist({
@@ -42,6 +50,8 @@ export default function ActionsChecklist({
   discountCode,
   mcInfo,
   parkingTicketUrl,
+  youtubeVideoUrl,
+  speakerPhotoLink,
 }: ActionsChecklistProps) {
   // Helper function to determine status based on approval value
   const getApprovalStatus = (approval?: string): "Approved" | "Denied" | "Pending" => {
@@ -139,6 +149,27 @@ export default function ActionsChecklist({
     });
   }
 
+  // Media Links - combined info box for YouTube video and speaker photo
+  const mediaLinks: MediaLink[] = [];
+  if (youtubeVideoUrl) {
+    mediaLinks.push({ label: "Speaker Video", url: youtubeVideoUrl });
+  }
+  if (speakerPhotoLink) {
+    mediaLinks.push({ label: "Speaker Photo", url: speakerPhotoLink });
+  }
+  if (mediaLinks.length > 0) {
+    ticketTasks.push({
+      id: "media-links",
+      title: "Media",
+      description: "Your speaker media from Breakpoint.",
+      status: "approved" as const,
+      link: null,
+      linkText: null,
+      type: "media" as const,
+      mediaLinks,
+    });
+  }
+
   // Create deck upload tasks for each session
   // States: null, DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved
   // Show tasks for all states except null
@@ -206,6 +237,9 @@ export default function ActionsChecklist({
   const getTaskIcon = (task: Task) => {
     if (task.type === "info") {
       return <Info className="text-azure h-5 w-5" />;
+    }
+    if (task.type === "media") {
+      return <Film className="text-byte h-5 w-5" />;
     }
     if (task.status === "approved" || task.status === "Approved") {
       return <Check className="h-5 w-5 text-green-600" />;
@@ -290,6 +324,22 @@ export default function ActionsChecklist({
                       </li>
                     );
                   })}
+                </ul>
+              )}
+              {task.mediaLinks && task.mediaLinks.length > 0 && (
+                <ul className="text-muted-foreground mt-2 space-y-1 text-sm">
+                  {task.mediaLinks.map((mediaLink: MediaLink, index: number) => (
+                    <li key={index}>
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={mediaLink.url}
+                        className="text-azure hover:underline"
+                      >
+                        {mediaLink.label}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               )}
             </div>

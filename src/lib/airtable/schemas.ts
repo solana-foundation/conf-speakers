@@ -53,6 +53,8 @@ const speakerFieldsSchema = z.object({
   "Speaker Permit Approval": z.string().optional(),
   "MC Info": z.string().optional(),
   "Parking Ticket": z.string().optional(),
+  "YouTube Speaker Video": z.string().optional(),
+  "Speaker Photo Link": z.string().optional(),
 });
 
 const formatFieldsSchema = z.object({
@@ -111,6 +113,8 @@ export const SpeakerFieldsSchema = z
     speakerPermitApproval: data.fields["Speaker Permit Approval"],
     mcInfo: data.fields["MC Info"],
     parkingTicket: data.fields["Parking Ticket"],
+    youtubeVideoUrl: data.fields["YouTube Speaker Video"],
+    speakerPhotoLink: data.fields["Speaker Photo Link"],
   }));
 
 export const FormatFieldsSchema = z
