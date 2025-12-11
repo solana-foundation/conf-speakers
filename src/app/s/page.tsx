@@ -135,6 +135,8 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           discountCode={speakerData.discountCode}
           mcInfo={speakerData.mcInfo}
           parkingTicketUrl={speakerData.parkingTicket}
+          youtubeVideoUrl={speakerData.youtubeVideoUrl}
+          speakerPhotoLink={speakerData.speakerPhotoLink}
         />
 
         {/* <Separator />
