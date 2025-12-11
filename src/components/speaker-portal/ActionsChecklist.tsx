@@ -152,10 +152,10 @@ export default function ActionsChecklist({
   // Media Links - combined info box for YouTube video and speaker photo
   const mediaLinks: MediaLink[] = [];
   if (youtubeVideoUrl) {
-    mediaLinks.push({ label: "Speaker Video", url: youtubeVideoUrl });
+    mediaLinks.push({ label: "Speaker Videos", url: youtubeVideoUrl });
   }
   if (speakerPhotoLink) {
-    mediaLinks.push({ label: "Speaker Photo", url: speakerPhotoLink });
+    mediaLinks.push({ label: "Speaker Photos", url: speakerPhotoLink });
   }
   if (mediaLinks.length > 0) {
     ticketTasks.push({
