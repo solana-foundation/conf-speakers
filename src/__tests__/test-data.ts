@@ -21,6 +21,10 @@ export const mockSpeaker: Speaker = {
   dietary: undefined,
   speakerPermitApproval: undefined,
   mcInfo: undefined,
+  parkingTicket: undefined,
+  youtubeVideoUrl: "https://youtube.com/watch?v=abc123, https://youtube.com/watch?v=def456",
+  speakerPhotoLink:
+    "https://photos.example.com/speaker1, https://photos.example.com/speaker2, https://photos.example.com/speaker3",
 };
 
 export const mockSessions: Session[] = [
@@ -69,6 +73,9 @@ export const mockSpeakerRecord = {
     "Headshot_For Web": [{ url: "https://example.com/jane-smith.jpg" }],
     "Speaker Card": [{ url: "https://example.com/jane-smith-card.jpg" }],
     Twitter: "https://x.com/janesmith",
+    "YouTube Speaker Video": "https://youtube.com/watch?v=abc123, https://youtube.com/watch?v=def456",
+    "Speaker Photo Link":
+      "https://photos.example.com/speaker1, https://photos.example.com/speaker2, https://photos.example.com/speaker3",
   },
 };
 

@@ -77,6 +77,15 @@ export default function ActionsChecklist({
       .filter((code) => code.length > 0);
   };
 
+  // Parse comma-separated URLs
+  const parseUrls = (urls?: string | null): string[] => {
+    if (!urls) return [];
+    return urls
+      .split(",")
+      .map((url) => url.trim())
+      .filter((url) => url.length > 0);
+  };
+
   // Create ticket tasks
   const ticketTasks = [];
 
@@ -150,13 +159,19 @@ export default function ActionsChecklist({
   }
 
   // Media Links - combined info box for YouTube video and speaker photo
+  // Supports comma-separated URLs for multiple links
   const mediaLinks: MediaLink[] = [];
-  if (youtubeVideoUrl) {
-    mediaLinks.push({ label: "Speaker Videos", url: youtubeVideoUrl });
-  }
-  if (speakerPhotoLink) {
-    mediaLinks.push({ label: "Speaker Photos", url: speakerPhotoLink });
-  }
+  const youtubeUrls = parseUrls(youtubeVideoUrl);
+  const photoUrls = parseUrls(speakerPhotoLink);
+
+  youtubeUrls.forEach((url, index) => {
+    const label = youtubeUrls.length > 1 ? `Speaker Video ${index + 1}` : "Speaker Video";
+    mediaLinks.push({ label, url });
+  });
+  photoUrls.forEach((url, index) => {
+    const label = photoUrls.length > 1 ? `Speaker Photos ${index + 1}` : "Speaker Photos";
+    mediaLinks.push({ label, url });
+  });
   if (mediaLinks.length > 0) {
     ticketTasks.push({
       id: "media-links",

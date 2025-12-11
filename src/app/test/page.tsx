@@ -36,8 +36,9 @@ const DUMMY_DATA = {
     discountCode: "GA25-NNNNN, GA25-NNNNN",
     mcInfo: "https://docs.google.com/document/d/example-mc-info-doc",
     parkingTicket: "https://example.com/parking",
-    youtubeVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    speakerPhotoLink: "https://drive.google.com/file/d/example-speaker-photo",
+    youtubeVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ, https://www.youtube.com/watch?v=abc123",
+    speakerPhotoLink:
+      "https://drive.google.com/file/d/example-speaker-photo-1, https://drive.google.com/file/d/example-speaker-photo-2, https://drive.google.com/file/d/example-speaker-photo-3",
   },
   sessions: [
     {
