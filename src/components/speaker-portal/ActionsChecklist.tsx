@@ -190,14 +190,25 @@ export default function ActionsChecklist({
         status = "todo"; // DeckStatus.ToUpload
       }
 
+      // Determine link based on deck status:
+      // - ToUpload: Show upload link so user can upload their deck
+      // - Uploaded: Show link in case user needs to re-upload
+      // - Approved: No link needed, deck is finalized
+      // - null/undefined: Filtered out above
+      const getDeckLink = (): string | null => {
+        if (isApproved) return null;
+        // For ToUpload and Uploaded states, show link only if available
+        return slideDeckFile || null;
+      };
+
       return {
         id: `upload-deck-${session.id}`,
         title: `Deck upload status for - ${session.name}`,
         description:
           "Use 16:9 aspect, embed fonts, and upload as Keynote or Powerpoint file. Upload any video files seperately.",
         status,
-        link: isApproved ? null : slideDeckFile || "#",
-        linkText: isApproved ? null : "Deck Files Dropbox",
+        link: getDeckLink(),
+        linkText: getDeckLink() ? "Deck Files Dropbox" : null,
         type: "task" as const,
       };
     });
