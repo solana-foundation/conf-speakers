@@ -5,10 +5,11 @@ import SessionsCards from "@/components/sessions-cards";
 import { Speaker, StageTitle, StageValues, DeckStatus } from "@/lib/airtable/types";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
+import { EVENT_DESCRIPTION, EVENT_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Breakpoint 2025 Speaker Portal - Preview",
-  description: "Demo of the speaker portal interface with all states",
+  title: `${EVENT_NAME} Speaker Portal Preview`,
+  description: EVENT_DESCRIPTION,
   robots: {
     index: false,
     follow: false,
@@ -31,7 +32,7 @@ const DUMMY_DATA = {
     dietary: "Vegetarian",
     slideDeckFile: "https://google.com",
     speakerPermitApproval: undefined,
-    lumaTicketSpeaker: "https://luma.com/breakpoint2025/tickets/speaker-123",
+    lumaTicketSpeaker: "https://luma.com/event/tickets/speaker-123",
     invitationCode: "SPEAKER+1-NNNNN",
     discountCode: "GA25-NNNNN, GA25-NNNNN",
     mcInfo: "https://docs.google.com/document/d/example-mc-info-doc",
@@ -50,11 +51,11 @@ const DUMMY_DATA = {
       stage: StageValues.Main,
       speakerIds: ["rec123abc", "rec456def"],
       moderatorIds: undefined,
-      subscribeUrl: "https://breakpoint.solana.org/calendar/session_1",
+      subscribeUrl: `${SITE_URL}/calendar/session_1`,
       webPublishingStatus: ["Title", "Description", "Speaker"],
       format: ["Product Keynote (5 min)"],
       greenlightTime: "Between 10am and 11am",
-      portalTelegramGroup: "https://t.me/bp25_dapps_session",
+      portalTelegramGroup: "https://t.me/event_session_1",
       actionsDeckReceived: DeckStatus.ToUpload,
       speakers: [
         {
@@ -80,11 +81,11 @@ const DUMMY_DATA = {
       stage: StageValues.Side,
       speakerIds: ["rec123abc", "rec789ghi", "rec012jkl"],
       moderatorIds: undefined,
-      subscribeUrl: "https://breakpoint.solana.org/calendar/session_2",
+      subscribeUrl: `${SITE_URL}/calendar/session_2`,
       webPublishingStatus: ["Time", "Title", "Description", "Speaker"],
       format: ["Debate (30 min)"],
       greenlightTime: undefined,
-      portalTelegramGroup: "https://t.me/bp25_web3_panel",
+      portalTelegramGroup: "https://t.me/event_session_2",
       actionsDeckReceived: DeckStatus.Approved,
       speakers: [
         {
@@ -116,7 +117,7 @@ const DUMMY_DATA = {
       stage: StageValues.Main,
       speakerIds: ["rec123abc"],
       moderatorIds: undefined,
-      subscribeUrl: "https://breakpoint.solana.org/calendar/session_4",
+      subscribeUrl: `${SITE_URL}/calendar/session_4`,
       webPublishingStatus: ["Time", "Title", "Description", "Speaker"],
       format: ["Keynote (10 min)"],
       greenlightTime: undefined,
@@ -138,8 +139,8 @@ export default function DemoSpeakerPage() {
   const { speaker, sessions } = DUMMY_DATA;
 
   // Dummy calendar URLs
-  const calendarUrl = "https://breakpoint.solana.org/api/ics/speaker/dummy-token";
-  const allSessionsCalendarUrl = "https://breakpoint.solana.org/api/ics/event/dummy-token";
+  const calendarUrl = `${SITE_URL}/api/ics/speaker/dummy-token`;
+  const allSessionsCalendarUrl = `${SITE_URL}/api/ics/event/dummy-token`;
 
   // Prepare sessions data for ActionsChecklist
   const sessionsForChecklist = sessions.map((session) => ({
@@ -167,7 +168,7 @@ export default function DemoSpeakerPage() {
 
         <div className="flex gap-3">
           <LogisticsDialogButton
-            stage={(sessions[0]?.stage as StageTitle) || "Absolute Cinema"}
+            stage={sessions[0]?.stage as StageTitle | undefined}
             stages={Array.from(new Set(sessions.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
           />
         </div>

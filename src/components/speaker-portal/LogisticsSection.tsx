@@ -17,23 +17,22 @@ export default function LogisticsSection() {
       <div className="divide-y">
         <Row label="Venue & Stage Location">
           <InfoDialog title="Venue & Stage Location">
-            <p>Breakers Ballroom — Main</p>
-            <p>Backstage entrance via Hall C. Staff will guide you.</p>
-            <p>Wayfinding signs posted at registration.</p>
+            <p>Refer to the latest venue map and speaker briefing for your assigned stage.</p>
+            <p>Follow posted wayfinding and speaker check-in directions on site.</p>
           </InfoDialog>
         </Row>
 
         <Row label="Arrival (45 min prior to session)">
           <InfoDialog title="Arrival Timing">
             <p>Please arrive 45 minutes before your session start time.</p>
-            <p>Check in at Speaker Ops for mic fitting and stage brief.</p>
+            <p>Check in at the speaker operations desk for mic fitting and stage brief.</p>
           </InfoDialog>
         </Row>
 
         <Row label="Speaker Lounge: Location & Amenities">
           <InfoDialog title="Speaker Lounge">
-            <p>Location: Mezzanine Level, Room M2.</p>
-            <p>Coffee, tea, snacks, power outlets, and strong Wi‑Fi available.</p>
+            <p>Refer to the latest event logistics for lounge location and access.</p>
+            <p>Refreshments, power, and Wi-Fi are typically available in the speaker lounge.</p>
           </InfoDialog>
         </Row>
 
@@ -46,8 +45,8 @@ export default function LogisticsSection() {
 
         <Row label="Travel & Packing Notes">
           <InfoDialog title="Travel & Packing Notes">
-            <p>Adapters: EU Type C available on site; bring your own if needed.</p>
-            <p>We recommend carrying your deck on a USB‑C/USB‑A drive as backup.</p>
+            <p>Bring any adapters you expect to need at the venue.</p>
+            <p>We recommend carrying your deck on a USB‑C or USB‑A drive as backup.</p>
           </InfoDialog>
         </Row>
       </div>

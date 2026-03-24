@@ -24,15 +24,15 @@ const FORMAT_DESCRIPTIONS: Record<string, string> = {
   "Debate (30 min)":
     "A fast-paced, parliamentary-style debate between two teams of two. Expect sharp arguments, surprising alliances, and real conviction as experts challenge each other's assumptions onstage. The goal is to surface tension, test ideas in public, and leave the audience thinking differently about where the industry is headed.",
   "Fireside (10 min)":
-    "It is a casual, joint exploration of your topic. The goal is to give attendees an insider look into the practitioners' view – and share any news you are saving for Breakpoint.",
+    "It is a casual, joint exploration of your topic. The goal is to give attendees an insider look into the practitioners' view and share any news you are saving for the event.",
   "Fireside (15 min)":
-    "It is a casual, joint exploration of your topic. The goal is to give attendees an insider look into the practitioners' view – and share any news you are saving for Breakpoint.",
+    "It is a casual, joint exploration of your topic. The goal is to give attendees an insider look into the practitioners' view and share any news you are saving for the event.",
   "Fireside (20 min)":
-    "It is a casual, joint exploration of your topic. The goal is to give attendees an insider look into the practitioners' view – and share any news you are saving for Breakpoint.",
+    "It is a casual, joint exploration of your topic. The goal is to give attendees an insider look into the practitioners' view and share any news you are saving for the event.",
   "Keynote (10 min)":
-    "For the Keynote format, we have prioritized speakers with lofty goals and ambitious undertakings. Breakpoint is an opportunity to set the stage for not just your own company, but the hundreds to come—use the chance to convey the problems to be overcome rather than just the problems you've already solved. Vision statements on the future of the crypto industry are welcome (and recommended).",
+    "For the keynote format, we prioritize speakers with ambitious goals and substantial undertakings. Use the opportunity to frame the problems still worth solving, not only the ones already solved. Vision statements about where the industry is headed are welcome.",
   "Keynote (15 min)":
-    "For the Keynote format, we have prioritized speakers with lofty goals and ambitious undertakings. Breakpoint is an opportunity to set the stage for not just your own company, but the hundreds to come—use the chance to convey the problems to be overcome rather than just the problems you've already solved. Vision statements on the future of the crypto industry are welcome (and recommended).",
+    "For the keynote format, we prioritize speakers with ambitious goals and substantial undertakings. Use the opportunity to frame the problems still worth solving, not only the ones already solved. Vision statements about where the industry is headed are welcome.",
   "Product Keynote (5 min)":
     "For the Product Keynotes, we have prioritized teams that are launching new products. Our goal is to showcase the flourish of Solana's application layer or developer resources that helps build a thriving application layer. Accordingly, we ask that you keep your presentation product-centric. In other words, please show, don't tell. Product demos are preferable.",
   "Product Keynote (7 min)":
@@ -236,11 +236,11 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                         </Button>
                       )}
 
-                      {/* All BP25 Sessions button */}
+                      {/* All sessions button */}
                       {publishingStatusFlags?.hasTime && allSessionsCalendarUrl && (
                         <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                           <a href={allSessionsCalendarUrl} target="_blank" rel="noopener noreferrer">
-                            <Calendar className="mr-2 h-4 w-4" />+ Add All BP25 Sessions to Calendar
+                            <Calendar className="mr-2 h-4 w-4" />+ Add All Sessions to Calendar
                           </a>
                         </Button>
                       )}

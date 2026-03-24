@@ -150,9 +150,9 @@ export default function ActionsChecklist({
     ticketTasks.push({
       id: "parking-ticket",
       title: "Parking Access Ticket",
-      description: "Access your parking pass for the Etihad Arena.",
+      description: "Access your event parking pass.",
       status: "approved" as const,
-      link: "https://drive.google.com/file/d/1CcH_qpYcrK_9QhRWBIXxMleZ12FfeyXH/view",
+      link: parkingTicketUrl,
       linkText: "View Parking Pass",
       type: "info" as const,
     });
@@ -176,7 +176,7 @@ export default function ActionsChecklist({
     ticketTasks.push({
       id: "media-links",
       title: "Media",
-      description: "Your speaker media from Breakpoint.",
+      description: "Your speaker media for this event.",
       status: "approved" as const,
       link: null,
       linkText: null,
@@ -234,7 +234,7 @@ export default function ActionsChecklist({
     {
       id: "speaker-permit-approval",
       title: "Speaker Permit Approval",
-      description: "We're arranging this for you with UAE government. Contact us if you have any questions.",
+      description: "We are coordinating this where required. Contact the event team if you have any questions.",
       status: getApprovalStatus(speakerPermitApproval),
       link: null,
       linkText: null,

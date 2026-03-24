@@ -1,4 +1,5 @@
 import sgMail from "@sendgrid/mail";
+import { SITE_NAME } from "@/lib/site";
 
 type SendMagicLinkArgs = {
   to: string;
@@ -10,8 +11,8 @@ type SendMagicLinkArgs = {
 
 const apiKey = process.env.SENDGRID_API_KEY;
 const defaultTemplateId = process.env.SENDGRID_TEMPLATE_ID;
-const fromEmail = process.env.SENDGRID_FROM_EMAIL ?? "speakers@solana.org";
-const fromName = process.env.SENDGRID_FROM_NAME ?? "Breakpoint Speakers";
+const fromEmail = process.env.SENDGRID_FROM_EMAIL ?? "noreply@example.com";
+const fromName = process.env.SENDGRID_FROM_NAME ?? "Events Team";
 const sandboxMode = process.env.SENDGRID_SANDBOX_MODE === "true";
 
 if (apiKey) {
@@ -45,7 +46,7 @@ export async function sendMagicLinkEmail({
           recipient_name: recipientName ?? "there",
           magic_link: magicLink,
           expires_in: expiresInLabel ?? "a month",
-          event_title: eventTitle ?? "Breakpoint Speaker Portal",
+          event_title: eventTitle ?? SITE_NAME,
         },
       },
     ],

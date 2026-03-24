@@ -4,6 +4,7 @@ import { airtable } from "@/lib/airtable/client";
 import { generateKey } from "@/lib/sign.server";
 import { isZodError } from "@/lib/airtable/utils";
 import { sendMagicLinkEmail } from "@/lib/sendgrid";
+import { SITE_NAME } from "@/lib/site";
 
 const tableSpeakers = process.env.AIRTABLE_TABLE_SPEAKERS || "Onboarded Speakers";
 const columnEmail = "fldXAPcvQhbruspxA"; // "Speaker's Email"
@@ -21,7 +22,7 @@ type ActionState = {
   cooldownMs?: number;
 };
 
-const eventTitle = "Breakpoint Speaker Dashboard";
+const eventTitle = SITE_NAME;
 
 function formatExpiresIn(expirationMs: number) {
   if (!Number.isFinite(expirationMs) || expirationMs <= 0) return undefined;

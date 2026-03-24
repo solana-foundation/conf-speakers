@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
+import { ORGANIZER_NAME } from "@/lib/site";
 
 type ActionState = {
   ok: boolean;
@@ -93,7 +94,7 @@ export function EmailForm() {
         </label>
         <Input id="email" name="email" type="email" placeholder="you@example.com" required />
         <p className="text-muted-foreground text-xs">
-          You&apos;ll receive a magic link from the Breakpoint Events Team.
+          You&apos;ll receive a magic link from {ORGANIZER_NAME}.
         </p>
         <EmailFieldError error={state.fieldErrors?.email} />
       </div>

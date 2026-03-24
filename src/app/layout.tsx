@@ -3,29 +3,30 @@ import "./globals.css";
 import { abcDiatype, macanMono, fhLecturis } from "../fonts";
 import { SiteHeader } from "@/components/header";
 import { Suspense } from "react";
+import { EVENT_DESCRIPTION, EVENT_NAME, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Breakpoint 2025 Dashboard",
-  description: "Agenda and speaking info for the Breakpoint 2025 conference",
-  metadataBase: new URL("https://breakpoint25.solana.com"),
+  title: SITE_NAME,
+  description: EVENT_DESCRIPTION,
+  metadataBase: new URL(SITE_URL),
   openGraph: {
-    title: "Breakpoint 2025 Dashboard",
-    description: "Agenda and speaking info for the Breakpoint 2025 conference",
+    title: SITE_NAME,
+    description: EVENT_DESCRIPTION,
     images: [
       {
         url: "/twitter-card.png",
         width: 1200,
         height: 630,
-        alt: "Breakpoint - December 11-13, 2025 - Abu Dhabi, United Arab Emirates - Etihad Arena",
+        alt: `${EVENT_NAME} speaker portal`,
       },
     ],
     type: "website",
-    siteName: "Breakpoint 2025 Dashboard",
+    siteName: SITE_NAME,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Breakpoint 2025 Dashboard",
-    description: "Agenda and speaking info for the Breakpoint 2025 conference",
+    title: SITE_NAME,
+    description: EVENT_DESCRIPTION,
     images: ["/twitter-card.png"],
   },
 };

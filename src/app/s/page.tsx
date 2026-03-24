@@ -12,6 +12,7 @@ import { getSessionCalendarHttpUrl, getSessionsCalendarUrl, getSpeakerCalendarUr
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
 import { getSpeakerSessionIds } from "@/lib/airtable/utils";
+import { EVENT_DESCRIPTION, EVENT_NAME } from "@/lib/site";
 
 export const generateMetadata = async ({
   searchParams,
@@ -23,8 +24,8 @@ export const generateMetadata = async ({
   const speakerId = payload?.speakerId ?? "Unknown";
 
   return {
-    title: `Breakpoint 2025 Speaker ${speakerId}`,
-    description: `Detailed information about the speaker ${speakerId} of the Breakpoint conference`,
+    title: `${EVENT_NAME} Speaker Portal`,
+    description: `${EVENT_DESCRIPTION} Speaker reference: ${speakerId}.`,
     robots: {
       index: false,
       follow: false,
@@ -122,7 +123,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
         <div className="flex gap-3">
           <LogisticsDialogButton
-            stage={allSessionsData[0]?.stage || "Absolute Cinema"}
+            stage={allSessionsData[0]?.stage}
             stages={Array.from(new Set(allSessionsData.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
           />
         </div>

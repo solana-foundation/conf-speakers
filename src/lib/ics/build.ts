@@ -1,8 +1,12 @@
 import { createEvents, EventAttributes } from "ics";
 import { parseISO } from "@/lib/time/tz";
+import { CALENDAR_NAME, EVENT_NAME, EVENT_LOCATION, ORGANIZER_EMAIL, ORGANIZER_NAME, SITE_HOST } from "@/lib/site";
 
-const DEFAULT_ICS_LOCATION = process.env.NEXT_PUBLIC_ICS_LOCATION || "New York City";
-const DEFAULT_ICS_GEO = { lat: 40.7128, lon: -74.006 };
+const DEFAULT_ICS_LOCATION = EVENT_LOCATION;
+const DEFAULT_ICS_GEO =
+  process.env.EVENT_GEO_LAT && process.env.EVENT_GEO_LON
+    ? { lat: Number(process.env.EVENT_GEO_LAT), lon: Number(process.env.EVENT_GEO_LON) }
+    : undefined;
 
 export interface SessionEvent {
   id: string;
@@ -61,14 +65,17 @@ export function sessionToIcsEvent(session: SessionEvent): EventAttributes {
     end: endArray,
     endInputType: "utc" as const,
     endOutputType: "utc" as const,
-    title: `${session.name} - BP25`,
+    title: session.name,
     description,
-    location: session.stage ? `${session.stage}, ${DEFAULT_ICS_LOCATION}` : DEFAULT_ICS_LOCATION,
+    location:
+      session.stage && DEFAULT_ICS_LOCATION
+        ? `${session.stage}, ${DEFAULT_ICS_LOCATION}`
+        : session.stage || DEFAULT_ICS_LOCATION || undefined,
     geo: DEFAULT_ICS_GEO,
-    uid: `session-${session.id}@speakers.solana.com`,
-    productId: "speakers.solana.com//Breakpoint 2025//EN",
-    calName: "Breakpoint 2025",
-    organizer: { name: "Breakpoint 2025", email: "noreply@speakers.solana.com" },
+    uid: `session-${session.id}@${SITE_HOST}`,
+    productId: `${SITE_HOST}//${CALENDAR_NAME}//EN`,
+    calName: CALENDAR_NAME,
+    organizer: { name: ORGANIZER_NAME, email: ORGANIZER_EMAIL },
     status: "CONFIRMED" as const,
     busyStatus: "BUSY" as const,
     created: createdArray,
@@ -85,7 +92,9 @@ export function speakerSessionsToIcsEvents(sessions: SpeakerEvent[]) {
 
     // Add speaker name to title if available
     if (session.speakerName) {
-      event.title = `${session.name} - ${session.speakerName} - BP25`;
+      event.title = `${session.name} - ${session.speakerName}`;
+    } else if (EVENT_NAME) {
+      event.title = session.name;
     }
 
     return event;

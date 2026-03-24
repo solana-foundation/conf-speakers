@@ -9,10 +9,11 @@ import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 import { GlobalStateProvider } from "@/lib/state";
 import ScheduleSessionsTable from "@/components/schedule-sessions-table";
 import ScheduleSubscribeButton from "@/components/schedule-subscribe-button";
+import { EVENT_DESCRIPTION, EVENT_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Breakpoint 2025 Schedule",
-  description: "The schedule for the Breakpoint conference",
+  title: `${EVENT_NAME} Schedule`,
+  description: EVENT_DESCRIPTION,
   robots: {
     index: false,
     follow: false,
@@ -48,7 +49,7 @@ export default async function SchedulePage() {
       <div className="min-h-screen p-8 font-sans">
         <main className="mx-auto flex max-w-6xl flex-col gap-8">
           <div className="flex items-center justify-between gap-4 max-md:flex-col max-md:items-start">
-            <h1 className="font-fh-lecturis text-3xl">Breakpoint 2025 Schedule</h1>
+            <h1 className="font-fh-lecturis text-3xl">{EVENT_NAME} Schedule</h1>
             {filteredSessionsData.length > 0 && <ScheduleSubscribeButton href={getSessionsCalendarUrl(calendarKey)} />}
           </div>
 
@@ -75,7 +76,7 @@ export default async function SchedulePage() {
                     <li>Session titles and descriptions</li>
                     <li>Speaker names and details</li>
                     <li>Date, time, and duration</li>
-                    <li>Stage location (Absolute Cinema or Lock In)</li>
+                    <li>Stage or location details</li>
                     <li>Session format</li>
                   </ul>
                 </div>
