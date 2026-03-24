@@ -1,245 +1,272 @@
-# speakers.solana.com — BP25 Speaker Portal
+# BP Speakers
 
-A focused **Airtable-driven** microsite for Breakpoint speakers. Private-but-shareable pages (no login required) via **JWT-signed links**, fresh data from **Airtable** (server-side only), and convenient **ICS** calendar feeds.
+Next.js 15 App Router app for a speaker portal and private public-facing event schedule backed by Airtable. The app serves:
 
-## Getting speaker links
+- `/` for the event schedule
+- `/s?key=...` for the speaker portal
+- `/email-link` for requesting a magic link by email
+- signed ICS feeds for single sessions, a speaker's sessions, or the full event schedule
 
-Speaker links are availble in airtable, but can also be found in the server logs where `src/app/api/auth/request-link/route.ts` will log them as they are requested in the email form.
+The app is event-configurable through environment variables, so event name, copy, organizer details, location, timezone, and calendar labels should be changed in config rather than hardcoded in UI files.
 
----
+## Stack
 
-## Tech Stack
+- Next.js 15, React 19, TypeScript
+- Airtable REST API
+- Luxon for venue-aware time handling
+- Zod for Airtable response validation
+- `ics` for calendar generation
+- Tailwind CSS v4 + shadcn/ui primitives
+- JWT-signed access keys for portal and calendar access
+- SendGrid for magic-link email delivery
 
-- **Next.js (App Router, TypeScript)** — deployed on Vercel
-- **Tailwind CSS + shadcn/ui (Radix)** — accessible UI primitives
-- **Airtable REST API** — primary data source
-- **Zod** — runtime validation of Airtable responses
-- **TanStack Table** (+ `@tanstack/react-virtual`) — fast agenda tables
-- **Luxon** — timezone-safe formatting
-- **ICS** — generate calendar files server-side
-- **JWT** — signed access tokens (no login)
-- Optional: **Sentry** (observability), **Upstash Ratelimit** (API protection)
+## App Structure
 
----
+Main areas of the codebase:
 
-## Getting Started
+- `src/app` routes and API handlers
+- `src/lib/airtable` Airtable client, fetchers, schemas, and helpers
+- `src/lib/time` timezone helpers
+- `src/lib/ics` ICS generation and URL helpers
+- `src/lib/site.ts` env-driven site and event config
+- `src/components` schedule UI and speaker portal UI
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Important files for data issues:
 
-### 1) Install & Run
+- `src/lib/airtable/fetch.ts`
+- `src/lib/airtable/schemas.ts`
+- `src/lib/airtable/utils.ts`
+- `src/app/s/page.tsx`
+- `src/app/api/ics/speaker/[speakerId]/route.ts`
+- `src/lib/time/tz.ts`
+- `src/lib/ics/build.ts`
+- `src/lib/site.ts`
+
+## Current Routes
+
+Pages:
+
+- `/` event schedule
+- `/s?key=...` speaker portal
+- `/email-link` email-based magic-link request form
+
+API routes:
+
+- `POST /api/auth/request` mint a signed portal token for a speaker ID using `x-api-key`
+- `POST /api/auth/request-link` look up a speaker or assistant email in Airtable and send a magic link with SendGrid
+- `GET /api/sessions` return normalized sessions JSON when a valid portal key is provided
+- `GET /api/sessions/[sessionId]` return a single session
+- `GET /api/speakers/[speakerId]` return a single speaker when a valid portal key is provided
+- `GET /api/ics/event` generate an event ICS feed, optionally filtered with `?sessions=id1,id2`
+- `GET /api/ics/session/[sessionId]` generate an ICS file for one session
+- `GET /api/ics/speaker/[speakerId]` generate an ICS file for a specific speaker's sessions
+- `POST /api/revalidate` revalidate cached Airtable tags using a `revalidate` key
+
+`robots.ts` currently disallows `/s/*` and all `/api/*`.
+
+## Airtable Model
+
+Required table env vars:
+
+- `AIRTABLE_TABLE_AGENDA`
+- `AIRTABLE_TABLE_SPEAKERS`
+- `AIRTABLE_TABLE_FORMATS`
+
+Current normalized field contract lives in `src/lib/airtable/schemas.ts`.
+
+Agenda fields in use:
+
+- `⚙️ Session Name`
+- `Description`
+- `Start Time`
+- `End Time`
+- `Stage`
+- `Onboarded Speakers`
+- `Moderator`
+- `Format`
+- `Actions_Deck Received`
+- `Portal_Telegram Group`
+- `Portal_Greenlight Time`
+- `Web Publishing Status`
+
+Speaker fields in use:
+
+- `Name`
+- `First Name`
+- `Last Name`
+- `Role or Title`
+- `Company`
+- `Bio`
+- `Headshot_For Web`
+- `Speaker Card`
+- `Twitter`
+- `Slide Deck File`
+- `Luma Speaker Ticket`
+- `Luma Ticket_Plus One`
+- `Invitation Code`
+- `25% Discount Code`
+- `Dietary`
+- `Speaker Permit Approval`
+- `MC Info`
+- `Parking Ticket`
+- `YouTube Speaker Video`
+- `Speaker Photo Link`
+
+Format fields in use:
+
+- `Format`
+
+Known data gotchas:
+
+- Speaker-to-session filtering must use Airtable linked record IDs, not names
+- `NEXT_PUBLIC_VENUE_TZ` supports aliases like `NYC`
+- Stage values come directly from Airtable and may include `Absolute Cinema`, `Lock In`, `Cafe del Mar`, and `Etihad Arena`
+
+## Environment
+
+Start from `.env.example` and create `.env.local`.
+
+```bash
+AIRTABLE_PAT=
+AIRTABLE_BASE=
+AIRTABLE_TABLE_SPEAKERS=
+AIRTABLE_TABLE_AGENDA=
+AIRTABLE_TABLE_FORMATS=
+
+DATA_CACHING_OFF=false
+
+SITE_SECRET=secret
+API_KEY=key
+
+NEXT_PUBLIC_VENUE_TZ=America/New_York
+NEXT_PUBLIC_KEY_EXP=7776000000
+NEXT_PUBLIC_BASE_URL=localhost:3000
+NEXT_PUBLIC_EVENT_NAME=Event
+NEXT_PUBLIC_SITE_NAME="Speaker Portal"
+NEXT_PUBLIC_EVENT_DESCRIPTION="Agenda and speaker information for this event."
+NEXT_PUBLIC_EVENT_LOCATION="New York City"
+NEXT_PUBLIC_ORGANIZER_NAME="Events Team"
+NEXT_PUBLIC_SPEAKER_GUIDE_URL=
+
+EVENT_CALENDAR_NAME="Event Schedule"
+EVENT_ORGANIZER_EMAIL=noreply@example.com
+EVENT_GEO_LAT=
+EVENT_GEO_LON=
+
+SENDGRID_API_KEY=
+SENDGRID_TEMPLATE_ID=
+SENDGRID_FROM_EMAIL=noreply@example.com
+SENDGRID_FROM_NAME="Events Team"
+SENDGRID_SANDBOX_MODE=true
+```
+
+Notes:
+
+- Airtable credentials are server-only
+- Site metadata and ICS labels are driven from `src/lib/site.ts`
+- Venue timezone is required and initializes Luxon globally
+- Airtable caching is enabled by default
+- Set `DATA_CACHING_OFF=true` only when you need to bypass Next's data cache
+
+## Auth Model
+
+The app does not use user accounts or sessions.
+
+Access is controlled with JWT-signed keys generated by `src/lib/sign.server.ts`:
+
+- `auth` keys for portal and protected JSON routes
+- `ics` keys for calendar download routes
+- `revalidate` keys for cache invalidation
+
+Portal flow:
+
+1. Speaker enters an email on `/email-link`
+2. `POST /api/auth/request-link` finds a matching Airtable speaker record
+3. The app emails a magic link to `/s?key=...`
+4. `/s` validates the key, extracts `speakerId`, and renders the personalized portal
+
+Automation flow:
+
+1. Call `POST /api/auth/request` with `x-api-key`
+2. Provide `{ "speakerId": "rec..." }`
+3. Use the returned token as `?key=...` on protected routes
+
+## Caching
+
+`src/lib/airtable/fetch.ts` uses `unstable_cache` with a 5 minute revalidation window for:
+
+- sessions
+- speakers
+- individual speaker fetches
+- formats
+
+The page routes currently export `revalidate = 600` for a 10 minute page-level revalidation window.
+
+`POST /api/revalidate` can revalidate:
+
+- `sessions`
+- `speaker`
+- `speakers`
+
+## Calendars
+
+ICS files are generated server-side in `src/lib/ics/build.ts`.
+
+Calendar metadata is env-driven:
+
+- `EVENT_CALENDAR_NAME`
+- `NEXT_PUBLIC_EVENT_LOCATION`
+- `EVENT_GEO_LAT`
+- `EVENT_GEO_LON`
+- `NEXT_PUBLIC_ORGANIZER_NAME`
+- `EVENT_ORGANIZER_EMAIL`
+
+The speaker portal exposes subscribe/download links for:
+
+- the current speaker's sessions
+- all event sessions
+- individual sessions
+
+## Local Development
+
+Install and run:
 
 ```bash
 pnpm install
 pnpm dev
-# or: npm run dev / yarn dev / bun dev
 ```
 
-Open http://localhost:3000.
+Open `http://localhost:3000`.
 
-### 2) Environment
+If you are testing the email flow locally:
 
-Create `.env.local`:
-
-```bash
-AIRTABLE_PAT=pat_XXXXXXXXXXXX
-AIRTABLE_BASE=app_XXXXXXXXXXXX
-AIRTABLE_TABLE_SPEAKERS=Speakers
-AIRTABLE_TABLE_SESSIONS=Sessions
-
-SITE_SECRET=change_me_hmac_key
-VENUE_TZ=Asia/Dubai
-
-# Auth token issuance for /api/auth/request
-API_KEY=server_only_random_value
-# Milliseconds a token is valid from "now" when issued -eg. 3M
-NEXT_PUBLIC_KEY_EXP=7776000000
-
-# SendGrid transactional email
-SENDGRID_API_KEY=SG.xxxxxx
-SENDGRID_TEMPLATE_ID=d-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-SENDGRID_FROM_EMAIL=speakers@solana.org
-SENDGRID_FROM_NAME="Breakpoint Events Team"
-# Optional: keep true while developing to avoid sending real mail
-SENDGRID_SANDBOX_MODE=true
-```
-
-Never expose `AIRTABLE_PAT` to the client. All Airtable reads happen server-side.
-
-### 2.1) Verify the email flow locally or on preview
-
-1. Ensure `.env.local` includes the SendGrid variables above and restart the dev server after changes.
-2. Run `pnpm dev` and submit the email form at `/email-link` (or any page rendering `EmailForm`).
-3. Watch the server logs: you should see `POST /api/auth/request-link` followed by a `202` response from SendGrid. In sandbox mode the HTML payload is logged in the SendGrid dashboard without being delivered.
-4. Disable sandbox mode and use a real inbox to confirm the dynamic template renders correctly, the button links to `/s?key=…`, and the link expires after the configured window.
-5. If the email fails to send, check the Vercel logs (or Next.js console locally) for the thrown error, verify the template ID, sender identity, and that the API key has Mail Send permission.
-
-### 3) shadcn/ui
-
-shadcn is initialized. Add the primitives you need as you implement pages:
-
-```bash
-npx shadcn add button input badge card table dialog sheet tabs dropdown-menu toast separator alert avatar tooltip
-```
-
-## What’s Already Decided (Scope)
-
-No login. Access via signed links: `/s/[slug]?key=<jwt>`
-
-Airtable views as source of truth (e.g., Onboarded Speakers > For Web, Agenda > For Web)
-
-### Pages
-
-- `/s/[slug]` — speaker portal (profile, sessions, ticket, shareables, highlights)
-- `/schedule` — agenda with Day (1–3), Stage (A/B), Type filters
-
-### APIs
-
-- `/api/auth/request` — mint a short-lived JWT for access (server-to-server)
-- `/api/speakers/[slug]` — server data for speaker page
-- `/api/sessions` — list/filter sessions for agenda
-- `/api/ics/session/[id]`, `/api/ics/speaker/[slug]`, `/api/ics/event` — calendar feeds
-
-Robots: Disallow `/s/*` and `/api/ics/*` (private-ish but shareable)
-
-## Folder Structure (suggested)
-
-```
-app/
-  s/[slug]/page.tsx
-  schedule/page.tsx
-  api/
-    auth/request/route.ts
-    speakers/[slug]/route.ts
-    sessions/route.ts
-    ics/
-      session/[id]/route.ts
-      speaker/[slug]/route.ts
-      event/route.ts
-    revalidate/route.ts
-  robots.ts
-  globals.css
-
-lib/
-  airtable/
-    client.ts       # fetch wrapper (server-only), short ISR
-    zod.ts          # Speaker/Session schemas
-    speakers.ts     # getSpeakerBySlug(...)
-    sessions.ts     # listSessions(...filters)
-  sign.server.ts    # JWT sign/verify helpers
-  time/
-    tz.ts           # Luxon helpers (venue tz, user tz)
-  ics/
-    build.ts        # util to generate ICS content
-
-components/
-  speaker-card.tsx
-  schedule-table.tsx
-  highlights-gallery.tsx
-
-middleware.ts       # optional: extra headers for /s/*
-```
-
-## Key Implementation Notes
-
-### Signed Links (no login, now JWT)
-
-JWT payload and usage:
-
-- Claims:
-  - `slug` — audience marker for the resource (e.g., `auth`, `schedule`, `ics`)
-  - `speakerId` — optional, used when scoping access to a specific speaker
-  - `exp` — expiration (unix seconds)
-- Signing:
-  - Signed `JWT` with `SITE_SECRET`
-- Transport:
-  - Sent as `key` query param, e.g., `/s?key=<jwt>`
-
-Helpers in `lib/sign.server.ts`:
-
-- `generateKey(expMs, slug, speakerId?)` — returns a JWT string
-- `isAuthenticated(request, slug?)` — checks `?key` exists, verifies signature and `slug` (defaults to `"auth"`)
-- `getTokenPayload(key)` — returns decoded claims or `null`
-
-In dev mode, the server logs a valid token for the checked slug when verification runs.
-
-Key slugs:
-
-- `/schedule` — `schedule`
-- `/s/*` — `auth` (and validate `payload.speakerId` against the route param if applicable)
-- `/api/ics*` — `ics`
-
-### Auth Token Issuance API
-
-`POST /api/auth/request`
-
-- **Auth**: require header `x-api-key: <API_KEY>`
-- **Body**: `{ "speakerId": "rec123456789" }`
-- **Behavior**:
-  - Computes `exp = Date.now() + Number(NEXT_PUBLIC_KEY_EXP)`
-  - Signs a JWT with claims `{ slug: "auth", speakerId, exp }`
-- **Response**: `{ "token": "<jwt>", "speakerId": "spk_123", "slug": "auth", "exp": 1731234567 }`
-
-Use the returned `token` as `?key=<token>` on protected URLs.
-
-### Airtable Reads
-
-Query filtered views (e.g., For Web) so only confirmed, public-safe fields flow to the UI.
-
-Prefer denormalized fields for speed (e.g., SessionsExpanded JSON via Automation), otherwise join with a second request and cache.
-
-### Caching & Freshness
-
-Use `fetch(..., { next: { revalidate: 60, tags: ["agenda","speaker:slug"] } })`
-
-Have Airtable Automation → POST to `/api/revalidate` on record changes; revalidate tag(s) for the touched speaker/day.
-
-### Calendars (reduce notification spam)
-
-Default to ICS subscribe buttons (silent updates).
-
-Keep Luma “Add to calendar” secondary if needed.
-
-### Privacy & Robots
-
-Add noindex meta on `/s/[slug]`.
-
-`robots.ts` disallows `/s/` and `/api/ics/`.
-
-### Basic Hardening
-
-Rate-limit `/api/*` (especially ICS) if scraped.
-
-Never pass Airtable secrets to the browser.
-
-Validate all external data with Zod before render.
-
-## Developer TODO (shortlist)
-
-- Guard `/s/[slug]` and relevant APIs with JWT verification
-- Implement Airtable fetchers + Zod schemas
-- Build SpeakerCard, TicketCard, ScheduleTable (TanStack Table + filters)
-- Add ICS routes (session, speaker, event)
-- Wire `/api/revalidate` and Airtable Automation
-- Add noindex + robots rules
-- Add basic rate limiting and Sentry (optional)
-- Smoke test: 1 speaker, 2 sessions, ICS import in Apple/Google/Outlook
+- configure the SendGrid env vars
+- keep `SENDGRID_SANDBOX_MODE=true` until you want real delivery
+- submit the form on `/email-link`
 
 ## Scripts
 
 ```bash
-pnpm dev        # run local server
-pnpm build      # production build
-pnpm start      # run production
-pnpm lint       # lint
+pnpm dev
+pnpm build
+pnpm start
+pnpm lint
+pnpm format
+pnpm format:check
+pnpm test
 ```
 
-## Deploy on Vercel
+## Testing
 
-- Create project speakers-solana-com
-- Set all Environment Variables
-- Assign custom domain speakers.solana.com
-- (Optional) Add Sentry via wizard
+The repo includes Jest tests for utility modules and key UI components, including:
 
-## Contributing
+- timezone helpers
+- JWT helpers
+- Airtable utilities
+- session and speaker presentation components
 
-Small, focused PRs are ideal. Add notes inline if you divert from this README—this doc is a guide, not a gate.
+Run:
+
+```bash
+pnpm test
+```

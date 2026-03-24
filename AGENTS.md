@@ -29,6 +29,7 @@ Use this file first before re-exploring the repo.
 - Event identity and timezone should be treated as configuration, not hardcoded copy.
 - Main config lives in `src/lib/site.ts`.
 - Important env vars:
+  - `DATA_CACHING_OFF`
   - `NEXT_PUBLIC_VENUE_TZ`
   - `NEXT_PUBLIC_BASE_URL`
   - `NEXT_PUBLIC_EVENT_NAME`
@@ -42,6 +43,7 @@ Use this file first before re-exploring the repo.
   - `EVENT_GEO_LAT`
   - `EVENT_GEO_LON`
 - If event copy, metadata, email labels, or ICS labels need changing, update env-backed config first.
+- Airtable caching is on by default. Set `DATA_CACHING_OFF=true` only when you want to bypass the Next data cache.
 
 ## Important Airtable Field Mapping
 

@@ -24,24 +24,32 @@ export const revalidate = 600; // 10 minutes
 
 export default async function SchedulePage() {
   const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
+  let filteredSessionsData: Array<
+    ReturnType<typeof SessionFieldsSchema.parse> & { subscribeUrl: string; speakers: Speaker[] }
+  > = [];
 
-  const speakers = await getCachedSpeakers();
-  const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
-  const sessions = await getCachedSessions();
-  const sessionsData = sessions.map((session) => {
-    const sessionData = SessionFieldsSchema.parse(session);
-    return {
-      ...SessionFieldsSchema.parse(session),
-      subscribeUrl: getSessionCalendarUrl(session.id, calendarKey),
-      speakers: sessionData.speakerIds
-        ?.map((id) => speakersData.find((item) => item.id === id))
-        .filter(Boolean) as Speaker[],
-    };
-  });
-  const filteredSessionsData = sessionsData.filter((session) => {
-    const publishingStatus = getWebPublishingStatus(session.webPublishingStatus);
-    return publishingStatus?.hasDoNotPublish === false;
-  });
+  try {
+    const speakers = await getCachedSpeakers();
+    const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
+    const sessions = await getCachedSessions();
+    const sessionsData = sessions.map((session) => {
+      const sessionData = SessionFieldsSchema.parse(session);
+      return {
+        ...SessionFieldsSchema.parse(session),
+        subscribeUrl: getSessionCalendarUrl(session.id, calendarKey),
+        speakers: sessionData.speakerIds
+          ?.map((id) => speakersData.find((item) => item.id === id))
+          .filter(Boolean) as Speaker[],
+      };
+    });
+    filteredSessionsData = sessionsData.filter((session) => {
+      const publishingStatus = getWebPublishingStatus(session.webPublishingStatus);
+      return publishingStatus?.hasDoNotPublish === false;
+    });
+  } catch (error) {
+    console.error("Failed to load schedule data:", error);
+  }
+
   const filters = getSessionsFilters(filteredSessionsData);
 
   return (
