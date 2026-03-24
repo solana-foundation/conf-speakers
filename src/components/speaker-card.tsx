@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
-import { Twitter, Check, CircleMinus, Clock, Download } from "lucide-react";
+import { Twitter, Check, CircleMinus, Clock } from "lucide-react";
 import { DeckStatus } from "@/lib/airtable/types";
 import { getWebPublishingStatus } from "@/lib/airtable/utils";
 

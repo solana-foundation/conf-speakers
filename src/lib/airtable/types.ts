@@ -1,4 +1,4 @@
-export type StageTitle = "Absolute Cinema" | "Lock In";
+export type StageTitle = "Absolute Cinema" | "Lock In" | "Cafe del Mar" | "Etihad Arena";
 
 export enum StageValues {
   Main = "Absolute Cinema",
@@ -11,6 +11,7 @@ export enum DeckStatus {
   ToUpload = "To Upload Deck",
   Uploaded = "Deck Uploaded, not yet approved",
   Approved = "Deck Approved",
+  Completed = "Completed",
 }
 
 export const WEB_PUBLISHING_STATUS_MAP: Record<string, string> = {

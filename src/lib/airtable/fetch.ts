@@ -11,18 +11,11 @@ if (!tableSessions || !tableSpeakers || !tableFormats) {
   throw new Error("AIRTABLE_TABLE_AGENDA or AIRTABLE_TABLE_SPEAKERS or AIRTABLE_TABLE_FORMATS is not set");
 }
 
-interface SessionParams {
-  speakerName?: string;
-}
-
-export const fetchSessions = (params: SessionParams = {}) => {
+export const fetchSessions = () => {
   return airtable
     .table(tableSessions)
     .select({
       fields: sessionFieldNames,
-      ...(params.speakerName
-        ? { filterByFormula: `FIND("${params.speakerName}", {Onboarded Speakers}&"")` }
-        : undefined),
       sort: [{ field: "Start Time", direction: "asc" }],
     })
     .all();
@@ -56,8 +49,8 @@ export const fetchFormats = () => {
 };
 
 export const getCachedSessions = unstable_cache(
-  async (params: SessionParams = {}) => {
-    return await fetchSessions(params);
+  async () => {
+    return await fetchSessions();
   },
   ["sessions"],
   {

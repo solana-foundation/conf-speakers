@@ -21,6 +21,18 @@ const LOGISTICS_CONFIG = {
       arrivalTime: "45 minutes before your session start time",
       checkInLocation: "Lock In Stage Ops for equipment check and brief",
     },
+    [StageValues.Cafe]: {
+      name: "Cafe del Mar",
+      entrance: "Use the main venue entrance and follow signage for Cafe del Mar.",
+      arrivalTime: "45 minutes before your session start time",
+      checkInLocation: "Speaker Ops desk near Cafe del Mar",
+    },
+    [StageValues.Etihad]: {
+      name: "Etihad Arena",
+      entrance: "Use the main arena entrance and follow speaker check-in signage.",
+      arrivalTime: "45 minutes before your session start time",
+      checkInLocation: "Main speaker check-in desk",
+    },
   },
   shared: {
     speakerLounge: "Mezzanine Level, Room M2. Coffee, snacks, power, Wi‑Fi.",

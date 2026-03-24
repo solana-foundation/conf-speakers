@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { sanitizeXLink, sanitizeXName } from "@/lib/utils";
-import { StageValues, DeckStatus } from "@/lib/airtable/types";
 
 // Define field schemas separately so we can extract field names
 const sessionFieldsSchema = z.object({

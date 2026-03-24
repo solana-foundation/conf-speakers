@@ -4,6 +4,8 @@ import { Badge } from "./ui/badge";
 export const stageColorMap: Record<StageTitle, string> = {
   "Absolute Cinema": "bg-azure",
   "Lock In": "bg-lime",
+  "Cafe del Mar": "bg-byte",
+  "Etihad Arena": "bg-mint",
 };
 
 export function getStageBadgeClass(title: string): string {

@@ -1,6 +1,9 @@
 import { createEvents, EventAttributes } from "ics";
 import { parseISO } from "@/lib/time/tz";
 
+const DEFAULT_ICS_LOCATION = process.env.NEXT_PUBLIC_ICS_LOCATION || "New York City";
+const DEFAULT_ICS_GEO = { lat: 40.7128, lon: -74.006 };
+
 export interface SessionEvent {
   id: string;
   name: string;
@@ -60,8 +63,8 @@ export function sessionToIcsEvent(session: SessionEvent): EventAttributes {
     endOutputType: "utc" as const,
     title: `${session.name} - BP25`,
     description,
-    location: session.stage ? session.stage : "Etihad Arena, Abu Dhabi, UAE",
-    geo: { lat: 24.4539, lon: 54.3773 }, // Abu Dhabi coordinates
+    location: session.stage ? `${session.stage}, ${DEFAULT_ICS_LOCATION}` : DEFAULT_ICS_LOCATION,
+    geo: DEFAULT_ICS_GEO,
     uid: `session-${session.id}@speakers.solana.com`,
     productId: "speakers.solana.com//Breakpoint 2025//EN",
     calName: "Breakpoint 2025",

@@ -1,6 +1,20 @@
 import { DateTime, Settings } from "luxon";
 
-const VENUE_TIMEZONE = process.env.NEXT_PUBLIC_VENUE_TZ;
+const TZ_ALIASES: Record<string, string> = {
+  NYC: "America/New_York",
+  "NEW YORK": "America/New_York",
+  "NEW YORK CITY": "America/New_York",
+};
+
+function normalizeVenueTimezone(value?: string): string | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  return TZ_ALIASES[value.trim().toUpperCase()] ?? value;
+}
+
+const VENUE_TIMEZONE = normalizeVenueTimezone(process.env.NEXT_PUBLIC_VENUE_TZ);
 
 if (!VENUE_TIMEZONE) {
   throw new Error("NEXT_PUBLIC_VENUE_TZ is not set");

@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
 import { generateKey, isKeyValid, getTokenPayload } from "@/lib/sign.server";
 import { notFound, redirect } from "next/navigation";
-import { getCachedFormats, getCachedSessions, getCachedSpeaker, fetchSpeakers } from "@/lib/airtable/fetch";
+import { fetchSession, getCachedFormats, getCachedSpeaker, fetchSpeakers } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
@@ -11,6 +11,7 @@ import { getSessionCalendarHttpUrl, getSessionsCalendarUrl, getSpeakerCalendarUr
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
+import { getSpeakerSessionIds } from "@/lib/airtable/utils";
 
 export const generateMetadata = async ({
   searchParams,
@@ -57,6 +58,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   // Fetch main speaker directly (cacheable - small payload)
   const speaker = await getCachedSpeaker(speakerId);
   const speakerData = SpeakerFieldsSchema.parse(speaker);
+  const speakerSessionIds = getSpeakerSessionIds(speaker);
 
   if (!speakerData) {
     notFound();
@@ -66,21 +68,23 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const speakers = await fetchSpeakers();
   const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
 
-  const sessions = await getCachedSessions({ speakerName: speakerData._name });
+  const sessions = await Promise.all(speakerSessionIds.map((sessionId) => fetchSession(sessionId)));
   const formats = await getCachedFormats();
-  const allSessionsData = sessions.map((session) => {
-    const sessionData = SessionFieldsSchema.parse(session);
-    return {
-      ...sessionData,
-      subscribeUrl: getSessionCalendarHttpUrl(session.id, calendarKey),
-      speakers: sessionData.speakerIds
-        ?.map((id) => speakersData.find((item) => item.id === id))
-        .filter(Boolean) as Speaker[],
-      format: sessionData.format
-        ?.map((formatId) => formats.find((item) => item.id === formatId)?.fields["Format"])
-        .filter(Boolean) as string[],
-    };
-  });
+  const allSessionsData = sessions
+    .map((session) => {
+      const sessionData = SessionFieldsSchema.parse(session);
+      return {
+        ...sessionData,
+        subscribeUrl: getSessionCalendarHttpUrl(session.id, calendarKey),
+        speakers: sessionData.speakerIds
+          ?.map((id) => speakersData.find((item) => item.id === id))
+          .filter(Boolean) as Speaker[],
+        format: sessionData.format
+          ?.map((formatId) => formats.find((item) => item.id === formatId)?.fields["Format"])
+          .filter(Boolean) as string[],
+      };
+    })
+    .sort((a, b) => (a.startTime ?? "").localeCompare(b.startTime ?? ""));
 
   // Prepare sessions data for ActionsChecklist
   const sessionsForChecklist = allSessionsData.map((session) => {

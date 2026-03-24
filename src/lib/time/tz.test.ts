@@ -41,3 +41,15 @@ describe("formatVenueTime", () => {
     expect(result).toBe("Jan 15, 2025 at 6:30 PM");
   });
 });
+
+describe("NYC timezone alias", () => {
+  it("normalizes NYC to America/New_York", async () => {
+    jest.resetModules();
+    process.env.NEXT_PUBLIC_VENUE_TZ = "NYC";
+
+    const { formatVenueTime: formatWithAlias } = await import("./tz");
+    const result = formatWithAlias("2025-01-15T14:30:00.000Z", "MMM d, yyyy 'at' h:mm a");
+
+    expect(result).toBe("Jan 15, 2025 at 9:30 AM");
+  });
+});

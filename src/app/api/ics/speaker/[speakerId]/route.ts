@@ -1,7 +1,8 @@
-import { fetchSessions, fetchSpeaker } from "@/lib/airtable/fetch";
+import { fetchSession, fetchSpeaker } from "@/lib/airtable/fetch";
 import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
 import { generateSpeakerIcsContent } from "@/lib/ics/build";
 import { getTokenPayload, isAuthenticated } from "@/lib/sign.server";
+import { getSpeakerSessionIds } from "@/lib/airtable/utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest, { params }: { params: Promise<{ speakerId: string }> }) => {
@@ -25,11 +26,13 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     // Fetch speaker details
     const speakerRecord = await fetchSpeaker(speakerId);
     const speaker = SpeakerFieldsSchema.parse(speakerRecord);
+    const speakerSessionIds = getSpeakerSessionIds(speakerRecord);
 
     // Fetch sessions for this speaker
-    const sessionRecords = await fetchSessions({ speakerName: speaker._name });
+    const sessionRecords = await Promise.all(speakerSessionIds.map((sessionId) => fetchSession(sessionId)));
     const sessions = sessionRecords
       .map((record) => SessionFieldsSchema.parse(record))
+      .sort((a, b) => (a.startTime ?? "").localeCompare(b.startTime ?? ""))
       .filter((session) => session.name && session.startTime && session.endTime);
 
     if (sessions.length === 0) {
