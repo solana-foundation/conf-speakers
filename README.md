@@ -120,7 +120,7 @@ Known data gotchas:
 
 - Speaker-to-session filtering must use Airtable linked record IDs, not names
 - `NEXT_PUBLIC_VENUE_TZ` supports aliases like `NYC`
-- Stage values come directly from Airtable and may include `Absolute Cinema`, `Lock In`, `Cafe del Mar`, and `Etihad Arena`
+- Legacy Airtable stage values like `Absolute Cinema`, `Lock In`, `Cafe del Mar`, and `Etihad Arena` are normalized to generic titles in the app (`Main Stage`, `Side Stage`, `Lounge Stage`, `Arena Stage`)
 
 ## Environment
 

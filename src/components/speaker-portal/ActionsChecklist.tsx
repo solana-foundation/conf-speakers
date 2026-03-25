@@ -303,20 +303,20 @@ export default function ActionsChecklist({
                 <div className="flex items-center gap-2">
                   <h4 className={"h4"}>{task.title}</h4>
                   {task.type === "task" && (task.status === "approved" || task.status === "Approved") && (
-                    <span className="rounded-full bg-[#19fb9b] px-2 py-0.5 font-mono text-[12px] text-black">
+                    <span className="rounded-full bg-[#19fb9b]/20 px-2.5 py-0.5 font-mono text-[12px] uppercase tracking-wider text-[#19fb9b]">
                       Approved
                     </span>
                   )}
                   {task.type === "task" && task.status === "todo" && (
-                    <span className="rounded-full bg-[#2a88de] px-2 py-0.5 font-mono text-[12px] text-white">To Do</span>
+                    <span className="rounded-full bg-[#2a88de]/20 px-2.5 py-0.5 font-mono text-[12px] uppercase tracking-wider text-[#2a88de]">To Do</span>
                   )}
                   {task.type === "task" && (task.status === "pending" || task.status === "Pending") && (
-                    <span className="rounded-full bg-[#c9ff7c] px-2 py-0.5 font-mono text-[12px] text-black">
+                    <span className="rounded-full bg-[#c9ff7c]/20 px-2.5 py-0.5 font-mono text-[12px] uppercase tracking-wider text-[#c9ff7c]">
                       Pending
                     </span>
                   )}
                   {task.type === "task" && task.status === "Denied" && (
-                    <span className="rounded-full bg-red-500 px-2 py-0.5 font-mono text-[12px] text-white">
+                    <span className="rounded-full bg-red-500/20 px-2.5 py-0.5 font-mono text-[12px] uppercase tracking-wider text-red-400">
                       Declined
                     </span>
                   )}

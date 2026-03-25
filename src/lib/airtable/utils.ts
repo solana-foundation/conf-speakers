@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { airtableSpeakerSessionLinkFields } from "./config";
 import { DeckStatus, Session, WEB_PUBLISHING_STATUS_MAP } from "./types";
+import { normalizeStageTitle } from "./stages";
 
 export const getZodErrorMessage = (error: z.ZodError) => {
   return error.issues.map(({ message, path }) => `${message} - ${path.join(".")}`).join(", ");
@@ -78,8 +79,10 @@ export const getSessionsFilters = (sessions: Session[]) => {
   };
 
   sessions.forEach((session) => {
-    if (session.stage) {
-      sets.stages.add(session.stage);
+    const normalizedStage = normalizeStageTitle(session.stage);
+
+    if (normalizedStage) {
+      sets.stages.add(normalizedStage);
     }
 
     if (session.startTime) {

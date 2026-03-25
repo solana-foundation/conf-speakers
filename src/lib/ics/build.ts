@@ -1,6 +1,7 @@
 import { createEvents, EventAttributes } from "ics";
 import { parseISO } from "@/lib/time/tz";
 import { CALENDAR_NAME, EVENT_NAME, EVENT_LOCATION, ORGANIZER_EMAIL, ORGANIZER_NAME, SITE_HOST } from "@/lib/site";
+import { normalizeStageTitle } from "@/lib/airtable/stages";
 
 const DEFAULT_ICS_LOCATION = EVENT_LOCATION;
 const DEFAULT_ICS_GEO =
@@ -57,6 +58,7 @@ export function sessionToIcsEvent(session: SessionEvent): EventAttributes {
   const createdArray = [created.getFullYear(), created.getMonth() + 1, created.getDate()] as [number, number, number];
 
   const description = [session.description].filter(Boolean).join("\n\n");
+  const stageTitle = normalizeStageTitle(session.stage);
 
   return {
     start: startArray,
@@ -68,9 +70,9 @@ export function sessionToIcsEvent(session: SessionEvent): EventAttributes {
     title: session.name,
     description,
     location:
-      session.stage && DEFAULT_ICS_LOCATION
-        ? `${session.stage}, ${DEFAULT_ICS_LOCATION}`
-        : session.stage || DEFAULT_ICS_LOCATION || undefined,
+      stageTitle && DEFAULT_ICS_LOCATION
+        ? `${stageTitle}, ${DEFAULT_ICS_LOCATION}`
+        : stageTitle || DEFAULT_ICS_LOCATION || undefined,
     geo: DEFAULT_ICS_GEO,
     uid: `session-${session.id}@${SITE_HOST}`,
     productId: `${SITE_HOST}//${CALENDAR_NAME}//EN`,

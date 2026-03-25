@@ -2,7 +2,7 @@ import { getSessionsFilters } from "./utils";
 import { Session, StageValues } from "./types";
 
 describe("getSessionsFilters", () => {
-  test("should extract unique stages and dates from sessions", () => {
+  test("should extract unique normalized stages and dates from sessions", () => {
     const sessions: Session[] = [
       {
         id: "session-1",
@@ -10,7 +10,7 @@ describe("getSessionsFilters", () => {
         description: "Learn how to build web applications that can handle millions of users.",
         startTime: "2025-01-15T10:00:00.000Z",
         endTime: "2025-01-15T11:00:00.000Z",
-        stage: StageValues.Main,
+        stage: "Absolute Cinema",
         speakerIds: ["speaker-1"],
         moderatorIds: undefined,
         format: undefined,
@@ -25,7 +25,7 @@ describe("getSessionsFilters", () => {
         description: "Deep dive into advanced React patterns and best practices.",
         startTime: "2025-01-15T14:00:00.000Z",
         endTime: "2025-01-15T15:00:00.000Z",
-        stage: StageValues.Side,
+        stage: "Lock In",
         speakerIds: ["speaker-2"],
         moderatorIds: undefined,
         format: undefined,
@@ -40,7 +40,7 @@ describe("getSessionsFilters", () => {
         description: "Another session on the same stage.",
         startTime: "2025-01-16T09:00:00.000Z",
         endTime: "2025-01-16T10:00:00.000Z",
-        stage: StageValues.Main, // Duplicate stage
+        stage: StageValues.Main, // Duplicate stage after normalization
         speakerIds: ["speaker-3"],
         moderatorIds: undefined,
         format: undefined,

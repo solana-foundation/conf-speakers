@@ -137,10 +137,10 @@ export default function SpeakerCard({
                     key={index}
                     className={`gap-1.5 ${
                       badge.variant === "awaiting-deck"
-                        ? "bg-[#2a88de] text-white"
+                        ? "bg-[#2a88de]/20 text-[#2a88de]"
                         : badge.variant === "schedule-pending"
-                          ? "bg-[#c9ff7c] text-black"
-                          : "bg-[#19fb9b] text-black"
+                          ? "bg-[#c9ff7c]/20 text-[#c9ff7c]"
+                          : "bg-[#19fb9b]/20 text-[#19fb9b]"
                     }`}
                   >
                     {badge.icon}

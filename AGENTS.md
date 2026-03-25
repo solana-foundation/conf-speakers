@@ -91,11 +91,16 @@ Use this file first before re-exploring the repo.
 
 - Speaker session filtering must use Airtable linked record ids, not speaker names.
 - `NEXT_PUBLIC_VENUE_TZ` is user-configured and should support aliases like `NYC`.
-- Stage values come from Airtable and may include:
+- Legacy stage values may still come from Airtable:
   - `Absolute Cinema`
   - `Lock In`
   - `Cafe del Mar`
   - `Etihad Arena`
+- Normalize those to generic titles in the app:
+  - `Main Stage`
+  - `Side Stage`
+  - `Lounge Stage`
+  - `Arena Stage`
 
 ## Files To Check First For Data Issues
 

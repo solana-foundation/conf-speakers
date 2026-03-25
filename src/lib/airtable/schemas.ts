@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { sanitizeXLink, sanitizeXName } from "@/lib/utils";
 import { airtableFieldMap, getFieldAliases } from "./config";
+import { normalizeStageTitle } from "./stages";
 
 const AirtableRecordSchema = z.object({
   id: z.string(),
@@ -69,7 +70,7 @@ export const SessionFieldsSchema = z
     description: getStringField(data.fields, getFieldAliases("session", "description")),
     startTime: getStringField(data.fields, getFieldAliases("session", "startTime")),
     endTime: getStringField(data.fields, getFieldAliases("session", "endTime")),
-    stage: getStringField(data.fields, getFieldAliases("session", "stage")),
+    stage: normalizeStageTitle(getStringField(data.fields, getFieldAliases("session", "stage"))),
     speakerIds: getStringArrayField(data.fields, getFieldAliases("session", "speakerIds")),
     moderatorIds: getStringArrayField(data.fields, getFieldAliases("session", "moderatorIds")),
     format: getStringArrayField(data.fields, getFieldAliases("session", "formatIds")),

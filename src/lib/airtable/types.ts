@@ -1,12 +1,13 @@
 import { airtableWebPublishingStatusMap } from "./config";
+import { CanonicalStageTitle, LegacyStageTitle } from "./stages";
 
-export type StageTitle = "Absolute Cinema" | "Lock In" | "Cafe del Mar" | "Etihad Arena" | "Main Stage" | (string & {});
+export type StageTitle = CanonicalStageTitle | LegacyStageTitle | (string & {});
 
 export enum StageValues {
-  Main = "Absolute Cinema",
-  Side = "Lock In",
-  Cafe = "Cafe del Mar",
-  Etihad = "Etihad Arena",
+  Main = "Main Stage",
+  Side = "Side Stage",
+  Cafe = "Lounge Stage",
+  Etihad = "Arena Stage",
 }
 
 export enum DeckStatus {

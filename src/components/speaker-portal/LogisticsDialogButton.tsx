@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { MapPin, Clock, Coffee, Shirt, Luggage, ExternalLink } from "lucide-react";
 import { StageTitle, StageValues } from "@/lib/airtable/types";
+import { normalizeStageTitle } from "@/lib/airtable/stages";
 import { SPEAKER_GUIDE_URL } from "@/lib/site";
 
 type StageConfig = {
@@ -39,12 +40,6 @@ const STAGE_LOGISTICS: Record<string, StageConfig> = {
     arrivalTime: "45 minutes before your session start time",
     checkInLocation: "Speaker check-in",
   },
-  "Main Stage": {
-    name: "Main Stage",
-    entrance: "Follow venue signage and speaker check-in directions.",
-    arrivalTime: "45 minutes before your session start time",
-    checkInLocation: "Speaker check-in for mic fitting and stage brief",
-  },
 };
 
 // Hardcoded configuration data
@@ -61,7 +56,11 @@ const LOGISTICS_CONFIG = {
 };
 
 export default function LogisticsDialogButton({ stage, stages }: { stage?: StageTitle; stages?: StageTitle[] }) {
-  const uniqueStages = stages?.filter((s, index, self) => self.indexOf(s) === index) || (stage ? [stage] : []);
+  const uniqueStages =
+    stages
+      ?.map((value) => normalizeStageTitle(value))
+      .filter((value, index, self): value is string => Boolean(value) && self.indexOf(value) === index) ||
+    (stage ? [normalizeStageTitle(stage)].filter((value): value is string => Boolean(value)) : []);
   const stageConfigs = uniqueStages.map((s) => LOGISTICS_CONFIG.stages[s]).filter((config): config is StageConfig => Boolean(config));
 
   return (
