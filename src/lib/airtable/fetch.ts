@@ -1,5 +1,5 @@
 import { unstable_cache } from "next/cache";
-import { airtable } from "./client";
+import { getAirtableRecord, listAirtableRecords } from "./client";
 import { airtableTableIds } from "./config";
 
 const tableSessions = airtableTableIds.sessions;
@@ -36,36 +36,30 @@ const runAirtableRequest = async <T>(request: Promise<T>): Promise<T> => {
 
 export const fetchSessions = () => {
   return runAirtableRequest(
-    airtable
-      .table(tableSessions)
-      .select({
-        sort: [{ field: "Start Time", direction: "asc" }],
-      })
-      .all(),
+    listAirtableRecords(tableSessions, {
+      sort: [{ field: "Start Time", direction: "asc" }],
+    }),
   );
 };
 
 export const fetchSession = (sessionId: string) => {
-  return runAirtableRequest(airtable.table(tableSessions).find(sessionId));
+  return runAirtableRequest(getAirtableRecord(tableSessions, sessionId));
 };
 
 export const fetchSpeaker = (speakerId: string) => {
-  return runAirtableRequest(airtable.table(tableSpeakers).find(speakerId));
+  return runAirtableRequest(getAirtableRecord(tableSpeakers, speakerId));
 };
 
 export const fetchSpeakers = () => {
   return runAirtableRequest(
-    airtable
-      .table(tableSpeakers)
-      .select({
-        sort: [{ field: "Name", direction: "asc" }],
-      })
-      .all(),
+    listAirtableRecords(tableSpeakers, {
+      sort: [{ field: "Name", direction: "asc" }],
+    }),
   );
 };
 
 export const fetchFormats = () => {
-  return runAirtableRequest(airtable.table(tableFormats).select().all());
+  return runAirtableRequest(listAirtableRecords(tableFormats));
 };
 
 const cachedSessions = unstable_cache(

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { airtable } from "@/lib/airtable/client";
+import { listAirtableRecords } from "@/lib/airtable/client";
 import { airtableSpeakerContactFieldIds, airtableTableIds } from "@/lib/airtable/config";
 import { getSpeakerDisplayName } from "@/lib/airtable/schemas";
 import { generateKey } from "@/lib/sign.server";
@@ -82,13 +82,10 @@ export async function POST(request: NextRequest) {
   const filterFormula = `OR(${buildDelimitedSearchFormula(columnEmail, emailFormulaValue)}, ${buildDelimitedSearchFormula(columnAssistantEmail, emailFormulaValue)})`;
 
   try {
-    const records = await airtable
-      .table(tableSpeakers)
-      .select({
-        filterByFormula: filterFormula,
-        maxRecords: 2,
-      })
-      .firstPage();
+    const records = await listAirtableRecords(tableSpeakers, {
+      filterByFormula: filterFormula,
+      maxRecords: 2,
+    });
 
     if (records.length === 0) {
       return NextResponse.json<ActionState>(
