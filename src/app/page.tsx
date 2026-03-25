@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
-import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
+import { parseSessionRecord, parseSpeakerRecord } from "@/lib/airtable/schemas";
 import { generateKey } from "@/lib/sign.server";
 import { getSessionsFilters, getWebPublishingStatus } from "@/lib/airtable/utils";
 import { Speaker } from "@/lib/airtable/types";
@@ -24,18 +24,16 @@ export const revalidate = 600; // 10 minutes
 
 export default async function SchedulePage() {
   const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
-  let filteredSessionsData: Array<
-    ReturnType<typeof SessionFieldsSchema.parse> & { subscribeUrl: string; speakers: Speaker[] }
-  > = [];
+  let filteredSessionsData: Array<ReturnType<typeof parseSessionRecord> & { subscribeUrl: string; speakers: Speaker[] }> = [];
 
   try {
     const speakers = await getCachedSpeakers();
-    const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
+    const speakersData = speakers.map(parseSpeakerRecord);
     const sessions = await getCachedSessions();
     const sessionsData = sessions.map((session) => {
-      const sessionData = SessionFieldsSchema.parse(session);
+      const sessionData = parseSessionRecord(session);
       return {
-        ...SessionFieldsSchema.parse(session),
+        ...sessionData,
         subscribeUrl: getSessionCalendarUrl(session.id, calendarKey),
         speakers: sessionData.speakerIds
           ?.map((id) => speakersData.find((item) => item.id === id))

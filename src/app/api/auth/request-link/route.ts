@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { airtable } from "@/lib/airtable/client";
+import { airtableSpeakerContactFieldIds, airtableTableIds } from "@/lib/airtable/config";
+import { getSpeakerDisplayName } from "@/lib/airtable/schemas";
 import { generateKey } from "@/lib/sign.server";
 import { isZodError } from "@/lib/airtable/utils";
 import { sendMagicLinkEmail } from "@/lib/sendgrid";
 import { SITE_NAME } from "@/lib/site";
 
-const tableSpeakers = process.env.AIRTABLE_TABLE_SPEAKERS || "Onboarded Speakers";
-const columnEmail = "fldXAPcvQhbruspxA"; // "Speaker's Email"
-const columnAssistantEmail = "fld1o4wbFWJqYrw5X"; // "Assistant's Email"
+const tableSpeakers = airtableTableIds.speakers || "Onboarded Speakers";
+const columnEmail = airtableSpeakerContactFieldIds.speakerEmail;
+const columnAssistantEmail = airtableSpeakerContactFieldIds.assistantEmail;
 
 const FormSchema = z.object({
   email: z.string("Invalid email address"),
@@ -110,12 +112,7 @@ export async function POST(request: NextRequest) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
     const link = `${baseUrl}/s?key=${token}`;
 
-    const fields = record.fields as Record<string, unknown>;
-    const recipientName =
-      (fields["Speaker Name"] as string | undefined) ??
-      (fields["Speaker's Name"] as string | undefined) ??
-      (fields["Full Name"] as string | undefined) ??
-      (fields["Name"] as string | undefined);
+    const recipientName = getSpeakerDisplayName(record);
 
     if (isDevelopment) {
       console.info("[auth] Magic link generated for local login");

@@ -1,10 +1,10 @@
 import { unstable_cache } from "next/cache";
 import { airtable } from "./client";
-import { speakerFieldNames, sessionFieldNames, formatFieldNames } from "./schemas";
+import { airtableTableIds } from "./config";
 
-const tableSessions = process.env.AIRTABLE_TABLE_AGENDA;
-const tableSpeakers = process.env.AIRTABLE_TABLE_SPEAKERS;
-const tableFormats = process.env.AIRTABLE_TABLE_FORMATS;
+const tableSessions = airtableTableIds.sessions;
+const tableSpeakers = airtableTableIds.speakers;
+const tableFormats = airtableTableIds.formats;
 const REVALIDATE_TIME = 300; // 5 minutes
 const DATA_CACHING_OFF = process.env.DATA_CACHING_OFF === "true";
 
@@ -39,7 +39,6 @@ export const fetchSessions = () => {
     airtable
       .table(tableSessions)
       .select({
-        fields: sessionFieldNames,
         sort: [{ field: "Start Time", direction: "asc" }],
       })
       .all(),
@@ -59,7 +58,6 @@ export const fetchSpeakers = () => {
     airtable
       .table(tableSpeakers)
       .select({
-        fields: speakerFieldNames,
         sort: [{ field: "Name", direction: "asc" }],
       })
       .all(),
@@ -67,14 +65,7 @@ export const fetchSpeakers = () => {
 };
 
 export const fetchFormats = () => {
-  return runAirtableRequest(
-    airtable
-      .table(tableFormats)
-      .select({
-        fields: formatFieldNames,
-      })
-      .all(),
-  );
+  return runAirtableRequest(airtable.table(tableFormats).select().all());
 };
 
 const cachedSessions = unstable_cache(

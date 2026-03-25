@@ -25,6 +25,9 @@ export const mockSpeaker: Speaker = {
   youtubeVideoUrl: "https://youtube.com/watch?v=abc123, https://youtube.com/watch?v=def456",
   speakerPhotoLink:
     "https://photos.example.com/speaker1, https://photos.example.com/speaker2, https://photos.example.com/speaker3",
+  actionsDeckReceived: undefined,
+  greenlightTime: undefined,
+  publishToWeb: undefined,
 };
 
 export const mockSessions: Session[] = [

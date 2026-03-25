@@ -1,5 +1,5 @@
 import { fetchSessions } from "@/lib/airtable/fetch";
-import { SessionFieldsSchema } from "@/lib/airtable/schemas";
+import { parseSessionRecord } from "@/lib/airtable/schemas";
 import { generateIcsContent } from "@/lib/ics/build";
 import { isAuthenticated } from "@/lib/sign.server";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,7 +15,7 @@ export const GET = async (request: NextRequest) => {
   try {
     const sessionRecords = await fetchSessions();
     let sessions = sessionRecords
-      .map((record) => SessionFieldsSchema.parse(record))
+      .map(parseSessionRecord)
       .filter((session) => session.name && session.startTime && session.endTime);
 
     if (selectedSessions) {
@@ -28,7 +28,7 @@ export const GET = async (request: NextRequest) => {
 
     const icsContent = generateIcsContent(
       sessions.map((session) => ({
-        id: sessionRecords.find((r) => SessionFieldsSchema.parse(r).name === session.name)?.id || "",
+        id: session.id,
         name: session.name!,
         description: session.description,
         startTime: session.startTime!,

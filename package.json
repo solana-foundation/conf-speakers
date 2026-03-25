@@ -7,6 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
+    "airtable:audit": "tsx --tsconfig tsconfig.json scripts/airtable-audit.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "jest",

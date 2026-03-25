@@ -7,34 +7,49 @@ import { MapPin, Clock, Coffee, Shirt, Luggage, ExternalLink } from "lucide-reac
 import { StageTitle, StageValues } from "@/lib/airtable/types";
 import { SPEAKER_GUIDE_URL } from "@/lib/site";
 
+type StageConfig = {
+  name: string;
+  entrance: string;
+  arrivalTime: string;
+  checkInLocation: string;
+};
+
+const STAGE_LOGISTICS: Record<string, StageConfig> = {
+  [StageValues.Main]: {
+    name: StageValues.Main,
+    entrance: "Follow venue signage and speaker check-in directions.",
+    arrivalTime: "45 minutes before your session start time",
+    checkInLocation: "Speaker check-in for mic fitting and stage brief",
+  },
+  [StageValues.Side]: {
+    name: StageValues.Side,
+    entrance: "Follow venue signage and speaker check-in directions.",
+    arrivalTime: "45 minutes before your session start time",
+    checkInLocation: "Speaker check-in for equipment check and brief",
+  },
+  [StageValues.Cafe]: {
+    name: StageValues.Cafe,
+    entrance: "Follow venue signage and speaker check-in directions.",
+    arrivalTime: "45 minutes before your session start time",
+    checkInLocation: "Speaker check-in",
+  },
+  [StageValues.Etihad]: {
+    name: StageValues.Etihad,
+    entrance: "Follow venue signage and speaker check-in directions.",
+    arrivalTime: "45 minutes before your session start time",
+    checkInLocation: "Speaker check-in",
+  },
+  "Main Stage": {
+    name: "Main Stage",
+    entrance: "Follow venue signage and speaker check-in directions.",
+    arrivalTime: "45 minutes before your session start time",
+    checkInLocation: "Speaker check-in for mic fitting and stage brief",
+  },
+};
+
 // Hardcoded configuration data
 const LOGISTICS_CONFIG = {
-  stages: {
-    [StageValues.Main]: {
-      name: StageValues.Main,
-      entrance: "Follow venue signage and speaker check-in directions.",
-      arrivalTime: "45 minutes before your session start time",
-      checkInLocation: "Speaker check-in for mic fitting and stage brief",
-    },
-    [StageValues.Side]: {
-      name: StageValues.Side,
-      entrance: "Follow venue signage and speaker check-in directions.",
-      arrivalTime: "45 minutes before your session start time",
-      checkInLocation: "Speaker check-in for equipment check and brief",
-    },
-    [StageValues.Cafe]: {
-      name: StageValues.Cafe,
-      entrance: "Follow venue signage and speaker check-in directions.",
-      arrivalTime: "45 minutes before your session start time",
-      checkInLocation: "Speaker check-in",
-    },
-    [StageValues.Etihad]: {
-      name: StageValues.Etihad,
-      entrance: "Follow venue signage and speaker check-in directions.",
-      arrivalTime: "45 minutes before your session start time",
-      checkInLocation: "Speaker check-in",
-    },
-  },
+  stages: STAGE_LOGISTICS,
   shared: {
     speakerLounge: "Refer to the latest event logistics for speaker lounge access, refreshments, power, and Wi-Fi.",
     wardrobe: {
@@ -47,7 +62,7 @@ const LOGISTICS_CONFIG = {
 
 export default function LogisticsDialogButton({ stage, stages }: { stage?: StageTitle; stages?: StageTitle[] }) {
   const uniqueStages = stages?.filter((s, index, self) => self.indexOf(s) === index) || (stage ? [stage] : []);
-  const stageConfigs = uniqueStages.map((s) => LOGISTICS_CONFIG.stages[s]).filter(Boolean);
+  const stageConfigs = uniqueStages.map((s) => LOGISTICS_CONFIG.stages[s]).filter((config): config is StageConfig => Boolean(config));
 
   return (
     <Dialog>
@@ -63,41 +78,41 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
         <div className="space-y-6">
           {stageConfigs.length > 0 ? (
             stageConfigs.map((stageConfig, index) => (
-            <React.Fragment key={index}>
-              <section className="group">
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="bg-mint/10 text-mint flex h-8 w-8 items-center justify-center rounded-full">
-                    <MapPin className="h-4 w-4" />
+              <React.Fragment key={index}>
+                <section className="group">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="bg-mint/10 text-mint flex h-8 w-8 items-center justify-center rounded-full">
+                      <MapPin className="h-4 w-4" />
+                    </div>
+                    <h4 className="text-h3 text-primary font-medium uppercase">
+                      Venue & Stage Location{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
+                    </h4>
                   </div>
-                  <h4 className="text-h3 text-primary font-medium uppercase">
-                    Venue & Stage Location{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
-                  </h4>
-                </div>
-                <div className="space-y-2 pl-11">
-                  <p className="text-p1 font-medium">{stageConfig.name}</p>
-                  <p className="text-p2 text-secondary">{stageConfig.entrance}</p>
-                </div>
-              </section>
-
-              <div className="bg-stroke-primary h-px" />
-
-              <section className="group">
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="bg-azure/10 text-azure flex h-8 w-8 items-center justify-center rounded-full">
-                    <Clock className="h-4 w-4" />
+                  <div className="space-y-2 pl-11">
+                    <p className="text-p1 font-medium">{stageConfig.name}</p>
+                    <p className="text-p2 text-secondary">{stageConfig.entrance}</p>
                   </div>
-                  <h4 className="text-h3 text-primary font-medium uppercase">
-                    Arrival{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
-                  </h4>
-                </div>
-                <div className="space-y-2 pl-11">
-                  <p className="text-p1">Please arrive {stageConfig.arrivalTime}.</p>
-                  <p className="text-p2 text-secondary">Check in at {stageConfig.checkInLocation}.</p>
-                </div>
-              </section>
+                </section>
 
-              {index < stageConfigs.length - 1 && <div className="bg-stroke-primary h-px" />}
-            </React.Fragment>
+                <div className="bg-stroke-primary h-px" />
+
+                <section className="group">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="bg-azure/10 text-azure flex h-8 w-8 items-center justify-center rounded-full">
+                      <Clock className="h-4 w-4" />
+                    </div>
+                    <h4 className="text-h3 text-primary font-medium uppercase">
+                      Arrival{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
+                    </h4>
+                  </div>
+                  <div className="space-y-2 pl-11">
+                    <p className="text-p1">Please arrive {stageConfig.arrivalTime}.</p>
+                    <p className="text-p2 text-secondary">Check in at {stageConfig.checkInLocation}.</p>
+                  </div>
+                </section>
+
+                {index < stageConfigs.length - 1 && <div className="bg-stroke-primary h-px" />}
+              </React.Fragment>
             ))
           ) : (
             <section className="group">

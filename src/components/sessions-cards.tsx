@@ -72,7 +72,7 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
   // Get publishing status display info
   const getPublishingStatusFlags = useCallback(
     (session: Session & { webPublishingStatus?: string[] }) => getWebPublishingStatus(session.webPublishingStatus),
-    [items],
+    [],
   );
 
   const getDoorsOpenTime = useCallback((session: Session & { startTime?: Session["startTime"] }) => {

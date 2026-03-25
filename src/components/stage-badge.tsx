@@ -1,15 +1,16 @@
 import { StageTitle } from "@/lib/airtable/types";
 import { Badge } from "./ui/badge";
 
-export const stageColorMap: Record<StageTitle, string> = {
+export const stageColorMap: Record<string, string> = {
   "Absolute Cinema": "bg-azure",
   "Lock In": "bg-lime",
   "Cafe del Mar": "bg-byte",
   "Etihad Arena": "bg-mint",
+  "Main Stage": "bg-azure",
 };
 
 export function getStageBadgeClass(title: string): string {
-  return stageColorMap[title as StageTitle] || "bg-primary";
+  return stageColorMap[title] || "bg-primary";
 }
 
 export default function StageBadge({ title }: { title: StageTitle | undefined }) {

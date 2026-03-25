@@ -1,7 +1,7 @@
 import { isAuthenticated } from "@/lib/sign.server";
 import { NextRequest, NextResponse } from "next/server";
 import { fetchSpeaker } from "@/lib/airtable/fetch";
-import { SpeakerFieldsSchema } from "@/lib/airtable/schemas";
+import { parseSpeakerRecord } from "@/lib/airtable/schemas";
 import { getZodErrorMessage, isZodError } from "@/lib/airtable/utils";
 
 export const GET = async (request: NextRequest, { params }: { params: Promise<{ speakerId: string }> }) => {
@@ -14,7 +14,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
   try {
     const record = await fetchSpeaker(speakerId);
 
-    const data = SpeakerFieldsSchema.parse(record);
+    const data = parseSpeakerRecord(record);
 
     return NextResponse.json({ ...data });
   } catch (error) {

@@ -16,7 +16,7 @@ const customJestConfig = {
     "<rootDir>/src/__tests__/test-data.ts",
     "<rootDir>/src/__tests__/smoke-test-runner.ts",
   ],
-  moduleNameMapping: {
+  moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts", "!src/**/*.stories.{js,jsx,ts,tsx}"],

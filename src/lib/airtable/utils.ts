@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { Session, WEB_PUBLISHING_STATUS_MAP } from "./types";
+import { airtableSpeakerSessionLinkFields } from "./config";
+import { DeckStatus, Session, WEB_PUBLISHING_STATUS_MAP } from "./types";
 
 export const getZodErrorMessage = (error: z.ZodError) => {
   return error.issues.map(({ message, path }) => `${message} - ${path.join(".")}`).join(", ");
@@ -13,9 +14,15 @@ export interface WebPublishingStatus {
   hasDoNotPublish: boolean;
 }
 
-export const getWebPublishingStatus = (webPublishingStatus?: string[]): WebPublishingStatus | null => {
+export const getWebPublishingStatus = (webPublishingStatus?: string[]): WebPublishingStatus => {
   if (!webPublishingStatus || webPublishingStatus.length === 0) {
-    return null;
+    return {
+      hasTime: false,
+      hasTitle: false,
+      hasDescription: false,
+      hasSpeaker: false,
+      hasDoNotPublish: false,
+    };
   }
 
   const flags = webPublishingStatus.map((id) => WEB_PUBLISHING_STATUS_MAP[id]).filter(Boolean);
@@ -33,12 +40,22 @@ export const isZodError = (error: unknown): error is z.ZodError => {
   return error instanceof z.ZodError;
 };
 
-const SPEAKER_SESSION_FIELDS = ["Link to Agenda", "Speaking On", "Moderator On", "MC On"] as const;
+export const normalizeDeckStatus = (value?: string | null) => {
+  if (!value) {
+    return null;
+  }
+
+  if (value === "To Do") {
+    return DeckStatus.ToUpload;
+  }
+
+  return Object.values(DeckStatus).find((status) => status === value) ?? null;
+};
 
 export const getSpeakerSessionIds = (record: { fields?: Record<string, unknown> }): string[] => {
   const ids = new Set<string>();
 
-  for (const fieldName of SPEAKER_SESSION_FIELDS) {
+  for (const fieldName of airtableSpeakerSessionLinkFields) {
     const value = record.fields?.[fieldName];
     if (!Array.isArray(value)) {
       continue;

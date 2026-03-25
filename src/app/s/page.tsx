@@ -3,15 +3,15 @@ import { Metadata } from "next/types";
 import { generateKey, isKeyValid, getTokenPayload } from "@/lib/sign.server";
 import { notFound, redirect } from "next/navigation";
 import { fetchSession, getCachedFormats, getCachedSpeaker, fetchSpeakers } from "@/lib/airtable/fetch";
-import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
+import { parseFormatRecord, parseSessionRecord, parseSpeakerRecord } from "@/lib/airtable/schemas";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
-import { Speaker, StageTitle, DeckStatus } from "@/lib/airtable/types";
+import { Speaker, StageTitle } from "@/lib/airtable/types";
 import { getSessionCalendarHttpUrl, getSessionsCalendarUrl, getSpeakerCalendarUrl } from "@/lib/ics/utils";
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
-import { getSpeakerSessionIds } from "@/lib/airtable/utils";
+import { getSpeakerSessionIds, normalizeDeckStatus } from "@/lib/airtable/utils";
 import { EVENT_DESCRIPTION, EVENT_NAME } from "@/lib/site";
 
 export const generateMetadata = async ({
@@ -58,7 +58,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
   // Fetch main speaker directly (cacheable - small payload)
   const speaker = await getCachedSpeaker(speakerId);
-  const speakerData = SpeakerFieldsSchema.parse(speaker);
+  const speakerData = parseSpeakerRecord(speaker);
   const speakerSessionIds = getSpeakerSessionIds(speaker);
 
   if (!speakerData) {
@@ -67,13 +67,17 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
   // Fetch all speakers for session mapping (uncached - payload exceeds 2MB cache limit)
   const speakers = await fetchSpeakers();
-  const speakersData = speakers.map((item) => SpeakerFieldsSchema.parse(item));
+  const speakersData = speakers.map(parseSpeakerRecord);
 
   const sessions = await Promise.all(speakerSessionIds.map((sessionId) => fetchSession(sessionId)));
   const formats = await getCachedFormats();
+  const formatLabels = new Map(formats.map((record) => {
+    const parsed = parseFormatRecord(record);
+    return [parsed.id, parsed.label];
+  }));
   const allSessionsData = sessions
     .map((session) => {
-      const sessionData = SessionFieldsSchema.parse(session);
+      const sessionData = parseSessionRecord(session);
       return {
         ...sessionData,
         subscribeUrl: getSessionCalendarHttpUrl(session.id, calendarKey),
@@ -81,7 +85,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           ?.map((id) => speakersData.find((item) => item.id === id))
           .filter(Boolean) as Speaker[],
         format: sessionData.format
-          ?.map((formatId) => formats.find((item) => item.id === formatId)?.fields["Format"])
+          ?.map((formatId) => formatLabels.get(formatId))
           .filter(Boolean) as string[],
       };
     })
@@ -89,16 +93,11 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
   // Prepare sessions data for ActionsChecklist
   const sessionsForChecklist = allSessionsData.map((session) => {
-    let actionsDeckReceived: DeckStatus | null = null;
-    if (session.actionsDeckReceived) {
-      const deckValue = Object.values(DeckStatus).find((status) => status === session.actionsDeckReceived);
-      actionsDeckReceived = deckValue || null;
-    }
     return {
       id: session.id,
       name: session.name,
-      actionsDeckReceived,
-      greenlightTime: session.greenlightTime,
+      actionsDeckReceived: normalizeDeckStatus(session.actionsDeckReceived ?? speakerData.actionsDeckReceived),
+      greenlightTime: session.greenlightTime ?? speakerData.greenlightTime ?? null,
       webPublishingStatus: session.webPublishingStatus,
     };
   });

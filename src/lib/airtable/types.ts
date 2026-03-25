@@ -1,4 +1,6 @@
-export type StageTitle = "Absolute Cinema" | "Lock In" | "Cafe del Mar" | "Etihad Arena";
+import { airtableWebPublishingStatusMap } from "./config";
+
+export type StageTitle = "Absolute Cinema" | "Lock In" | "Cafe del Mar" | "Etihad Arena" | "Main Stage" | (string & {});
 
 export enum StageValues {
   Main = "Absolute Cinema",
@@ -14,13 +16,7 @@ export enum DeckStatus {
   Completed = "Completed",
 }
 
-export const WEB_PUBLISHING_STATUS_MAP: Record<string, string> = {
-  recwtiuTWTluBFNAE: "Time",
-  recOn6L12BmGHDOno: "Title",
-  recEP0WiwY2y8dx22: "Description",
-  recRQY6k9lMzQnFk9: "Speaker",
-  recqpel3kBGWP6Xkx: "Do not publish",
-};
+export const WEB_PUBLISHING_STATUS_MAP: Record<string, string> = airtableWebPublishingStatusMap;
 
 // Re-export types derived from schemas (single source of truth)
 export type { Session, Speaker, Format } from "./schemas";

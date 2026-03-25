@@ -1,5 +1,5 @@
 import { fetchSession, fetchSpeaker } from "@/lib/airtable/fetch";
-import { SessionFieldsSchema, SpeakerFieldsSchema } from "@/lib/airtable/schemas";
+import { parseSessionRecord, parseSpeakerRecord } from "@/lib/airtable/schemas";
 import { generateSpeakerIcsContent } from "@/lib/ics/build";
 import { getTokenPayload, isAuthenticated } from "@/lib/sign.server";
 import { getSpeakerSessionIds } from "@/lib/airtable/utils";
@@ -25,13 +25,13 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
   try {
     // Fetch speaker details
     const speakerRecord = await fetchSpeaker(speakerId);
-    const speaker = SpeakerFieldsSchema.parse(speakerRecord);
+    const speaker = parseSpeakerRecord(speakerRecord);
     const speakerSessionIds = getSpeakerSessionIds(speakerRecord);
 
     // Fetch sessions for this speaker
     const sessionRecords = await Promise.all(speakerSessionIds.map((sessionId) => fetchSession(sessionId)));
     const sessions = sessionRecords
-      .map((record) => SessionFieldsSchema.parse(record))
+      .map(parseSessionRecord)
       .sort((a, b) => (a.startTime ?? "").localeCompare(b.startTime ?? ""))
       .filter((session) => session.name && session.startTime && session.endTime);
 
@@ -41,7 +41,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
 
     const icsContent = generateSpeakerIcsContent(
       sessions.map((session) => ({
-        id: sessionRecords.find((r) => SessionFieldsSchema.parse(r).name === session.name)?.id || "",
+        id: session.id,
         name: session.name!,
         description: session.description,
         startTime: session.startTime!,

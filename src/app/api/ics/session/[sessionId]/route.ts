@@ -1,5 +1,5 @@
 import { fetchSession } from "@/lib/airtable/fetch";
-import { SessionFieldsSchema } from "@/lib/airtable/schemas";
+import { parseSessionRecord } from "@/lib/airtable/schemas";
 import { generateIcsContent } from "@/lib/ics/build";
 import { isAuthenticated } from "@/lib/sign.server";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,7 +13,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
 
   try {
     const record = await fetchSession(sessionId);
-    const session = SessionFieldsSchema.parse(record);
+    const session = parseSessionRecord(record);
 
     if (!session.name || !session.startTime || !session.endTime) {
       return NextResponse.json({ error: "Session missing start or end time" }, { status: 400 });

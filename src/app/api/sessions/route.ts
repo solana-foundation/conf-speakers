@@ -1,5 +1,5 @@
 import { fetchSessions } from "@/lib/airtable/fetch";
-import { SessionFieldsSchema } from "@/lib/airtable/schemas";
+import { parseSessionRecord } from "@/lib/airtable/schemas";
 import { getZodErrorMessage, isZodError } from "@/lib/airtable/utils";
 import { isAuthenticated } from "@/lib/sign.server";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,7 +12,7 @@ export const GET = async (request: NextRequest) => {
   try {
     const records = await fetchSessions();
 
-    const data = records.map((record) => SessionFieldsSchema.parse(record));
+    const data = records.map(parseSessionRecord);
 
     return NextResponse.json(data);
   } catch (error) {
