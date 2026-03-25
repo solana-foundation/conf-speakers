@@ -1,3 +1,4 @@
+import React from "react";
 import { render } from "@testing-library/react";
 import { mockSessions } from "@/__tests__/test-data";
 import SessionsTable from "./sessions-table";

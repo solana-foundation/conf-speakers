@@ -1,3 +1,4 @@
+import React from "react";
 import SpeakerCard from "./speaker-card";
 import { render } from "@testing-library/react";
 import { mockSpeaker } from "@/__tests__/test-data";

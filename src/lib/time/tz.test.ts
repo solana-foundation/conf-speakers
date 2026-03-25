@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import { vi } from "vitest";
 
 // Mock the environment variable for testing
 const originalEnv = process.env.NEXT_PUBLIC_VENUE_TZ;
@@ -17,7 +18,7 @@ afterAll(() => {
 
 describe("formatVenueTime", () => {
   it("should format a DateTime object with default format", async () => {
-    jest.resetModules();
+    vi.resetModules();
     process.env.NEXT_PUBLIC_VENUE_TZ = "America/New_York";
 
     const { formatVenueTime } = await import("./tz");
@@ -28,7 +29,7 @@ describe("formatVenueTime", () => {
   });
 
   it("should format an ISO string with custom format", async () => {
-    jest.resetModules();
+    vi.resetModules();
     process.env.NEXT_PUBLIC_VENUE_TZ = "America/New_York";
 
     const { formatVenueTime } = await import("./tz");
@@ -41,7 +42,7 @@ describe("formatVenueTime", () => {
 
 describe("NYC timezone alias", () => {
   it("normalizes NYC to America/New_York", async () => {
-    jest.resetModules();
+    vi.resetModules();
     process.env.NEXT_PUBLIC_VENUE_TZ = "NYC";
 
     const { formatVenueTime: formatWithAlias } = await import("./tz");

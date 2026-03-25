@@ -1,15 +1,15 @@
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
 
-// Mock Next.js router
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter() {
     return {
-      push: jest.fn(),
-      replace: jest.fn(),
-      prefetch: jest.fn(),
-      back: jest.fn(),
-      forward: jest.fn(),
-      refresh: jest.fn(),
+      push: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
     };
   },
   useSearchParams() {
@@ -20,7 +20,6 @@ jest.mock("next/navigation", () => ({
   },
 }));
 
-// Mock environment variables
 process.env.SITE_SECRET = "test-secret-key";
 process.env.AIRTABLE_PAT = "test-pat";
 process.env.AIRTABLE_BASE = "test-base";
