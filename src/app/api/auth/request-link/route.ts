@@ -23,6 +23,7 @@ type ActionState = {
 };
 
 const eventTitle = SITE_NAME;
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 function formatExpiresIn(expirationMs: number) {
   if (!Number.isFinite(expirationMs) || expirationMs <= 0) return undefined;
@@ -115,6 +116,30 @@ export async function POST(request: NextRequest) {
       (fields["Speaker's Name"] as string | undefined) ??
       (fields["Full Name"] as string | undefined) ??
       (fields["Name"] as string | undefined);
+
+    if (isDevelopment) {
+      console.info("[auth] Magic link generated for local login");
+      console.info(`[auth] email=${trimmedEmail}`);
+      console.info(`[auth] token=${token}`);
+      console.info(`[auth] link=${link}`);
+    }
+
+    const hasSendGridConfig = Boolean(process.env.SENDGRID_API_KEY && process.env.SENDGRID_TEMPLATE_ID);
+
+    if (!hasSendGridConfig) {
+      if (isDevelopment) {
+        return NextResponse.json<ActionState>({
+          ok: true,
+          message: "A login link was generated and logged to the server console.",
+          cooldownMs: 60000,
+        });
+      }
+
+      return NextResponse.json<ActionState>(
+        { ok: false, message: "Magic-link email is not configured." },
+        { status: 500 },
+      );
+    }
 
     try {
       await sendMagicLinkEmail({

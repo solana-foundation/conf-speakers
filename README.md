@@ -168,6 +168,63 @@ Notes:
 - Airtable caching is enabled by default
 - Set `DATA_CACHING_OFF=true` only when you need to bypass Next's data cache
 
+## Quick Start
+
+1. Install dependencies:
+
+```bash
+pnpm install
+```
+
+2. Copy the example env file and fill in the Airtable and site values:
+
+```bash
+cp .env.example .env.local
+```
+
+Minimum local setup:
+
+- `AIRTABLE_PAT`
+- `AIRTABLE_BASE`
+- `AIRTABLE_TABLE_SPEAKERS`
+- `AIRTABLE_TABLE_AGENDA`
+- `AIRTABLE_TABLE_FORMATS`
+- `SITE_SECRET`
+- `API_KEY`
+- `NEXT_PUBLIC_VENUE_TZ`
+- `NEXT_PUBLIC_BASE_URL=http://localhost:3000`
+
+Notes:
+
+- The repo already documents the current Airtable table IDs in `AGENTS.md`
+- For local email-link testing, SendGrid is optional
+- If `SENDGRID_API_KEY` and `SENDGRID_TEMPLATE_ID` are not set, the app will log the magic link to the server console in development instead of sending an email
+
+3. Start the dev server:
+
+```bash
+npm run dev
+```
+
+4. Open the app:
+
+- Schedule: `http://localhost:3000/`
+- Speaker email login: `http://localhost:3000/email-link`
+
+5. Log in as a speaker using email:
+
+- Enter a speaker email or assistant email that exists in the Airtable speakers table
+- Submit the form on `/email-link`
+- Check the terminal running `npm run dev`
+- The server will print both the raw token and the full login URL:
+
+```text
+[auth] token=...
+[auth] link=http://localhost:3000/s?key=...
+```
+
+6. Open the logged URL in your browser to enter that speaker's portal.
+
 ## Auth Model
 
 The app does not use user accounts or sessions.
