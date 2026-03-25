@@ -262,13 +262,13 @@ export default function ActionsChecklist({
 
   const getTaskIcon = (task: Task) => {
     if (task.type === "info") {
-      return <Info className="text-azure h-5 w-5" />;
+      return <Info className="h-5 w-5 text-[#2a88de]" />;
     }
     if (task.type === "media") {
-      return <Film className="text-byte h-5 w-5" />;
+      return <Film className="h-5 w-5 text-[#9945ff]" />;
     }
     if (task.status === "approved" || task.status === "Approved") {
-      return <Check className="h-5 w-5 text-green-600" />;
+      return <Check className="h-5 w-5 text-[#19fb9b]" />;
     }
     if (task.status === "Denied") {
       return <X className="h-5 w-5 text-red-500" />;
@@ -284,19 +284,17 @@ export default function ActionsChecklist({
 
   return (
     <div className="space-y-4">
-      <h3 className="h5 uppercase">Actions Checklist</h3>
+      <h3 className="font-space-grotesk text-sm font-semibold uppercase tracking-[0.15em] text-white/60">Actions Checklist</h3>
       <div className="space-y-3">
         {tasks.map((task) => (
           <div
             key={task.id}
             className={`flex items-start gap-3 rounded-lg border p-3 ${
               task.type === "info"
-                ? "bg-azure/10 border-0"
+                ? "border-[#2a88de]/20 bg-[#2a88de]/5"
                 : task.status === "Denied"
-                  ? "border-red-500"
-                  : task.status === "todo"
-                    ? "border-stroke-primary"
-                    : "border-stroke-primary"
+                  ? "border-red-500/30 bg-red-500/5"
+                  : "border-white/10 bg-white/[0.02]"
             }`}
           >
             <div className="flex items-start justify-center">{getTaskIcon(task)}</div>
@@ -305,15 +303,15 @@ export default function ActionsChecklist({
                 <div className="flex items-center gap-2">
                   <h4 className={"h4"}>{task.title}</h4>
                   {task.type === "task" && (task.status === "approved" || task.status === "Approved") && (
-                    <span className="rounded-full bg-green-500 px-2 py-0.5 font-mono text-[12px] text-white">
+                    <span className="rounded-full bg-[#19fb9b] px-2 py-0.5 font-mono text-[12px] text-black">
                       Approved
                     </span>
                   )}
                   {task.type === "task" && task.status === "todo" && (
-                    <span className="bg-azure rounded-full px-2 py-0.5 font-mono text-[12px] text-black">To Do</span>
+                    <span className="rounded-full bg-[#2a88de] px-2 py-0.5 font-mono text-[12px] text-white">To Do</span>
                   )}
                   {task.type === "task" && (task.status === "pending" || task.status === "Pending") && (
-                    <span className="rounded-full bg-yellow-500 px-2 py-0.5 font-mono text-[12px] text-black">
+                    <span className="rounded-full bg-[#c9ff7c] px-2 py-0.5 font-mono text-[12px] text-black">
                       Pending
                     </span>
                   )}
@@ -331,7 +329,7 @@ export default function ActionsChecklist({
                   </Button>
                 )}
               </div>
-              <p className={`text-muted-foreground text-sm`}>{task.description}</p>
+              <p className="text-sm text-white/50">{task.description}</p>
               {task.codes && task.codes.length > 0 && (
                 <ul className="text-muted-foreground mt-2 space-y-1 text-sm">
                   {task.codes.map((code: string, index: number) => {
@@ -343,7 +341,7 @@ export default function ActionsChecklist({
                           target="_blank"
                           rel="noopener noreferrer"
                           href={lumaUrl}
-                          className="text-azure hover:underline"
+                          className="text-[#9945ff] hover:text-[#19fb9b] hover:underline transition-colors"
                         >
                           {code}
                         </a>
@@ -360,7 +358,7 @@ export default function ActionsChecklist({
                         target="_blank"
                         rel="noopener noreferrer"
                         href={mediaLink.url}
-                        className="text-azure hover:underline"
+                        className="text-[#9945ff] hover:text-[#19fb9b] hover:underline transition-colors"
                       >
                         {mediaLink.label}
                       </a>

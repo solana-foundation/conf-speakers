@@ -29,14 +29,14 @@ export default function ScheduleSubscribeButton({ href }: ScheduleSubscribeButto
 
   return (
     <div className="flex items-center gap-1">
-      <Button variant="mint" asChild>
+      <Button variant="gradient" asChild>
         <a href={currentHref} target="_blank" rel="noopener noreferrer">
           {buttonText}
         </a>
       </Button>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant="mint" size="icon" onClick={handleCopy} aria-label="Copy link">
+          <Button variant="gradient" size="icon" onClick={handleCopy} aria-label="Copy link">
             {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
           </Button>
         </TooltipTrigger>

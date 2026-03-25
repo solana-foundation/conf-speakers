@@ -225,7 +225,7 @@ export default function SessionsTable({
   });
 
   return (
-    <Card className="bg-background border-muted py-1">
+    <Card className="border-white/10 bg-white/[0.02] py-1">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

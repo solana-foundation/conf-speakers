@@ -97,7 +97,7 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
 
   return (
     <>
-      <h2 className="text-h5 uppercase">Your Schedule</h2>
+      <h2 className="font-space-grotesk text-sm font-semibold uppercase tracking-[0.15em] text-white/60">Your Schedule</h2>
       <div className="space-y-6">
         {/* Sessions Cards */}
         <div className="space-y-4">
@@ -110,7 +110,7 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
             return (
               <Card
                 key={session.id}
-                className="border-stroke-secondary bg-card/40 overflow-hidden border backdrop-blur-sm"
+                className="overflow-hidden border-white/10 bg-white/[0.02] backdrop-blur-sm"
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
@@ -124,10 +124,10 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                         </div>
                       )}
                       {/* Session Title */}
-                      <h3 className="text-xl leading-tight font-bold">{session.name}</h3>
+                      <h3 className="font-space-grotesk text-xl leading-tight font-light text-white">{session.name}</h3>
                       {/* Format Description */}
                       {formatDescription && (
-                        <p className="text-muted-foreground text-sm leading-relaxed">{formatDescription}</p>
+                        <p className="text-sm leading-relaxed text-white/50">{formatDescription}</p>
                       )}
                     </div>
                   </div>
@@ -136,24 +136,24 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                 <CardContent className="space-y-4">
                   {/* Greenlight Time Display */}
                   {!publishingStatusFlags?.hasTime && !session.greenlightTime && (
-                    <div className="border-azure bg-azure/10 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
-                      <Info className="text-azure h-4 w-4" />
+                    <div className="flex items-center gap-2 rounded-lg border border-[#2a88de]/30 bg-[#2a88de]/10 px-3 py-2 text-sm">
+                      <Info className="h-4 w-4 text-[#2a88de]" />
                       <span className="font-medium text-white">Scheduling in progress</span>
                     </div>
                   )}
 
                   {/* Greenlight Time Display */}
                   {session.greenlightTime && publishingStatusFlags?.hasDoNotPublish && (
-                    <div className="border-lime bg-lime/10 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
-                      <AlertTriangle className="text-lime h-4 w-4" />
+                    <div className="flex items-center gap-2 rounded-lg border border-[#c9ff7c]/30 bg-[#c9ff7c]/10 px-3 py-2 text-sm">
+                      <AlertTriangle className="h-4 w-4 text-[#c9ff7c]" />
                       <span className="font-medium text-white">{session.greenlightTime}</span>
                     </div>
                   )}
 
                   {/* Arrival Time Alert */}
                   {publishingStatusFlags?.hasTime && (
-                    <div className="border-mint bg-mint/10 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
-                      <AlertTriangle className="text-mint h-4 w-4" />
+                    <div className="flex items-center gap-2 rounded-lg border border-[#19fb9b]/30 bg-[#19fb9b]/10 px-3 py-2 text-sm">
+                      <AlertTriangle className="h-4 w-4 text-[#19fb9b]" />
                       <span className="font-medium text-white">
                         Please arrive 45 minutes before your session starts
                       </span>
@@ -161,7 +161,7 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                   )}
 
                   {/* Logistics */}
-                  <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-white/50">
                     {publishingStatusFlags?.hasTime && (
                       <>
                         {session.startTime && (
@@ -201,21 +201,21 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                   {/* Participants */}
                   {session.speakers && session.speakers.length > 0 && (
                     <div className="space-y-2">
-                      <div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+                      <div className="flex items-center gap-2 text-sm font-medium text-white/50">
                         <Users className="h-4 w-4" />
                         <span>Participants</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {session.speakers.map((speaker) => (
-                          <div key={speaker.id} className="bg-muted/50 flex items-center gap-2 rounded-md px-2 py-1">
+                          <div key={speaker.id} className="flex items-center gap-2 rounded-lg bg-white/5 px-2 py-1">
                             <Avatar className="h-6 w-6">
                               <AvatarImage src={speaker.imageUrl} alt={`${speaker.firstName} ${speaker.lastName}`} />
-                              <AvatarFallback className="text-xs font-semibold">
+                              <AvatarFallback className="bg-white/10 text-xs font-semibold text-white">
                                 {speaker.firstName?.charAt(0)}
                                 {speaker.lastName?.charAt(0)}
                               </AvatarFallback>
                             </Avatar>
-                            <span className="text-sm font-medium">
+                            <span className="text-sm font-medium text-white/80">
                               {speaker.firstName} {speaker.lastName}
                             </span>
                           </div>
@@ -227,7 +227,6 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                   {/* Calendar Buttons */}
                   {(publishingStatusFlags?.hasTime || session.portalTelegramGroup) && (
                     <div className="flex flex-col gap-2 pt-2 sm:flex-row">
-                      {/* Primary CTA Button - Add My Sessions to Calendar */}
                       {publishingStatusFlags?.hasTime && calendarUrl && (
                         <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                           <a href={calendarUrl} target="_blank" rel="noopener noreferrer">
@@ -236,7 +235,6 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                         </Button>
                       )}
 
-                      {/* All sessions button */}
                       {publishingStatusFlags?.hasTime && allSessionsCalendarUrl && (
                         <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                           <a href={allSessionsCalendarUrl} target="_blank" rel="noopener noreferrer">
@@ -245,13 +243,12 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                         </Button>
                       )}
 
-                      {/* Session Telegram Group */}
                       {session.portalTelegramGroup && (
                         <Button
                           size="sm"
                           variant="outline"
                           asChild
-                          className="border-azure text-azure hover:bg-azure/10 hover:text-azure w-full sm:w-auto"
+                          className="border-[#2a88de]/30 text-[#2a88de] hover:bg-[#2a88de]/10 w-full sm:w-auto"
                         >
                           <a href={session.portalTelegramGroup} target="_blank" rel="noopener noreferrer">
                             <MessageCircle className="mr-2 h-4 w-4" />

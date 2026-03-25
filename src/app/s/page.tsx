@@ -1,4 +1,3 @@
-import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next/types";
 import { generateKey, isKeyValid, getTokenPayload } from "@/lib/sign.server";
 import { notFound, redirect } from "next/navigation";
@@ -103,8 +102,8 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   });
 
   return (
-    <div className="min-h-screen p-8 font-sans">
-      <main className="mx-auto flex max-w-6xl flex-col gap-8">
+    <div className="min-h-screen bg-black p-8 font-sans">
+      <main className="mx-auto flex max-w-6xl flex-col gap-10">
         <SpeakerCard
           {...speakerData}
           sessions={sessionsForChecklist}
@@ -112,7 +111,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           speakerCardUrl={speakerData.speakerCardUrl}
         />
 
-        <Separator />
+        <div className="section-divider" />
 
         <SessionsCards
           items={allSessionsData}
@@ -127,7 +126,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           />
         </div>
 
-        <Separator />
+        <div className="section-divider" />
 
         <ActionsChecklist
           sessions={sessionsForChecklist}

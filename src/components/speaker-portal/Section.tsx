@@ -12,7 +12,7 @@ export interface SectionProps {
 
 export default function Section({ title, description, children, action, className }: SectionProps) {
   return (
-    <Card className={cn("border-stroke-primary bg-card/40", className)}>
+    <Card className={cn("border-white/10 bg-white/[0.02]", className)}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}

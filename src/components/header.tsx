@@ -12,21 +12,42 @@ export function SiteHeader() {
   const qs = key ? `?key=${encodeURIComponent(key)}` : "";
 
   return (
-    <header className="bg-background/80 border-stroke-primary sticky top-0 z-40 w-full border-b backdrop-blur">
+    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-black/80 backdrop-blur-xl">
+      {/* Gradient accent line at top */}
+      <div
+        className="h-[2px] w-full"
+        style={{
+          background: "linear-gradient(to right, #9945ff, #19fb9b, #00d4ff)",
+        }}
+      />
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6 sm:h-16 xl:px-0">
-        <Link href={`/${qs}`} className="hover:opacity-80">
-          <Image src="/icon.svg" alt={SITE_NAME} width={60} height={14} />
+        <Link href={`/${qs}`} className="group flex items-center gap-3 transition-opacity hover:opacity-80">
+          <Image src="/accelerate-usa-logo.svg" alt={SITE_NAME} width={197} height={99} className="h-10 w-auto sm:h-12" />
         </Link>
-        <nav className="flex items-center gap-6 text-sm">
+        <nav className="flex items-center gap-6">
           {!qs && (
-            <Link href={`/email-link`} className="hover:underline">
+            <Link
+              href={`/email-link`}
+              className="font-space-grotesk text-sm font-semibold uppercase tracking-[0.05em] text-white transition-colors hover:text-white/80"
+            >
               Speakers
             </Link>
           )}
           {qs && (
-            <Link href={`/s${qs}`} className="hover:underline">
-              <CircleUserIcon />
-            </Link>
+            <>
+              <Link
+                href={`/${qs}`}
+                className="font-space-grotesk text-sm font-semibold uppercase tracking-[0.05em] text-white/60 transition-colors hover:text-white"
+              >
+                Schedule
+              </Link>
+              <Link
+                href={`/s${qs}`}
+                className="text-white/60 transition-colors hover:text-white"
+              >
+                <CircleUserIcon className="h-5 w-5" />
+              </Link>
+            </>
           )}
         </nav>
       </div>

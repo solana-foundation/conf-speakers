@@ -7,34 +7,35 @@
 @theme inline {
   --font-sans: var(--font-abc-diatype);
   --font-mono: var(--font-macan-mono);
+  --font-space-grotesk: var(--font-space-grotesk);
 
   /* Core theme mapping to project color tokens */
   --color-background: var(--color-background-primary);
   --color-foreground: var(--color-primary);
 
-  --color-card: var(--color-background-secondary);
+  --color-card: rgba(255, 255, 255, 0.02);
   --color-card-foreground: var(--color-primary);
 
-  --color-popover: var(--color-background-secondary);
+  --color-popover: var(--color-primary-null);
   --color-popover-foreground: var(--color-primary);
 
   --color-primary: var(--color-primary-byte);
-  --color-primary-foreground: var(--color-invert);
+  --color-primary-foreground: #000000;
 
   --color-secondary: var(--color-wisp-60);
   --color-secondary-foreground: var(--color-primary);
 
   --color-muted: var(--color-wisp-10);
-  --color-muted-foreground: var(--color-wisp-60);
+  --color-muted-foreground: var(--color-accelerate-gray-200);
 
-  --color-accent: var(--color-background-secondary);
+  --color-accent: rgba(255, 255, 255, 0.05);
   --color-accent-foreground: var(--color-primary);
 
-  --color-destructive: var(--color-byte);
+  --color-destructive: #ef4444;
 
   --color-border: var(--color-stroke-primary);
   --color-input: var(--color-stroke-primary);
-  --color-ring: var(--color-stroke-tertiary);
+  --color-ring: var(--color-primary-byte);
 
   /* Charts */
   --color-chart-1: var(--color-lime);
@@ -51,7 +52,7 @@
   --color-sidebar-accent: var(--color-background-secondary);
   --color-sidebar-accent-foreground: var(--color-primary);
   --color-sidebar-border: var(--color-stroke-primary);
-  --color-sidebar-ring: var(--color-stroke-tertiary);
+  --color-sidebar-ring: var(--color-primary-byte);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -60,7 +61,11 @@
 }
 
 :root {
-  --radius: 0.3rem;
+  --radius: 0.5rem;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 @layer base {
@@ -95,6 +100,66 @@
   }
 }
 
+/* ─── Accelerate gradient text ─── */
+.gradient-text {
+  background: linear-gradient(135deg, #9945ff 0%, #19fb9b 50%, #00d4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Gradient CTA button (purple → green) ─── */
+.btn-cta {
+  @apply inline-flex items-center justify-center gap-2 rounded-full text-black transition-all hover:opacity-90;
+  background: linear-gradient(to right, #9945ff, #19fb9b);
+}
+
+/* ─── Gradient border button ─── */
+.btn-outline-gradient {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-transparent font-semibold uppercase tracking-[0.05em] text-white transition-colors hover:bg-white/5;
+  background:
+    linear-gradient(black, black) padding-box,
+    linear-gradient(to right, #9945ff, #19fb9b) border-box;
+  border: 1px solid transparent;
+}
+
+/* ─── Section utilities ─── */
+.section-accelerate {
+  @apply bg-black py-12 lg:py-16;
+}
+
+.section-divider {
+  @apply border-t border-white/10;
+}
+
+/* ─── Selection & focus styles ─── */
+::selection {
+  background: rgba(153, 69, 255, 0.2);
+}
+
+:focus-visible {
+  @apply outline-none ring-2 ring-[#9945ff] ring-offset-2 ring-offset-black;
+}
+
+/* ─── Custom scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-full;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 @custom-variant touch {
   @media (hover: none) {
     @slot;
@@ -102,11 +167,23 @@
 }
 
 [data-slot="sheet-content"] {
-  @apply border-stroke-primary;
+  @apply border-white/10;
+  background: #0d0d0d;
 }
 
 [data-slot="sheet-header"] {
   h2 {
     @apply text-3xl font-bold;
   }
+}
+
+/* ─── Dialog overlay dark mode ─── */
+[data-slot="dialog-overlay"] {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+[data-slot="dialog-content"] {
+  background: #0d0d0d;
+  border-color: rgba(255, 255, 255, 0.1);
 }

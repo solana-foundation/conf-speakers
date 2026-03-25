@@ -1,29 +1,40 @@
-/* Colors */
+/* Colors — Accelerate Miami palette */
 @theme {
-  --color-primary-null: #11081b;
-  --color-primary-byte: #ab66fd;
-  --color-primary-wisp: #e7d2f9;
+  /* Primary: Accelerate brand */
+  --color-primary-null: #0d0d0d;
+  --color-primary-byte: #9945ff;
+  --color-primary-wisp: #d2d2d2;
 
+  /* Secondary: Accelerate accents */
   --color-secondary-lime: #c9ff7c;
-  --color-secondary-mint: #14f195;
-  --color-secondary-azure: #59b8fe;
+  --color-secondary-mint: #19fb9b;
+  --color-secondary-azure: #2a88de;
+  --color-secondary-cyan: #00d4ff;
 
-  --color-transparent-wisp-80: #e7d2f9cc;
-  --color-transparent-wisp-60: #e7d2f999;
-  --color-transparent-wisp-40: #e7d2f966;
-  --color-transparent-wisp-30: #e7d2f94d;
-  --color-transparent-wisp-20: #e7d2f933;
-  --color-transparent-wisp-10: #e7d2f91a;
-  --color-transparent-null-80: #11081bcc;
-  --color-transparent-null-60: #11081b99;
-  --color-transparent-null-40: #11081b66;
-  --color-transparent-null-20: #11081b33;
-  --color-transparent-null-10: #11081b1a;
+  /* Transparent variants */
+  --color-transparent-wisp-80: #d2d2d2cc;
+  --color-transparent-wisp-60: #d2d2d299;
+  --color-transparent-wisp-40: #d2d2d266;
+  --color-transparent-wisp-30: #d2d2d24d;
+  --color-transparent-wisp-20: #d2d2d233;
+  --color-transparent-wisp-10: #d2d2d21a;
+  --color-transparent-null-80: #0d0d0dcc;
+  --color-transparent-null-60: #0d0d0d99;
+  --color-transparent-null-40: #0d0d0d66;
+  --color-transparent-null-20: #0d0d0d33;
+  --color-transparent-null-10: #0d0d0d1a;
+
+  /* Accelerate gray scale */
+  --color-accelerate-gray-100: #b3b2bc;
+  --color-accelerate-gray-200: #838191;
+  --color-accelerate-gray-300: #3b3b40;
+  --color-accelerate-muted: #bcbcbc;
 
   /* Section Tokens */
   --color-byte: var(--color-primary-byte);
   --color-azure: var(--color-secondary-azure);
   --color-mint: var(--color-secondary-mint);
+  --color-cyan: var(--color-secondary-cyan);
   --color-null: var(--color-primary-null);
   --color-lime: var(--color-secondary-lime);
   --color-wisp: var(--color-primary-wisp);
@@ -31,7 +42,7 @@
   --color-wisp-60: var(--color-transparent-wisp-60);
 
   /* Background Tokens */
-  --color-background-primary: var(--color-primary-null);
+  --color-background-primary: #000000;
   --color-background-secondary: var(--color-transparent-wisp-10);
   --color-background-invert: var(--color-primary-wisp);
 
@@ -41,8 +52,8 @@
   --color-invert: var(--color-primary-null);
 
   /* Stroke Tokens */
-  --color-stroke-primary: var(--color-transparent-wisp-10);
-  --color-stroke-secondary: var(--color-transparent-wisp-40);
+  --color-stroke-primary: rgba(255, 255, 255, 0.1);
+  --color-stroke-secondary: rgba(255, 255, 255, 0.15);
   --color-stroke-tertiary: var(--color-primary-wisp);
   --color-stroke-mint: var(--color-secondary-mint);
   --color-stroke-azure: var(--color-secondary-azure);

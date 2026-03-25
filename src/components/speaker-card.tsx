@@ -46,8 +46,6 @@ export default function SpeakerCard({
   const getStatusBadges = (): StatusBadge[] => {
     const badges: StatusBadge[] = [];
 
-    // Check for awaiting deck status (multiple sessions)
-    // States: null, DeckStatus.ToUpload, DeckStatus.Uploaded, DeckStatus.Approved
     const pendingDeckSessions = sessions.filter((session) => session.actionsDeckReceived === DeckStatus.ToUpload);
     if (pendingDeckSessions.length > 0) {
       badges.push({
@@ -66,7 +64,6 @@ export default function SpeakerCard({
       });
     }
 
-    // Check for schedule pending (if greenlightTime exists AND doNotPublish is true)
     const hasDoNotPublishSession = sessions.some((session) => {
       const status = getWebPublishingStatus(session.webPublishingStatus ?? undefined);
       return status?.hasDoNotPublish === true;
@@ -80,7 +77,6 @@ export default function SpeakerCard({
       });
     }
 
-    // If no other badges and all sessions are approved or have no deck requirement (null), show "All Set"
     const allCompletedSessions = sessions.filter(
       (session) =>
         session.actionsDeckReceived === DeckStatus.Approved ||
@@ -105,13 +101,15 @@ export default function SpeakerCard({
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
         <div className="flex flex-col items-center gap-4 lg:items-start">
           <div className="relative">
-            <Avatar className="size-24 lg:size-32">
-              {imageUrl && <AvatarImage src={imageUrl} alt={`${firstName} ${lastName}`} />}
-              <AvatarFallback className="text-3xl font-semibold">
-                {firstName?.charAt(0)}
-                {lastName?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
+            <div className="rounded-[48px] p-[2px]" style={{ background: "linear-gradient(135deg, #9945ff, #19fb9b, #00d4ff)" }}>
+              <Avatar className="size-24 rounded-[46px] lg:size-32">
+                {imageUrl && <AvatarImage src={imageUrl} alt={`${firstName} ${lastName}`} />}
+                <AvatarFallback className="rounded-[46px] bg-[#0d0d0d] text-3xl font-semibold text-white">
+                  {firstName?.charAt(0)}
+                  {lastName?.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+            </div>
           </div>
           {speakerCardUrl && (
             <a
@@ -120,7 +118,7 @@ export default function SpeakerCard({
               target="_blank"
               rel="noopener noreferrer"
               title="Download Speaker Card"
-              className="flex items-center text-xs underline"
+              className="flex items-center text-xs text-[#9945ff] underline transition-colors hover:text-[#19fb9b]"
             >
               Social Media Card
             </a>
@@ -130,20 +128,19 @@ export default function SpeakerCard({
         <div className="flex-1 space-y-4">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-semibold tracking-tight">
+              <h1 className="gradient-text font-space-grotesk text-4xl font-light tracking-tight">
                 {firstName} {lastName}
               </h1>
-              {/* Inline Status Badges */}
               <div className="flex flex-wrap items-center gap-2">
                 {statusBadges.map((badge, index) => (
                   <Badge
                     key={index}
                     className={`gap-1.5 ${
                       badge.variant === "awaiting-deck"
-                        ? "bg-azure text-black"
+                        ? "bg-[#2a88de] text-white"
                         : badge.variant === "schedule-pending"
-                          ? "bg-lime text-black"
-                          : "bg-mint text-black"
+                          ? "bg-[#c9ff7c] text-black"
+                          : "bg-[#19fb9b] text-black"
                     }`}
                   >
                     {badge.icon}
@@ -153,16 +150,16 @@ export default function SpeakerCard({
               </div>
             </div>
             <p className="text-p2-mono mt-2 uppercase">
-              {jobTitle && <span className="text-foreground/80 mt-2">{jobTitle}</span>}
+              {jobTitle && <span className="text-white/70">{jobTitle}</span>}
               <br />
-              {company && <span className="text-wisp/80">{company}</span>}
+              {company && <span className="text-white/50">{company}</span>}
             </p>
 
             {xLink && (
               <div className="mt-2 flex items-center gap-2">
-                <Twitter className="text-foreground/50 h-4 w-4" />
+                <Twitter className="h-4 w-4 text-white/40" />
                 <a
-                  className="text-primary text-md hover:underline"
+                  className="text-[#9945ff] text-md transition-colors hover:text-[#19fb9b] hover:underline"
                   href={xLink}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -175,7 +172,7 @@ export default function SpeakerCard({
 
           {bio && (
             <div className="max-w-none leading-relaxed">
-              <p className="text-p">{bio}</p>
+              <p className="text-p text-white/70">{bio}</p>
             </div>
           )}
         </div>

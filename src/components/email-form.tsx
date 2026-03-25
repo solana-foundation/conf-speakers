@@ -77,7 +77,7 @@ export function EmailForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto max-w-md space-y-4 p-6">
+    <form onSubmit={onSubmit} className="mx-auto max-w-md space-y-5 p-6">
       {/* Honeypot */}
       <input
         type="text"
@@ -93,7 +93,7 @@ export function EmailForm() {
           Email address
         </label>
         <Input id="email" name="email" type="email" placeholder="you@example.com" required />
-        <p className="text-muted-foreground text-xs">
+        <p className="text-xs text-white/40">
           You&apos;ll receive a magic link from {ORGANIZER_NAME}.
         </p>
         <EmailFieldError error={state.fieldErrors?.email} />

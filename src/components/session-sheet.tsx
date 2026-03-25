@@ -71,7 +71,7 @@ export default function SessionSheet({
             {startTime && (
               <p className="flex items-center gap-2 text-sm font-bold">
                 <Calendar className="size-4" />
-                <span className="text-foreground/50">{formatVenueTime(startTime, "MMM d")}</span>
+                <span className="text-white/50">{formatVenueTime(startTime, "MMM d")}</span>
                 {endTime && (
                   <>
                     <Clock className="size-4" />
@@ -95,7 +95,7 @@ export default function SessionSheet({
 
           {speakers && (
             <div className="mt-4 text-sm">
-              <div className="text-foreground/50 font-bold">Speakers:</div>
+              <div className="text-white/50 font-bold">Speakers:</div>
               {speakers.map((speaker) => (
                 <div key={speaker.id} className="mt-1 flex items-center gap-2">
                   <Avatar className="size-4">
@@ -116,7 +116,7 @@ export default function SessionSheet({
         <SheetFooter className="flex flex-col gap-2">
           <div className="flex gap-2">
             {subscribeUrl && (
-              <Button variant="mint" asChild>
+              <Button variant="gradient" asChild>
                 <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
                   Subscribe to session
                 </a>

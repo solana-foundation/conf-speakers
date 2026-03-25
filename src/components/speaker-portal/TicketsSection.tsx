@@ -17,10 +17,10 @@ function Row({
   description?: string;
 }) {
   return (
-    <div className="text-wisp border-stroke-primary flex flex-col gap-3 border-b py-4 first:pt-0 last:border-b-0 last:pb-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+    <div className="text-white border-white/10 flex flex-col gap-3 border-b py-4 first:pt-0 last:border-b-0 last:pb-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
       <div className="min-w-0 flex-1">
         <div className="text-base font-medium">{label}</div>
-        {description && <div className="text-secondary mt-1 text-sm">{description}</div>}
+        {description && <div className="text-white/50 mt-1 text-sm">{description}</div>}
       </div>
       <div className="flex-shrink-0 shrink-0">{children}</div>
     </div>
@@ -58,9 +58,9 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
             <div className="flex items-center gap-2">
               <span>Speaker Ticket</span>
               {speakerTicket ? (
-                <CheckCircle className="text-mint h-4 w-4" aria-label="Confirmed" />
+                <CheckCircle className="text-[#19fb9b] h-4 w-4" aria-label="Confirmed" />
               ) : (
-                <Clock className="text-secondary h-4 w-4" aria-label="Pending" />
+                <Clock className="text-white/40 h-4 w-4" aria-label="Pending" />
               )}
             </div>
           }
@@ -92,9 +92,9 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
             <div className="flex items-center gap-2">
               <span>Plus One Ticket</span>
               {plusOneTicket ? (
-                <CheckCircle className="text-azure h-4 w-4" aria-label="Available" />
+                <CheckCircle className="text-[#2a88de] h-4 w-4" aria-label="Available" />
               ) : (
-                <AlertCircle className="text-secondary h-4 w-4" aria-label="Not available" />
+                <AlertCircle className="text-white/40 h-4 w-4" aria-label="Not available" />
               )}
             </div>
           }
@@ -126,9 +126,9 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
             <div className="flex items-center gap-2">
               <span>Invitation Code</span>
               {invitationCode ? (
-                <CheckCircle className="text-lime h-4 w-4" aria-label="Code available" />
+                <CheckCircle className="text-[#c9ff7c] h-4 w-4" aria-label="Code available" />
               ) : (
-                <AlertCircle className="text-secondary h-4 w-4" aria-label="No code" />
+                <AlertCircle className="text-white/40 h-4 w-4" aria-label="No code" />
               )}
             </div>
           }
@@ -144,7 +144,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                 className="h-8 w-8 p-0"
                 aria-label="Copy invitation code"
               >
-                {copiedCode ? <CheckCircle className="text-lime h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copiedCode ? <CheckCircle className="text-[#c9ff7c] h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
             </div>
           ) : (
@@ -169,78 +169,78 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                 <span className="sm:hidden">Help</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="border-stroke-secondary max-h-[85vh] overflow-y-auto">
+            <DialogContent className="border-white/10 max-h-[85vh] overflow-y-auto">
               <DialogHeader className="pb-6">
                 <DialogTitle className="text-h2 text-center">Ticket Redemption Guide</DialogTitle>
               </DialogHeader>
               <div className="space-y-6">
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-mint/10 text-mint flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="bg-[#19fb9b]/10 text-[#19fb9b] flex h-8 w-8 items-center justify-center rounded-full">
                       <CheckCircle className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 text-primary font-medium uppercase">Speaker Ticket</h4>
+                    <h4 className="text-h3 font-medium uppercase text-white">Speaker Ticket</h4>
                   </div>
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">Your speaker ticket provides complimentary access to the event.</p>
-                    <p className="text-p2 text-secondary">
+                    <p className="text-p2 text-white/50">
                       Click the &#34;Redeem Ticket&#34; button above to claim your speaker access on Luma.
                     </p>
                   </div>
                 </section>
 
-                <div className="bg-stroke-primary h-px" />
+                <div className="bg-white/10 h-px" />
 
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-azure/10 text-azure flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="bg-[#2a88de]/10 text-[#2a88de] flex h-8 w-8 items-center justify-center rounded-full">
                       <CheckCircle className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 text-primary font-medium uppercase">Plus One Ticket</h4>
+                    <h4 className="text-h3 font-medium uppercase text-white">Plus One Ticket</h4>
                   </div>
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">Your plus-one ticket allows you to bring a guest to the event.</p>
-                    <p className="text-p2 text-secondary">
+                    <p className="text-p2 text-white/50">
                       Click the &#34;Redeem Guest Ticket&#34; button above to claim your plus-one access on Luma.
                     </p>
                   </div>
                 </section>
 
-                <div className="bg-stroke-primary h-px" />
+                <div className="bg-white/10 h-px" />
 
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-lime/10 text-lime flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="bg-[#c9ff7c]/10 text-[#c9ff7c] flex h-8 w-8 items-center justify-center rounded-full">
                       <Copy className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 text-primary font-medium uppercase">Using Invitation Codes</h4>
+                    <h4 className="text-h3 font-medium uppercase text-white">Using Invitation Codes</h4>
                   </div>
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">If you have an invitation code, you can use it during checkout on Luma.</p>
-                    <p className="text-p2 text-secondary">
+                    <p className="text-p2 text-white/50">
                       Copy the code above and paste it when prompted during registration.
                     </p>
-                    <p className="text-p2 text-secondary">
+                    <p className="text-p2 text-white/50">
                       Look for the &#34;Use a Coupon&#34; option on the event registration page.
                     </p>
                   </div>
                 </section>
 
-                <div className="bg-stroke-primary h-px" />
+                <div className="bg-white/10 h-px" />
 
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-byte/10 text-byte flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="bg-[#9945ff]/10 text-[#9945ff] flex h-8 w-8 items-center justify-center rounded-full">
                       <AlertCircle className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 text-primary font-medium uppercase">Need Help?</h4>
+                    <h4 className="text-h3 font-medium uppercase text-white">Need Help?</h4>
                   </div>
                   <div className="pl-11">
                     <p className="text-p1">
                       If you encounter any issues with ticket redemption, please contact the event organizers at{" "}
                       <a
                         href="mailto:events@solana.org"
-                        className="text-azure hover:underline"
+                        className="text-[#9945ff] hover:text-[#19fb9b] hover:underline transition-colors"
                         aria-label="Contact event organizers via email"
                       >
                         events@solana.org
