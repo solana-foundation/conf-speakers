@@ -11,6 +11,24 @@ function normalizeBaseUrl(value?: string): string {
   return `https://${raw}`;
 }
 
+function parseBooleanEnv(value: string | undefined, defaultValue: boolean): boolean {
+  if (value == null) {
+    return defaultValue;
+  }
+
+  const normalized = value.trim().toLowerCase();
+
+  if (["1", "true", "yes", "on"].includes(normalized)) {
+    return true;
+  }
+
+  if (["0", "false", "no", "off"].includes(normalized)) {
+    return false;
+  }
+
+  return defaultValue;
+}
+
 export const SITE_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL);
 export const SITE_HOST = new URL(SITE_URL).host;
 
@@ -25,3 +43,4 @@ export const ORGANIZER_EMAIL =
   process.env.EVENT_ORGANIZER_EMAIL?.trim() || process.env.SENDGRID_FROM_EMAIL?.trim() || "noreply@example.com";
 export const CALENDAR_NAME = process.env.EVENT_CALENDAR_NAME?.trim() || `${EVENT_NAME} Schedule`;
 export const SPEAKER_GUIDE_URL = process.env.NEXT_PUBLIC_SPEAKER_GUIDE_URL?.trim() || "";
+export const HOME_SCHEDULE_ENABLED = parseBooleanEnv(process.env.NEXT_PUBLIC_HOME_SCHEDULE_ENABLED, true);

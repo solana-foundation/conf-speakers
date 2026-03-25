@@ -147,6 +147,7 @@ NEXT_PUBLIC_EVENT_DESCRIPTION="Agenda and speaker information for this event."
 NEXT_PUBLIC_EVENT_LOCATION="New York City"
 NEXT_PUBLIC_ORGANIZER_NAME="Events Team"
 NEXT_PUBLIC_SPEAKER_GUIDE_URL=
+NEXT_PUBLIC_HOME_SCHEDULE_ENABLED=true
 
 EVENT_CALENDAR_NAME="Event Schedule"
 EVENT_ORGANIZER_EMAIL=noreply@example.com
@@ -164,6 +165,7 @@ Notes:
 
 - Airtable credentials are server-only
 - Site metadata and ICS labels are driven from `src/lib/site.ts`
+- Set `NEXT_PUBLIC_HOME_SCHEDULE_ENABLED=false` to hide the public home-page schedule behind a feature flag
 - Venue timezone is required and initializes Luxon globally
 - Airtable caching is enabled by default
 - Set `DATA_CACHING_OFF=true` only when you need to bypass Next's data cache

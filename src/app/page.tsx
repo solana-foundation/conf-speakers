@@ -8,7 +8,7 @@ import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 import { GlobalStateProvider } from "@/lib/state";
 import ScheduleSessionsTable from "@/components/schedule-sessions-table";
 import ScheduleSubscribeButton from "@/components/schedule-subscribe-button";
-import { EVENT_DESCRIPTION, EVENT_NAME } from "@/lib/site";
+import { EVENT_DESCRIPTION, EVENT_NAME, HOME_SCHEDULE_ENABLED } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: `${EVENT_NAME} Schedule`,
@@ -23,28 +23,32 @@ export const revalidate = 600; // 10 minutes
 
 export default async function SchedulePage() {
   const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
-  let filteredSessionsData: Array<ReturnType<typeof parseSessionRecord> & { subscribeUrl: string; speakers: Speaker[] }> = [];
+  let filteredSessionsData: Array<
+    ReturnType<typeof parseSessionRecord> & { subscribeUrl: string; speakers: Speaker[] }
+  > = [];
 
-  try {
-    const speakers = await getCachedSpeakers();
-    const speakersData = speakers.map(parseSpeakerRecord);
-    const sessions = await getCachedSessions();
-    const sessionsData = sessions.map((session) => {
-      const sessionData = parseSessionRecord(session);
-      return {
-        ...sessionData,
-        subscribeUrl: getSessionCalendarUrl(session.id, calendarKey),
-        speakers: sessionData.speakerIds
-          ?.map((id) => speakersData.find((item) => item.id === id))
-          .filter(Boolean) as Speaker[],
-      };
-    });
-    filteredSessionsData = sessionsData.filter((session) => {
-      const publishingStatus = getWebPublishingStatus(session.webPublishingStatus);
-      return publishingStatus?.hasDoNotPublish === false;
-    });
-  } catch (error) {
-    console.error("Failed to load schedule data:", error);
+  if (HOME_SCHEDULE_ENABLED) {
+    try {
+      const speakers = await getCachedSpeakers();
+      const speakersData = speakers.map(parseSpeakerRecord);
+      const sessions = await getCachedSessions();
+      const sessionsData = sessions.map((session) => {
+        const sessionData = parseSessionRecord(session);
+        return {
+          ...sessionData,
+          subscribeUrl: getSessionCalendarUrl(session.id, calendarKey),
+          speakers: sessionData.speakerIds
+            ?.map((id) => speakersData.find((item) => item.id === id))
+            .filter(Boolean) as Speaker[],
+        };
+      });
+      filteredSessionsData = sessionsData.filter((session) => {
+        const publishingStatus = getWebPublishingStatus(session.webPublishingStatus);
+        return publishingStatus?.hasDoNotPublish === false;
+      });
+    } catch (error) {
+      console.error("Failed to load schedule data:", error);
+    }
   }
 
   const filters = getSessionsFilters(filteredSessionsData);
