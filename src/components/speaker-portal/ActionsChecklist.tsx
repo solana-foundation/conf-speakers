@@ -105,7 +105,7 @@ export default function ActionsChecklist({
   // Plus One Ticket
   if (plusOneTicketLink) {
     const encodedCode = encodeURIComponent(plusOneTicketLink);
-    const plusOneUrl = `https://luma.com/breakpoint2025?coupon=${encodedCode}`;
+    const plusOneUrl = `https://luma.com/accelerate-miami?coupon=${encodedCode}`;
     ticketTasks.push({
       id: "plus-one-ticket",
       title: "Plus One Ticket",
@@ -284,7 +284,9 @@ export default function ActionsChecklist({
 
   return (
     <div className="space-y-4">
-      <h3 className="font-space-grotesk text-sm font-semibold uppercase tracking-[0.15em] text-white/60">Actions Checklist</h3>
+      <h3 className="font-space-grotesk text-sm font-semibold tracking-[0.15em] text-white/60 uppercase">
+        Actions Checklist
+      </h3>
       <div className="space-y-3">
         {tasks.map((task) => (
           <div
@@ -303,20 +305,22 @@ export default function ActionsChecklist({
                 <div className="flex items-center gap-2">
                   <h4 className={"h4"}>{task.title}</h4>
                   {task.type === "task" && (task.status === "approved" || task.status === "Approved") && (
-                    <span className="rounded-full bg-[#19fb9b]/20 px-2.5 py-0.5 font-mono text-[12px] uppercase tracking-wider text-[#19fb9b]">
+                    <span className="rounded-full bg-[#19fb9b]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#19fb9b] uppercase">
                       Approved
                     </span>
                   )}
                   {task.type === "task" && task.status === "todo" && (
-                    <span className="rounded-full bg-[#2a88de]/20 px-2.5 py-0.5 font-mono text-[12px] uppercase tracking-wider text-[#2a88de]">To Do</span>
+                    <span className="rounded-full bg-[#2a88de]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#2a88de] uppercase">
+                      To Do
+                    </span>
                   )}
                   {task.type === "task" && (task.status === "pending" || task.status === "Pending") && (
-                    <span className="rounded-full bg-[#c9ff7c]/20 px-2.5 py-0.5 font-mono text-[12px] uppercase tracking-wider text-[#c9ff7c]">
+                    <span className="rounded-full bg-[#c9ff7c]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#c9ff7c] uppercase">
                       Pending
                     </span>
                   )}
                   {task.type === "task" && task.status === "Denied" && (
-                    <span className="rounded-full bg-red-500/20 px-2.5 py-0.5 font-mono text-[12px] uppercase tracking-wider text-red-400">
+                    <span className="rounded-full bg-red-500/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-red-400 uppercase">
                       Declined
                     </span>
                   )}
@@ -334,14 +338,14 @@ export default function ActionsChecklist({
                 <ul className="text-muted-foreground mt-2 space-y-1 text-sm">
                   {task.codes.map((code: string, index: number) => {
                     const encodedCode = encodeURIComponent(code);
-                    const lumaUrl = `https://luma.com/breakpoint2025?coupon=${encodedCode}`;
+                    const lumaUrl = `https://luma.com/accelerate-miami?coupon=${encodedCode}`;
                     return (
                       <li key={index} className="font-mono">
                         <a
                           target="_blank"
                           rel="noopener noreferrer"
                           href={lumaUrl}
-                          className="text-[#9945ff] hover:text-[#19fb9b] hover:underline transition-colors"
+                          className="text-[#9945ff] transition-colors hover:text-[#19fb9b] hover:underline"
                         >
                           {code}
                         </a>
@@ -358,7 +362,7 @@ export default function ActionsChecklist({
                         target="_blank"
                         rel="noopener noreferrer"
                         href={mediaLink.url}
-                        className="text-[#9945ff] hover:text-[#19fb9b] hover:underline transition-colors"
+                        className="text-[#9945ff] transition-colors hover:text-[#19fb9b] hover:underline"
                       >
                         {mediaLink.label}
                       </a>
