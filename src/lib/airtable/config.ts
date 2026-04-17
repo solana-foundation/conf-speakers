@@ -31,7 +31,7 @@ export const airtableFieldMap = {
     company: ["Company"],
     bio: ["Bio"],
     image: ["Headshot_For Web", "Headshot"],
-    speakerCard: ["Speaker Card"],
+    speakerCard: ["Speaker Card (Individual)"],
     twitter: ["Twitter"],
     slideDeckFile: ["Slide Deck File"],
     lumaTicketSpeaker: ["Luma Speaker Ticket"],
