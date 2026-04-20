@@ -45,7 +45,8 @@ export interface SessionsCardsProps {
   items: Array<
     Session & {
       subscribeUrl?: string;
-      speakers?: Speaker[];
+      speakers?: Array<Speaker & { sessionRole?: "Moderator" | "Speaker" }>;
+      currentSpeakerRole?: "Moderator" | "Speaker" | null;
       format?: string[] | null;
       greenlightTime?: string | null;
       webPublishingStatus?: string[] | null;
@@ -198,6 +199,14 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                     </div>
                   </div>
 
+                  {session.currentSpeakerRole && (
+                    <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm">
+                      <Users className="h-4 w-4 text-white/50" />
+                      <span className="text-white/60">Your role:</span>
+                      <span className="font-medium text-white">{session.currentSpeakerRole}</span>
+                    </div>
+                  )}
+
                   {/* Participants */}
                   {session.speakers && session.speakers.length > 0 && (
                     <div className="space-y-2">
@@ -218,6 +227,11 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                             <span className="text-sm font-medium text-white/80">
                               {speaker.firstName} {speaker.lastName}
                             </span>
+                            {speaker.sessionRole && (
+                              <Badge variant="secondary" className="border-white/10 bg-white/10 text-[10px] tracking-[0.12em] uppercase">
+                                {speaker.sessionRole}
+                              </Badge>
+                            )}
                           </div>
                         ))}
                       </div>

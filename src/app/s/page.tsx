@@ -34,6 +34,18 @@ export const generateMetadata = async ({
 
 export const revalidate = 600; // 10 minutes
 
+const getSessionRole = (session: { moderatorIds?: string[]; speakerIds?: string[] }, speakerId: string) => {
+  if (session.moderatorIds?.includes(speakerId)) {
+    return "Moderator" as const;
+  }
+
+  if (session.speakerIds?.includes(speakerId)) {
+    return "Speaker" as const;
+  }
+
+  return null;
+};
+
 export default async function SpeakerPage({ searchParams }: { searchParams: Promise<{ key?: string }> }) {
   const { key } = await searchParams;
 
@@ -77,12 +89,25 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const allSessionsData = sessions
     .map((session) => {
       const sessionData = parseSessionRecord(session);
+      const participantIds = Array.from(new Set([...(sessionData.moderatorIds ?? []), ...(sessionData.speakerIds ?? [])]));
+
       return {
         ...sessionData,
         subscribeUrl: getSessionCalendarHttpUrl(session.id, calendarKey),
-        speakers: sessionData.speakerIds
-          ?.map((id) => speakersData.find((item) => item.id === id))
-          .filter(Boolean) as Speaker[],
+        speakers: participantIds
+          .map((id) => {
+            const speaker = speakersData.find((item) => item.id === id);
+            if (!speaker) {
+              return null;
+            }
+
+            return {
+              ...speaker,
+              sessionRole: getSessionRole(sessionData, id),
+            };
+          })
+          .filter(Boolean) as Array<Speaker & { sessionRole?: "Moderator" | "Speaker" }>,
+        currentSpeakerRole: getSessionRole(sessionData, speakerId),
         format: sessionData.format
           ?.map((formatId) => formatLabels.get(formatId))
           .filter(Boolean) as string[],
@@ -131,10 +156,10 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
         <ActionsChecklist
           sessions={sessionsForChecklist}
           dietaryStatus={speakerData.dietary}
-          speakerPermitApproval={speakerData.speakerPermitApproval}
           slideDeckFile={speakerData.slideDeckFile}
           speakerTicketLink={speakerData.lumaTicketSpeaker}
-          plusOneTicketLink={speakerData.invitationCode}
+          plusOneTicketLink={speakerData.lumaTicketPlusOne}
+          invitationCode={speakerData.invitationCode}
           discountCode={speakerData.discountCode}
           mcInfo={speakerData.mcInfo}
           parkingTicketUrl={speakerData.parkingTicket}

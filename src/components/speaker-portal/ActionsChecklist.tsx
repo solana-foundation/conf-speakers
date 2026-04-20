@@ -11,10 +11,10 @@ interface ActionsChecklistProps {
     actionsDeckReceived?: DeckStatus | null;
   }>;
   dietaryStatus?: string | null;
-  speakerPermitApproval?: string;
   slideDeckFile?: string | null;
   speakerTicketLink?: string | null;
   plusOneTicketLink?: string | null;
+  invitationCode?: string | null;
   discountCode?: string | null;
   mcInfo?: string | null;
   parkingTicketUrl?: string | null;
@@ -44,23 +44,16 @@ type Task = {
 export default function ActionsChecklist({
   sessions = [],
   dietaryStatus,
-  speakerPermitApproval,
   slideDeckFile,
   speakerTicketLink,
   plusOneTicketLink,
+  invitationCode,
   discountCode,
   mcInfo,
   parkingTicketUrl,
   youtubeVideoUrl,
   speakerPhotoLink,
 }: ActionsChecklistProps) {
-  // Helper function to determine status based on approval value
-  const getApprovalStatus = (approval?: string): "Approved" | "Denied" | "Pending" => {
-    if (approval === "Approved") return "Approved";
-    if (approval === "Denied") return "Denied";
-    return "Pending";
-  };
-
   // Helper function to get dietary description
   const getDietaryDescription = (): string => {
     if (!dietaryStatus || dietaryStatus.toLowerCase() === "none") {
@@ -114,6 +107,19 @@ export default function ActionsChecklist({
       link: plusOneUrl,
       linkText: "Claim Plus One Ticket",
       type: "task" as const,
+    });
+  }
+
+  if (invitationCode) {
+    ticketTasks.push({
+      id: "invitation-code",
+      title: "Invitation Code",
+      description: `Use this code during checkout on ${EVENT_REGISTRATION_PLATFORM}.`,
+      status: "approved" as const,
+      link: null,
+      linkText: null,
+      type: "task" as const,
+      codes: [invitationCode],
     });
   }
 
@@ -220,7 +226,7 @@ export default function ActionsChecklist({
         id: `upload-deck-${session.id}`,
         title: `Deck upload status for - ${session.name}`,
         description:
-          "Use 16:9 aspect, embed fonts, and upload as Keynote or Powerpoint file. Upload any video files seperately.",
+          "Only Product Keynote speakers need to upload a deck. If requested for this session, use 16:9, embed fonts, and upload Keynote or PowerPoint files. Upload video files separately.",
         status,
         link: getDeckLink(),
         linkText: getDeckLink() ? "Deck Files Dropbox" : null,
@@ -231,15 +237,6 @@ export default function ActionsChecklist({
   const tasks: Task[] = [
     ...deckTasks,
     ...ticketTasks,
-    {
-      id: "speaker-permit-approval",
-      title: "Speaker Permit Approval",
-      description: "We are coordinating this where required. Contact the event team if you have any questions.",
-      status: getApprovalStatus(speakerPermitApproval),
-      link: null,
-      linkText: null,
-      type: "task" as const,
-    },
     {
       id: "dietary-requirements",
       title: "Your Dietary Requirements",

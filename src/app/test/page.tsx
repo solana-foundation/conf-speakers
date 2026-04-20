@@ -31,8 +31,8 @@ const DUMMY_DATA = {
     xName: "hero_p",
     dietary: "Vegetarian",
     slideDeckFile: "https://google.com",
-    speakerPermitApproval: undefined,
     lumaTicketSpeaker: "https://luma.com/event/tickets/speaker-123",
+    lumaTicketPlusOne: "PLUS-ONE-CODE-123",
     invitationCode: "SPEAKER+1-NNNNN",
     discountCode: "GA25-NNNNN, GA25-NNNNN",
     mcInfo: "https://docs.google.com/document/d/example-mc-info-doc",
@@ -80,7 +80,7 @@ const DUMMY_DATA = {
       endTime: "2025-11-16T11:00:00Z",
       stage: StageValues.Side,
       speakerIds: ["rec123abc", "rec789ghi", "rec012jkl"],
-      moderatorIds: undefined,
+      moderatorIds: ["rec789ghi"],
       subscribeUrl: `${SITE_URL}/calendar/session_2`,
       webPublishingStatus: ["Time", "Title", "Description", "Speaker"],
       format: ["Debate (30 min)"],
@@ -99,14 +99,17 @@ const DUMMY_DATA = {
           firstName: "Morgan",
           lastName: "Taylor",
           imageUrl: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100&h=100&fit=crop",
+          sessionRole: "Moderator",
         },
         {
           id: "rec012jkl",
           firstName: "Casey",
           lastName: "Brown",
           imageUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop",
+          sessionRole: "Speaker",
         },
       ] as Speaker[],
+      currentSpeakerRole: "Speaker" as const,
     },
     {
       id: "rec_session_4",
@@ -179,9 +182,9 @@ export default function DemoSpeakerPage() {
           sessions={sessionsForChecklist}
           dietaryStatus={speaker.dietary}
           slideDeckFile={speaker.slideDeckFile}
-          speakerPermitApproval={speaker.speakerPermitApproval}
           speakerTicketLink={speaker.lumaTicketSpeaker}
-          plusOneTicketLink={speaker.invitationCode}
+          plusOneTicketLink={speaker.lumaTicketPlusOne}
+          invitationCode={speaker.invitationCode}
           discountCode={speaker.discountCode}
           mcInfo={speaker.mcInfo}
           parkingTicketUrl={speaker.parkingTicket}
