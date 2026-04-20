@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CircleUserIcon } from "lucide-react";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_LOGO_HEIGHT, SITE_LOGO_PATH, SITE_LOGO_WIDTH, SITE_NAME } from "@/lib/site";
 
 export function SiteHeader() {
   const searchParams = useSearchParams();
@@ -22,7 +22,7 @@ export function SiteHeader() {
       />
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6 sm:h-16 xl:px-0">
         <Link href={`/${qs}`} className="group flex items-center gap-3 transition-opacity hover:opacity-80">
-          <Image src="/accelerate-usa-logo.svg" alt={SITE_NAME} width={197} height={99} className="h-10 w-auto sm:h-12" />
+          <Image src={SITE_LOGO_PATH} alt={SITE_NAME} width={SITE_LOGO_WIDTH} height={SITE_LOGO_HEIGHT} className="h-10 w-auto sm:h-12" />
         </Link>
         <nav className="flex items-center gap-6">
           {!qs && (

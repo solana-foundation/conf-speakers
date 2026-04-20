@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ExternalLink, HelpCircle, CheckCircle, Clock, Copy, AlertCircle } from "lucide-react";
+import { EVENT_REGISTRATION_PLATFORM, SPEAKER_CONTACT_EMAIL } from "@/lib/site";
 
 function Row({
   label,
@@ -72,7 +73,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
               variant="mint"
               onClick={() => handleExternalLink(speakerTicket)}
               className="flex items-center gap-2"
-              aria-label="Redeem speaker ticket on Luma"
+              aria-label={`Redeem speaker ticket on ${EVENT_REGISTRATION_PLATFORM}`}
             >
               <span>Redeem Ticket</span>
               <ExternalLink className="h-3 w-3" />
@@ -106,7 +107,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
               variant="azure"
               onClick={() => handleExternalLink(plusOneTicket)}
               className="flex items-center gap-2"
-              aria-label="Redeem plus one ticket on Luma"
+              aria-label={`Redeem plus one ticket on ${EVENT_REGISTRATION_PLATFORM}`}
             >
               <span>Redeem Guest Ticket</span>
               <ExternalLink className="h-3 w-3" />
@@ -132,7 +133,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
               )}
             </div>
           }
-          description="Use this code during checkout on Luma"
+          description={`Use this code during checkout on ${EVENT_REGISTRATION_PLATFORM}`}
         >
           {invitationCode ? (
             <div className="flex items-center gap-2">
@@ -184,7 +185,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">Your speaker ticket provides complimentary access to the event.</p>
                     <p className="text-p2 text-white/50">
-                      Click the &#34;Redeem Ticket&#34; button above to claim your speaker access on Luma.
+                      Click the &#34;Redeem Ticket&#34; button above to claim your speaker access on {EVENT_REGISTRATION_PLATFORM}.
                     </p>
                   </div>
                 </section>
@@ -201,7 +202,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">Your plus-one ticket allows you to bring a guest to the event.</p>
                     <p className="text-p2 text-white/50">
-                      Click the &#34;Redeem Guest Ticket&#34; button above to claim your plus-one access on Luma.
+                      Click the &#34;Redeem Guest Ticket&#34; button above to claim your plus-one access on {EVENT_REGISTRATION_PLATFORM}.
                     </p>
                   </div>
                 </section>
@@ -216,7 +217,9 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                     <h4 className="text-h3 font-medium uppercase text-white">Using Invitation Codes</h4>
                   </div>
                   <div className="space-y-2 pl-11">
-                    <p className="text-p1">If you have an invitation code, you can use it during checkout on Luma.</p>
+                    <p className="text-p1">
+                      If you have an invitation code, you can use it during checkout on {EVENT_REGISTRATION_PLATFORM}.
+                    </p>
                     <p className="text-p2 text-white/50">
                       Copy the code above and paste it when prompted during registration.
                     </p>
@@ -239,11 +242,11 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                     <p className="text-p1">
                       If you encounter any issues with ticket redemption, please contact the event organizers at{" "}
                       <a
-                        href="mailto:events@solana.org"
+                        href={`mailto:${SPEAKER_CONTACT_EMAIL}`}
                         className="text-[#9945ff] hover:text-[#19fb9b] hover:underline transition-colors"
                         aria-label="Contact event organizers via email"
                       >
-                        events@solana.org
+                        {SPEAKER_CONTACT_EMAIL}
                       </a>
                       .
                     </p>

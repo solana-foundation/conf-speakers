@@ -2,6 +2,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Check, CircleMinus, Film, Info, X } from "lucide-react";
 import { DeckStatus } from "@/lib/airtable/types";
+import { buildEventCouponUrl, EVENT_REGISTRATION_PLATFORM, SPEAKER_CONTACT_EMAIL } from "@/lib/site";
 
 interface ActionsChecklistProps {
   sessions?: Array<{
@@ -104,8 +105,7 @@ export default function ActionsChecklist({
 
   // Plus One Ticket
   if (plusOneTicketLink) {
-    const encodedCode = encodeURIComponent(plusOneTicketLink);
-    const plusOneUrl = `https://luma.com/accelerate-miami?coupon=${encodedCode}`;
+    const plusOneUrl = buildEventCouponUrl(plusOneTicketLink) ?? plusOneTicketLink;
     ticketTasks.push({
       id: "plus-one-ticket",
       title: "Plus One Ticket",
@@ -122,7 +122,7 @@ export default function ActionsChecklist({
   if (discountCodes.length > 0) {
     ticketTasks.push({
       id: "discount-codes",
-      title: "25% Discount Codes",
+      title: "Discount Codes",
       description: "Use these discount codes when purchasing tickets.",
       status: "approved" as const,
       link: null,
@@ -252,7 +252,7 @@ export default function ActionsChecklist({
     {
       id: "stage-team-questions",
       title: "Questions",
-      description: "Email: speakers@solana.org",
+      description: `Email: ${SPEAKER_CONTACT_EMAIL}`,
       status: "pending" as const,
       link: null,
       linkText: null,
@@ -337,18 +337,21 @@ export default function ActionsChecklist({
               {task.codes && task.codes.length > 0 && (
                 <ul className="text-muted-foreground mt-2 space-y-1 text-sm">
                   {task.codes.map((code: string, index: number) => {
-                    const encodedCode = encodeURIComponent(code);
-                    const lumaUrl = `https://luma.com/accelerate-miami?coupon=${encodedCode}`;
+                    const couponUrl = buildEventCouponUrl(code);
                     return (
                       <li key={index} className="font-mono">
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={lumaUrl}
-                          className="text-[#9945ff] transition-colors hover:text-[#19fb9b] hover:underline"
-                        >
-                          {code}
-                        </a>
+                        {couponUrl ? (
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={couponUrl}
+                            className="text-[#9945ff] transition-colors hover:text-[#19fb9b] hover:underline"
+                          >
+                            {code}
+                          </a>
+                        ) : (
+                          <span title={`Use this code during checkout on ${EVENT_REGISTRATION_PLATFORM}`}>{code}</span>
+                        )}
                       </li>
                     );
                   })}
