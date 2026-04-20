@@ -70,12 +70,19 @@ export const EVENT_COUPON_PARAM = process.env.NEXT_PUBLIC_EVENT_COUPON_PARAM?.tr
 export const SPEAKER_CONTACT_EMAIL = process.env.NEXT_PUBLIC_SPEAKER_CONTACT_EMAIL?.trim() || ORGANIZER_EMAIL;
 export const SPEAKER_GUIDE_URL = process.env.NEXT_PUBLIC_SPEAKER_GUIDE_URL?.trim() || "";
 export const HOME_SCHEDULE_ENABLED = parseBooleanEnv(process.env.NEXT_PUBLIC_HOME_SCHEDULE_ENABLED, true);
-export const SITE_LOGO_PATH = process.env.NEXT_PUBLIC_SITE_LOGO_PATH?.trim() || "/accelerate-usa-logo.svg";
+const configuredSocialImagePath = process.env.NEXT_PUBLIC_SOCIAL_IMAGE_PATH?.trim() || "";
+const configuredSocialBackgroundImagePath = process.env.NEXT_PUBLIC_SOCIAL_BG_IMAGE_PATH?.trim() || "";
+export const SITE_LOGO_PATH = process.env.NEXT_PUBLIC_SITE_LOGO_PATH?.trim() || "/accelerate-usa-logo.png";
 export const SITE_LOGO_WIDTH = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_WIDTH, 197);
 export const SITE_LOGO_HEIGHT = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_HEIGHT, 99);
-export const SOCIAL_IMAGE_PATH = process.env.NEXT_PUBLIC_SOCIAL_IMAGE_PATH?.trim() || "/opengraph-image";
+export const SOCIAL_IMAGE_PATH =
+  process.env.NEXT_PUBLIC_SOCIAL_OUTPUT_IMAGE_PATH?.trim() ||
+  (configuredSocialImagePath && configuredSocialImagePath !== "/opengraph-image" && configuredSocialImagePath !== "/social-card.webp"
+    ? configuredSocialImagePath
+    : "/social-image.png");
 export const SOCIAL_BACKGROUND_IMAGE_PATH =
-  process.env.NEXT_PUBLIC_SOCIAL_BG_IMAGE_PATH?.trim() || "/social-card.webp";
+  configuredSocialBackgroundImagePath ||
+  (configuredSocialImagePath.toLowerCase().endsWith(".webp") ? configuredSocialImagePath : "/social-card.webp");
 
 export function buildEventCouponUrl(code: string): string | null {
   if (!EVENT_URL) {
