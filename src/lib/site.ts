@@ -73,7 +73,9 @@ export const HOME_SCHEDULE_ENABLED = parseBooleanEnv(process.env.NEXT_PUBLIC_HOM
 export const SITE_LOGO_PATH = process.env.NEXT_PUBLIC_SITE_LOGO_PATH?.trim() || "/accelerate-usa-logo.svg";
 export const SITE_LOGO_WIDTH = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_WIDTH, 197);
 export const SITE_LOGO_HEIGHT = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_HEIGHT, 99);
-export const SOCIAL_IMAGE_PATH = process.env.NEXT_PUBLIC_SOCIAL_IMAGE_PATH?.trim() || "/twitter-card.png";
+export const SOCIAL_IMAGE_PATH = process.env.NEXT_PUBLIC_SOCIAL_IMAGE_PATH?.trim() || "/opengraph-image";
+export const SOCIAL_BACKGROUND_IMAGE_PATH =
+  process.env.NEXT_PUBLIC_SOCIAL_BG_IMAGE_PATH?.trim() || "/social-card.webp";
 
 export function buildEventCouponUrl(code: string): string | null {
   if (!EVENT_URL) {

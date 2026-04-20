@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         url: SOCIAL_IMAGE_PATH,
         width: 1200,
         height: 630,
-        alt: `${EVENT_NAME} speaker portal`,
+        alt: `${EVENT_NAME} social card`,
       },
     ],
     type: "website",
