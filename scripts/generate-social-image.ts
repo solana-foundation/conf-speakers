@@ -77,7 +77,14 @@ function wrapText(value: string, maxCharsPerLine: number): string[] {
   return lines;
 }
 
-function buildTextBlockSvg(lines: string[], x: number, y: number, fontSize: number, lineHeight: number, color: string): string {
+function buildTextBlockSvg(
+  lines: string[],
+  x: number,
+  y: number,
+  fontSize: number,
+  lineHeight: number,
+  color: string,
+): string {
   const tspans = lines
     .map((line, index) => {
       const dy = index === 0 ? 0 : lineHeight;
