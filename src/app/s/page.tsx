@@ -10,6 +10,7 @@ import { getSessionCalendarHttpUrl, getSessionsCalendarUrl, getSpeakerCalendarUr
 // import { Gallery } from "@/components/gallery";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
+import SpeakerResourceLinks from "@/components/speaker-portal/SpeakerResourceLinks";
 import { getSpeakerSessionIds, normalizeDeckStatus } from "@/lib/airtable/utils";
 import { EVENT_DESCRIPTION, EVENT_NAME } from "@/lib/site";
 
@@ -82,14 +83,18 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
   const sessions = await Promise.all(speakerSessionIds.map((sessionId) => fetchSession(sessionId)));
   const formats = await getCachedFormats();
-  const formatLabels = new Map(formats.map((record) => {
-    const parsed = parseFormatRecord(record);
-    return [parsed.id, parsed.label];
-  }));
+  const formatLabels = new Map(
+    formats.map((record) => {
+      const parsed = parseFormatRecord(record);
+      return [parsed.id, parsed.label];
+    }),
+  );
   const allSessionsData = sessions
     .map((session) => {
       const sessionData = parseSessionRecord(session);
-      const participantIds = Array.from(new Set([...(sessionData.moderatorIds ?? []), ...(sessionData.speakerIds ?? [])]));
+      const participantIds = Array.from(
+        new Set([...(sessionData.moderatorIds ?? []), ...(sessionData.speakerIds ?? [])]),
+      );
 
       return {
         ...sessionData,
@@ -108,9 +113,7 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           })
           .filter(Boolean) as Array<Speaker & { sessionRole?: "Moderator" | "Speaker" }>,
         currentSpeakerRole: getSessionRole(sessionData, speakerId),
-        format: sessionData.format
-          ?.map((formatId) => formatLabels.get(formatId))
-          .filter(Boolean) as string[],
+        format: sessionData.format?.map((formatId) => formatLabels.get(formatId)).filter(Boolean) as string[],
       };
     })
     .sort((a, b) => (a.startTime ?? "").localeCompare(b.startTime ?? ""));
@@ -166,6 +169,10 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           youtubeVideoUrl={speakerData.youtubeVideoUrl}
           speakerPhotoLink={speakerData.speakerPhotoLink}
         />
+
+        <div className="section-divider" />
+
+        <SpeakerResourceLinks />
 
         {/* <Separator />
         <PostEventSection /> */}

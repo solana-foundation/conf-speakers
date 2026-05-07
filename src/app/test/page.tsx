@@ -5,6 +5,7 @@ import SessionsCards from "@/components/sessions-cards";
 import { Speaker, StageTitle, StageValues, DeckStatus } from "@/lib/airtable/types";
 import LogisticsDialogButton from "@/components/speaker-portal/LogisticsDialogButton";
 import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
+import SpeakerResourceLinks from "@/components/speaker-portal/SpeakerResourceLinks";
 import { EVENT_DESCRIPTION, EVENT_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -191,6 +192,10 @@ export default function DemoSpeakerPage() {
           youtubeVideoUrl={speaker.youtubeVideoUrl}
           speakerPhotoLink={speaker.speakerPhotoLink}
         />
+
+        <Separator />
+
+        <SpeakerResourceLinks />
 
         {/* <Separator />
         <PostEventSection /> */}
