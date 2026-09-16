@@ -35,7 +35,7 @@
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.541.0",
     "luxon": "^3.7.2",
-    "next": "15.5.9",
+    "next": "15.5.24",
     "react": "19.1.4",
     "react-dom": "19.1.4",
     "resend": "^6.0.3",
