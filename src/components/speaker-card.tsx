@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import { Twitter, Check, CircleMinus, Clock } from "@/components/ui/icons";
+import { Twitter } from "@/components/ui/icons";
+import { Button } from "./ui/button";
 import { DeckStatus } from "@/lib/airtable/types";
 import { getWebPublishingStatus } from "@/lib/airtable/utils";
 
@@ -28,7 +29,6 @@ export interface SpeakerCardProps {
 interface StatusBadge {
   label: string;
   variant: "awaiting-deck" | "schedule-pending" | "all-set";
-  icon: React.ReactNode;
 }
 
 export default function SpeakerCard({
@@ -51,7 +51,6 @@ export default function SpeakerCard({
       badges.push({
         label: `Awaiting Deck${pendingDeckSessions.length > 1 ? ` (${pendingDeckSessions.length})` : ""}`,
         variant: "awaiting-deck",
-        icon: <CircleMinus className="h-3 w-3" />,
       });
     }
 
@@ -60,7 +59,6 @@ export default function SpeakerCard({
       badges.push({
         label: `Approved Deck${approvedDeckSessions.length > 1 ? ` (${approvedDeckSessions.length})` : ""}`,
         variant: "all-set",
-        icon: <Check className="h-3 w-3" />,
       });
     }
 
@@ -78,7 +76,6 @@ export default function SpeakerCard({
       badges.push({
         label: "Time to be confirmed",
         variant: "schedule-pending",
-        icon: <Clock className="h-3 w-3" />,
       });
     }
 
@@ -98,7 +95,6 @@ export default function SpeakerCard({
       badges.push({
         label: "All Set",
         variant: "all-set",
-        icon: <Check className="h-3 w-3" />,
       });
     }
 
@@ -107,70 +103,64 @@ export default function SpeakerCard({
 
   const statusBadges = getStatusBadges();
 
+  const markerClass = {
+    "awaiting-deck": "bg-[#3c91ff]",
+    "schedule-pending": "bg-[#aa67fb]",
+    "all-set": "bg-[#14f195]",
+  } as const;
+
   return (
-    <section className="border border-white/20 bg-[#1e1e1e] p-5 sm:p-8" aria-label="Your speaker profile">
-      <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
-        <div className="flex flex-col items-center gap-4 lg:items-start">
-          <div className="relative">
-            <div className="border border-[#14f195]/60 p-1">
-              <Avatar className="size-24 rounded-none lg:size-32">
-                {imageUrl && <AvatarImage src={imageUrl} alt={`${firstName} ${lastName}`} />}
-                <AvatarFallback className="rounded-none bg-black text-3xl font-semibold text-white">
-                  {firstName?.charAt(0)}
-                  {lastName?.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
+    <section className="border border-[#353535] bg-black p-5 sm:p-8 lg:p-10" aria-label="Your speaker profile">
+      <div className="flex flex-col gap-6 sm:flex-row sm:gap-8 lg:gap-12">
+        <div className="flex shrink-0 flex-col items-start gap-4">
+          <Avatar className="size-28 rounded-none sm:size-40 lg:size-[200px]">
+            {imageUrl && <AvatarImage src={imageUrl} alt={`${firstName} ${lastName}`} className="object-cover" />}
+            <AvatarFallback className="rounded-none bg-[#353535] text-4xl text-white">
+              {firstName?.charAt(0)}
+              {lastName?.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
           {speakerCardUrl && (
-            <a
-              href={speakerCardUrl}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Download Speaker Card"
-              className="breakpoint-eyebrow flex items-center text-[#14f195] underline underline-offset-4 transition-colors hover:text-white"
-            >
-              Social Media Card
-            </a>
+            <Button size="sm" variant="outline" asChild>
+              <a href={speakerCardUrl} download target="_blank" rel="noopener noreferrer">
+                Social media card
+              </a>
+            </Button>
           )}
         </div>
 
-        <div className="min-w-0 flex-1 space-y-4">
-          <div>
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <h2 className="breakpoint-display text-3xl leading-none text-white sm:text-5xl">
+        <div className="min-w-0 flex-1 space-y-6">
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+              <h2 className="text-4xl leading-[1.05] tracking-[-0.06rem] text-white sm:text-5xl lg:text-[3.75rem] lg:tracking-[-0.15rem]">
                 {firstName} {lastName}
               </h2>
-              <div className="flex flex-wrap items-center gap-2">
-                {statusBadges.map((badge, index) => (
-                  <Badge
-                    key={index}
-                    className={`gap-1.5 ${
-                      badge.variant === "awaiting-deck"
-                        ? "bg-[#3c91ff]/20 text-[#3c91ff]"
-                        : badge.variant === "schedule-pending"
-                          ? "bg-[#c0e021]/20 text-[#c0e021]"
-                          : "bg-[#14f195]/20 text-[#14f195]"
-                    }`}
-                  >
-                    {badge.icon}
-                    <span>{badge.label}</span>
-                  </Badge>
-                ))}
-              </div>
+              {statusBadges.length > 0 && (
+                <ul className="unstyled-list flex flex-wrap items-center gap-2" aria-label="Your status">
+                  {statusBadges.map((badge) => (
+                    <li key={badge.variant + badge.label}>
+                      <Badge className="gap-2 text-white">
+                        <span aria-hidden="true" className={`size-2 shrink-0 ${markerClass[badge.variant]}`} />
+                        {badge.label}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-            <p className="breakpoint-eyebrow mt-3 leading-relaxed">
-              {jobTitle && <span className="text-white/70">{jobTitle}</span>}
-              {jobTitle && company && <span className="mx-2 text-white/30">/</span>}
-              {company && <span className="text-white/50">{company}</span>}
-            </p>
+            {(jobTitle || company) && (
+              <p className="breakpoint-eyebrow">
+                {company && <span className="text-white">{company}</span>}
+                {jobTitle && company && <span className="mx-2 text-[#696969]">/</span>}
+                {jobTitle && <span className="text-[#a2a2a2]">{jobTitle}</span>}
+              </p>
+            )}
 
             {xLink && (
-              <div className="mt-2 flex items-center gap-2">
-                <Twitter className="h-4 w-4 text-white/40" />
+              <div className="flex items-center gap-2">
+                <Twitter className="h-4 w-4 text-[#a2a2a2]" aria-hidden="true" />
                 <a
-                  className="text-md text-[#aa67fb] transition-colors hover:text-[#14f195] hover:underline"
+                  className="text-base text-white underline underline-offset-4 transition-colors hover:text-[#aa67fb]"
                   href={xLink}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -181,11 +171,7 @@ export default function SpeakerCard({
             )}
           </div>
 
-          {bio && (
-            <div className="max-w-none leading-relaxed">
-              <p className="text-p text-white/70">{bio}</p>
-            </div>
-          )}
+          {bio && <p className="max-w-[48rem] text-base leading-[1.45] text-[#a2a2a2] lg:text-lg">{bio}</p>}
         </div>
       </div>
     </section>

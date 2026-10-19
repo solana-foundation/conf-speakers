@@ -42,13 +42,16 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="lg" variant="gradient" className="w-full rounded-full">
+        <Button size="lg" className="w-full sm:w-auto">
           Key Information
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-y-auto border-white/10">
-        <DialogHeader className="pb-6">
-          <DialogTitle className="text-h2 text-center">Speaker Logistics</DialogTitle>
+      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-[42rem]">
+        <DialogHeader className="pb-6 text-left">
+          <p className="breakpoint-eyebrow text-[#a2a2a2]">Event day</p>
+          <DialogTitle className="breakpoint-section-title text-[1.75rem] leading-[1.15] font-normal sm:text-4xl">
+            Speaker logistics
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-6">
           {stageConfigs.length > 0 ? (
@@ -56,101 +59,101 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
               <React.Fragment key={index}>
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#14f195]/10 text-[#14f195]">
+                    <div className="flex size-8 shrink-0 items-center justify-center border border-[#353535] text-white">
                       <MapPin className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 font-medium text-white uppercase">
+                    <h4 className="breakpoint-eyebrow text-white">
                       Venue & Stage Location{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
                     </h4>
                   </div>
                   <div className="space-y-2 pl-11">
-                    <p className="text-p1 font-medium">{stageConfig.name}</p>
-                    <p className="text-p2 text-white/50">{stageConfig.entrance}</p>
+                    <p className="text-base text-white">{stageConfig.name}</p>
+                    <p className="text-sm text-[#a2a2a2]">{stageConfig.entrance}</p>
                   </div>
                 </section>
 
-                <div className="h-px bg-white/10" />
+                <div className="h-px bg-[#353535]" />
 
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#3c91ff]/10 text-[#3c91ff]">
+                    <div className="flex size-8 shrink-0 items-center justify-center border border-[#353535] text-white">
                       <Clock className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 font-medium text-white uppercase">
+                    <h4 className="breakpoint-eyebrow text-white">
                       Arrival{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
                     </h4>
                   </div>
                   <div className="space-y-2 pl-11">
-                    <p className="text-p1">{stageConfig.arrivalTime}</p>
-                    <p className="text-p2 text-white/50">Check in at {stageConfig.checkInLocation}.</p>
+                    <p className="text-base text-white">{stageConfig.arrivalTime}</p>
+                    <p className="text-sm text-[#a2a2a2]">Check in at {stageConfig.checkInLocation}.</p>
                   </div>
                 </section>
 
-                {index < stageConfigs.length - 1 && <div className="h-px bg-white/10" />}
+                {index < stageConfigs.length - 1 && <div className="h-px bg-[#353535]" />}
               </React.Fragment>
             ))
           ) : (
             <section className="group">
               <div className="mb-3 flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#14f195]/10 text-[#14f195]">
+                <div className="flex size-8 shrink-0 items-center justify-center border border-[#353535] text-white">
                   <MapPin className="h-4 w-4" />
                 </div>
-                <h4 className="text-h3 font-medium text-white uppercase">Venue & Stage Location</h4>
+                <h4 className="breakpoint-eyebrow text-white">Venue & Stage Location</h4>
               </div>
               <div className="space-y-2 pl-11">
-                <p className="text-p1 font-medium">
+                <p className="text-base text-white">
                   Venue details will appear here when stage information is assigned.
                 </p>
-                <p className="text-p2 text-white/50">
+                <p className="text-sm text-[#a2a2a2]">
                   Follow the latest event logistics and speaker check-in directions.
                 </p>
               </div>
             </section>
           )}
 
-          <div className="h-px bg-white/10" />
+          <div className="h-px bg-[#353535]" />
 
           <section className="group">
             <div className="mb-3 flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c0e021]/10 text-[#c0e021]">
+              <div className="flex size-8 shrink-0 items-center justify-center border border-[#353535] text-white">
                 <Coffee className="h-4 w-4" />
               </div>
-              <h4 className="text-h3 font-medium text-white uppercase">Speaker Lounge</h4>
+              <h4 className="breakpoint-eyebrow text-white">Speaker Lounge</h4>
             </div>
             <div className="pl-11">
-              <p className="text-p1">{LOGISTICS_CONFIG.shared.speakerLounge}</p>
+              <p className="text-base text-white">{LOGISTICS_CONFIG.shared.speakerLounge}</p>
             </div>
           </section>
 
-          <div className="h-px bg-white/10" />
+          <div className="h-px bg-[#353535]" />
 
           <section className="group">
             <div className="mb-3 flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#aa67fb]/10 text-[#aa67fb]">
+              <div className="flex size-8 shrink-0 items-center justify-center border border-[#353535] text-white">
                 <Shirt className="h-4 w-4" />
               </div>
-              <h4 className="text-h3 font-medium text-white uppercase">Wardrobe</h4>
+              <h4 className="breakpoint-eyebrow text-white">Wardrobe</h4>
             </div>
             <div className="space-y-2 pl-11">
-              <p className="text-p1">{LOGISTICS_CONFIG.shared.wardrobe.tips}</p>
-              <p className="text-p2 text-white/50">{LOGISTICS_CONFIG.shared.wardrobe.jacket}</p>
+              <p className="text-base text-white">{LOGISTICS_CONFIG.shared.wardrobe.tips}</p>
+              <p className="text-sm text-[#a2a2a2]">{LOGISTICS_CONFIG.shared.wardrobe.jacket}</p>
             </div>
           </section>
 
-          <div className="h-px bg-white/10" />
+          <div className="h-px bg-[#353535]" />
 
           <section className="group">
             <div className="mb-3 flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/80">
+              <div className="flex size-8 shrink-0 items-center justify-center border border-[#353535] text-white">
                 <Luggage className="h-4 w-4" />
               </div>
-              <h4 className="text-h3 font-medium text-white uppercase">Travel & Packing Notes</h4>
+              <h4 className="breakpoint-eyebrow text-white">Travel & Packing Notes</h4>
             </div>
             <div className="pl-11">
-              <p className="text-p1">{LOGISTICS_CONFIG.shared.travel}</p>
+              <p className="text-base text-white">{LOGISTICS_CONFIG.shared.travel}</p>
             </div>
           </section>
-          <div className="h-px bg-white/10" />
+          <div className="h-px bg-[#353535]" />
 
           {SPEAKER_GUIDE_URL ? (
             <section className="group">
@@ -159,12 +162,12 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
                   href={SPEAKER_GUIDE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-p1 inline-flex items-center gap-2 font-medium text-[#aa67fb] transition-colors hover:text-[#14f195]"
+                  className="inline-flex items-center gap-2 text-base text-white underline underline-offset-4 transition-colors hover:text-[#aa67fb]"
                 >
                   {SPEAKER_GUIDE_LABEL}
-                  <ExternalLink className="h-4 w-4" />
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
                 </a>
-                {SPEAKER_GUIDE_NOTE && <p className="text-p2 mt-2 text-white/50">{SPEAKER_GUIDE_NOTE}</p>}
+                {SPEAKER_GUIDE_NOTE && <p className="mt-2 text-sm text-[#a2a2a2]">{SPEAKER_GUIDE_NOTE}</p>}
               </div>
             </section>
           ) : null}

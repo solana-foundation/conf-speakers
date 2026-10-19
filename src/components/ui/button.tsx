@@ -5,25 +5,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-space-grotesk font-semibold uppercase tracking-[0.05em] transition-all disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#aa67fb] focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+  "inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-none font-mono text-sm font-bold uppercase tracking-[0.07em] transition-colors disabled:cursor-not-allowed disabled:bg-[#4e4e4e] disabled:text-[#dfdfdf] [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-black",
   {
     variants: {
       variant: {
-        default: "bg-[#aa67fb] text-white shadow-xs hover:bg-[#aa67fb]/90",
-        destructive: "bg-red-500 text-white shadow-xs hover:bg-red-500/90",
-        outline: "border border-white/10 bg-transparent shadow-xs hover:bg-white/5 hover:text-white",
-        secondary: "bg-white/10 text-white shadow-xs hover:bg-white/15",
-        ghost: "hover:bg-white/5 hover:text-white",
-        link: "text-[#aa67fb] underline-offset-4 hover:underline",
-        mint: "bg-[#14f195] text-black shadow-xs hover:bg-[#14f195]/90",
-        azure: "bg-[#3c91ff] text-white shadow-xs hover:bg-[#3c91ff]/90",
-        lime: "bg-[#c0e021] text-black shadow-xs hover:bg-[#c0e021]/90",
-        gradient: "bg-[#14f195] text-black shadow-xs hover:bg-[#14f195]/90",
+        default: "bg-white text-black hover:bg-[#c0c0c0]",
+        destructive: "bg-red-500 text-white hover:bg-red-600",
+        outline: "border border-white bg-transparent text-white hover:bg-[#353535]",
+        secondary: "border border-[#353535] bg-[#1e1e1e] text-white hover:bg-[#353535]",
+        ghost: "text-white hover:bg-[#353535]",
+        link: "text-white underline-offset-4 hover:text-[#c0c0c0] hover:underline",
+        mint: "bg-white text-black hover:bg-[#c0c0c0]",
+        azure: "bg-white text-black hover:bg-[#c0c0c0]",
+        lime: "bg-white text-black hover:bg-[#c0c0c0]",
+        gradient: "bg-white text-black hover:bg-[#c0c0c0]",
       },
       size: {
         default: "h-10 px-5 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-12 rounded-md px-7 has-[>svg]:px-5",
+        sm: "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-12 px-7 has-[>svg]:px-5",
         icon: "size-9",
       },
     },

@@ -44,7 +44,7 @@ function SubmitButton({ pending, cooldownMs }: { pending: boolean; cooldownMs?: 
   }, [pending, cooldown]);
 
   return (
-    <Button type="submit" variant="mint" className="h-12 w-full rounded-none" disabled={pending || cooldown > 0}>
+    <Button type="submit" className="h-10 w-full" disabled={pending || cooldown > 0}>
       {label}
     </Button>
   );
@@ -89,7 +89,7 @@ export function EmailForm() {
         autoComplete="off"
       />
       <div className="space-y-2">
-        <label htmlFor="email" className="block text-sm font-medium">
+        <label htmlFor="email" className="breakpoint-eyebrow block text-[#a2a2a2]">
           Email address
         </label>
         <Input
@@ -98,9 +98,9 @@ export function EmailForm() {
           type="email"
           placeholder="you@example.com"
           required
-          className="h-12 rounded-none border-white/30 bg-[#1e1e1e] px-4"
+          className="h-12 border-[#353535] bg-black px-4 text-white focus:border-white"
         />
-        <p className="text-xs text-white/40">You&apos;ll receive a magic link from {ORGANIZER_NAME}.</p>
+        <p className="text-sm text-[#a2a2a2]">You&apos;ll receive a secure link from {ORGANIZER_NAME}.</p>
         <EmailFieldError error={state.fieldErrors?.email} />
       </div>
       <SubmitButton pending={pending} cooldownMs={state.cooldownMs} />

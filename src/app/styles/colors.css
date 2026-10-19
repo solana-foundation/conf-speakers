@@ -11,17 +11,17 @@
   --color-secondary-cyan: #3c91ff;
 
   /* Transparent variants */
-  --color-transparent-wisp-80: #d2d2d2cc;
-  --color-transparent-wisp-60: #d2d2d299;
-  --color-transparent-wisp-40: #d2d2d266;
-  --color-transparent-wisp-30: #d2d2d24d;
-  --color-transparent-wisp-20: #d2d2d233;
-  --color-transparent-wisp-10: #d2d2d21a;
-  --color-transparent-null-80: #0d0d0dcc;
-  --color-transparent-null-60: #0d0d0d99;
-  --color-transparent-null-40: #0d0d0d66;
-  --color-transparent-null-20: #0d0d0d33;
-  --color-transparent-null-10: #0d0d0d1a;
+  --color-transparent-wisp-80: #ffffffcc;
+  --color-transparent-wisp-60: #ffffff99;
+  --color-transparent-wisp-40: #ffffff66;
+  --color-transparent-wisp-30: #ffffff4d;
+  --color-transparent-wisp-20: #ffffff33;
+  --color-transparent-wisp-10: #ffffff1a;
+  --color-transparent-null-80: #000000cc;
+  --color-transparent-null-60: #00000099;
+  --color-transparent-null-40: #00000066;
+  --color-transparent-null-20: #00000033;
+  --color-transparent-null-10: #0000001a;
 
   /* Neutral gray scale */
   --color-accelerate-gray-100: #c0c0c0;
@@ -42,7 +42,7 @@
 
   /* Background Tokens */
   --color-background-primary: #000000;
-  --color-background-secondary: var(--color-transparent-wisp-10);
+  --color-background-secondary: #1e1e1e;
   --color-background-invert: var(--color-primary-wisp);
 
   /* Font Tokens */
@@ -51,14 +51,14 @@
   --color-invert: var(--color-primary-null);
 
   /* Stroke Tokens */
-  --color-stroke-primary: rgba(255, 255, 255, 0.1);
-  --color-stroke-secondary: rgba(255, 255, 255, 0.15);
+  --color-stroke-primary: #353535;
+  --color-stroke-secondary: #4e4e4e;
   --color-stroke-tertiary: var(--color-primary-wisp);
   --color-stroke-mint: var(--color-secondary-mint);
   --color-stroke-azure: var(--color-secondary-azure);
 
   /* Button Tokens */
-  --color-button-fill: var(--color-primary-byte);
-  --color-button-fill-hover: var(--color-primary-wisp);
-  --color-button-fill-disabled: var(--color-transparent-wisp-10);
+  --color-button-fill: #ffffff;
+  --color-button-fill-hover: #c0c0c0;
+  --color-button-fill-disabled: #4e4e4e;
 }

@@ -12,26 +12,36 @@ export function SiteHeader() {
   const qs = key ? `?key=${encodeURIComponent(key)}` : "";
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/20 bg-black/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:h-20 sm:px-6">
+    <header className="fixed top-3 left-1/2 z-40 w-[calc(100%-32px)] max-w-[466px] -translate-x-1/2 bg-black">
+      <div className="flex h-12 items-center justify-between gap-3 px-3 sm:px-4">
         <Link
           href={qs && !HOME_SCHEDULE_ENABLED ? `/s${qs}` : `/${qs}`}
-          className="group flex min-w-0 items-center gap-4 transition-opacity hover:opacity-80"
+          className="group flex shrink-0 items-center gap-[6px] transition-opacity hover:opacity-80"
+          aria-label={SITE_NAME}
         >
           <Image
+            src="/breakpoint/nav-solana.svg"
+            alt=""
+            aria-hidden="true"
+            width={23}
+            height={20}
+            className="h-4 w-auto sm:h-5"
+          />
+          <Image
             src={SITE_LOGO_PATH}
-            alt={SITE_NAME}
+            alt=""
+            aria-hidden="true"
             width={SITE_LOGO_WIDTH}
             height={SITE_LOGO_HEIGHT}
-            className="h-7 w-auto sm:h-8"
+            className="h-4 w-auto sm:h-5"
           />
-          <span className="breakpoint-eyebrow hidden border-l border-white/30 pl-4 text-white/55 sm:block">
-            Speaker portal
-          </span>
         </Link>
-        <nav className="flex items-center gap-4 sm:gap-6">
+        <nav className="flex shrink-0 items-center gap-2 sm:gap-3" aria-label="Speaker portal">
           {!qs && (
-            <Link href={`/email-link`} className="breakpoint-eyebrow text-white transition-colors hover:text-[#14f195]">
+            <Link
+              href="/email-link"
+              className="inline-flex h-8 items-center bg-white px-3 font-mono text-[11px] font-bold tracking-[0.07em] text-black uppercase transition-colors hover:bg-[#c0c0c0] sm:text-xs"
+            >
               Speaker access
             </Link>
           )}
@@ -40,18 +50,18 @@ export function SiteHeader() {
               {HOME_SCHEDULE_ENABLED && (
                 <Link
                   href={`/${qs}`}
-                  className="breakpoint-eyebrow text-white/70 transition-colors hover:text-[#14f195]"
+                  className="font-mono text-[11px] font-bold tracking-[0.07em] text-white uppercase transition-colors hover:text-[#aa67fb] sm:text-xs"
                 >
                   Schedule
                 </Link>
               )}
               <Link
                 href={`/s${qs}`}
-                className="inline-flex items-center gap-2 text-white/70 transition-colors hover:text-[#14f195]"
+                className="inline-flex h-8 items-center gap-2 bg-white px-3 font-mono text-[11px] font-bold tracking-[0.07em] text-black uppercase transition-colors hover:bg-[#c0c0c0] sm:text-xs"
                 aria-label="Speaker portal"
               >
-                <CircleUserIcon className="h-5 w-5" />
-                <span className="breakpoint-eyebrow hidden sm:inline">My portal</span>
+                <CircleUserIcon className="h-4 w-4" />
+                <span>My portal</span>
               </Link>
             </>
           )}

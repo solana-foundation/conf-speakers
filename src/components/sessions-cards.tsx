@@ -1,15 +1,15 @@
 "use client";
 
 import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader } from "./ui/card";
-import { Badge } from "./ui/badge";
 import { formatVenueTime } from "@/lib/time/tz";
 import { Session, Speaker } from "@/lib/airtable/types";
 import { getWebPublishingStatus } from "@/lib/airtable/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
-import { Calendar, Clock, Users, AlertTriangle, Info, MessageCircle } from "@/components/ui/icons";
+import { Calendar, MessageCircle } from "@/components/ui/icons";
+import { SectionHeading } from "@/components/section-heading";
 import { useCallback } from "react";
+import type * as React from "react";
 
 const FORMAT_DESCRIPTIONS: Record<string, string> = {
   "Debate (20 min)":
@@ -80,188 +80,149 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
   }, []);
 
   return (
-    <>
-      <h2 className="breakpoint-display text-2xl text-white sm:text-3xl">Your schedule</h2>
-      <div className="space-y-6">
-        {items.length === 0 && (
-          <div className="border border-white/20 bg-[#1e1e1e] p-6 text-white/70">
-            Your sessions will appear here when the speaker team assigns them.
-          </div>
-        )}
-        {/* Sessions Cards */}
-        <div className="space-y-4">
-          {items.map((session) => {
-            const publishingStatusFlags = getPublishingStatusFlags(session);
-            const sessionDuration = getSessionDuration(session);
-            const formatDescription = getFormatDescription(session.format);
-
-            return (
-              <Card key={session.id} className="overflow-hidden rounded-none border-white/20 bg-[#1e1e1e]">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1 space-y-2">
-                      {/* Format Badge */}
-                      {session.format && (
-                        <div className="flex items-center gap-2">
-                          <Badge variant="secondary" className="text-xs">
-                            {session.format}
-                          </Badge>
-                        </div>
-                      )}
-                      {/* Session Title */}
-                      <h3 className="font-space-grotesk text-xl leading-tight font-light text-white">{session.name}</h3>
-                      {/* Format Description */}
-                      {formatDescription && (
-                        <p className="text-sm leading-relaxed text-white/50">{formatDescription}</p>
-                      )}
-                    </div>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  {/* Greenlight Time Display */}
-                  {!publishingStatusFlags?.hasTime && !session.greenlightTime && (
-                    <div className="flex items-center gap-2 rounded-lg border border-[#3c91ff]/30 bg-[#3c91ff]/10 px-3 py-2 text-sm">
-                      <Info className="h-4 w-4 text-[#3c91ff]" />
-                      <span className="font-medium text-white">Scheduling in progress</span>
-                    </div>
-                  )}
-
-                  {/* Greenlight Time Display */}
-                  {session.greenlightTime && !publishingStatusFlags?.hasTime && (
-                    <div className="flex items-center gap-2 rounded-lg border border-[#c0e021]/30 bg-[#c0e021]/10 px-3 py-2 text-sm">
-                      <AlertTriangle className="h-4 w-4 text-[#c0e021]" />
-                      <span className="font-medium text-white">{session.greenlightTime}</span>
-                    </div>
-                  )}
-
-                  {/* Arrival Time Alert */}
-                  {publishingStatusFlags?.hasTime && (
-                    <div className="flex items-center gap-2 rounded-lg border border-[#14f195]/30 bg-[#14f195]/10 px-3 py-2 text-sm">
-                      <AlertTriangle className="h-4 w-4 text-[#14f195]" />
-                      <span className="font-medium text-white">
-                        The speaker team will confirm your check-in time and location.
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Logistics */}
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-white/50">
-                    {publishingStatusFlags?.hasTime && (
-                      <>
-                        {session.startTime && (
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            <span>{formatVenueTime(session.startTime, "MMM d")}</span>
-                          </div>
-                        )}
-
-                        {session.startTime && session.endTime && (
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>
-                              {formatVenueTime(session.startTime, "HH:mm")} -{" "}
-                              {formatVenueTime(session.endTime, "HH:mm")}
-                            </span>
-                          </div>
-                        )}
-
-                        {sessionDuration && (
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{sessionDuration}</span>
-                          </div>
-                        )}
-                      </>
-                    )}
-
-                    <div className="flex items-center gap-1">
-                      stage: <StageBadge title={session.stage} />
-                    </div>
-                  </div>
-
-                  {session.currentSpeakerRole && (
-                    <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm">
-                      <Users className="h-4 w-4 text-white/50" />
-                      <span className="text-white/60">Your role:</span>
-                      <span className="font-medium text-white">{session.currentSpeakerRole}</span>
-                    </div>
-                  )}
-
-                  {/* Participants */}
-                  {session.speakers && session.speakers.length > 0 && (
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm font-medium text-white/50">
-                        <Users className="h-4 w-4" />
-                        <span>Participants</span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {session.speakers.map((speaker) => (
-                          <div key={speaker.id} className="flex items-center gap-2 rounded-lg bg-white/5 px-2 py-1">
-                            <Avatar className="h-6 w-6">
-                              <AvatarImage src={speaker.imageUrl} alt={`${speaker.firstName} ${speaker.lastName}`} />
-                              <AvatarFallback className="bg-white/10 text-xs font-semibold text-white">
-                                {speaker.firstName?.charAt(0)}
-                                {speaker.lastName?.charAt(0)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className="text-sm font-medium text-white/80">
-                              {speaker.firstName} {speaker.lastName}
-                            </span>
-                            {speaker.sessionRole && (
-                              <Badge
-                                variant="secondary"
-                                className="border-white/10 bg-white/10 text-[10px] tracking-[0.12em] uppercase"
-                              >
-                                {speaker.sessionRole}
-                              </Badge>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Calendar Buttons */}
-                  {(publishingStatusFlags?.hasTime || session.portalTelegramGroup) && (
-                    <div className="flex flex-col gap-2 pt-2 sm:flex-row">
-                      {publishingStatusFlags?.hasTime && calendarUrl && (
-                        <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
-                          <a href={calendarUrl} target="_blank" rel="noopener noreferrer">
-                            <Calendar className="mr-2 h-4 w-4" />+ Add My Sessions to Calendar
-                          </a>
-                        </Button>
-                      )}
-
-                      {publishingStatusFlags?.hasTime && allSessionsCalendarUrl && (
-                        <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
-                          <a href={allSessionsCalendarUrl} target="_blank" rel="noopener noreferrer">
-                            <Calendar className="mr-2 h-4 w-4" />+ Add All My Sessions to Calendar
-                          </a>
-                        </Button>
-                      )}
-
-                      {session.portalTelegramGroup && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          asChild
-                          className="w-full border-[#3c91ff]/30 text-[#3c91ff] hover:bg-[#3c91ff]/10 sm:w-auto"
-                        >
-                          <a href={session.portalTelegramGroup} target="_blank" rel="noopener noreferrer">
-                            <MessageCircle className="mr-2 h-4 w-4" />
-                            Join Speaker Telegram Group
-                          </a>
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })}
+    <section className="space-y-10" aria-labelledby="schedule-title">
+      <SectionHeading eyebrow="Sessions" title="Your schedule" id="schedule-title" />
+      {items.length === 0 && (
+        <div className="border border-[#353535] bg-[#1e1e1e] p-6 text-[#a2a2a2]">
+          Your sessions will appear here when the speaker team assigns them.
         </div>
+      )}
+      <div className="space-y-6">
+        {items.map((session) => {
+          const publishingStatusFlags = getPublishingStatusFlags(session);
+          const sessionDuration = getSessionDuration(session);
+          const formatDescription = getFormatDescription(session.format);
+          const hasTime = Boolean(publishingStatusFlags?.hasTime);
+
+          const facts: Array<{ label: string; value: React.ReactNode }> = [];
+          if (hasTime && session.startTime)
+            facts.push({ label: "Date", value: formatVenueTime(session.startTime, "MMM d") });
+          if (hasTime && session.startTime && session.endTime) {
+            facts.push({
+              label: "Time",
+              value: `${formatVenueTime(session.startTime, "HH:mm")} - ${formatVenueTime(session.endTime, "HH:mm")}`,
+            });
+          }
+          if (hasTime && sessionDuration) facts.push({ label: "Duration", value: sessionDuration });
+          facts.push({ label: "Stage", value: <StageBadge title={session.stage} /> });
+          if (session.currentSpeakerRole) facts.push({ label: "Your role", value: session.currentSpeakerRole });
+
+          return (
+            <article key={session.id} className="border border-[#353535] bg-[#1e1e1e]">
+              <div className="space-y-4 p-5 sm:p-8">
+                {session.format && <p className="breakpoint-eyebrow text-[#a2a2a2]">{session.format}</p>}
+                <h3 className="text-3xl leading-[1.1] tracking-[-0.05rem] text-white sm:text-4xl lg:text-[2.5rem]">
+                  {session.name}
+                </h3>
+                {formatDescription && (
+                  <p className="max-w-[48rem] text-base leading-[1.45] text-[#a2a2a2]">{formatDescription}</p>
+                )}
+              </div>
+
+              <dl className="grid grid-cols-2 border-t border-[#353535] sm:grid-cols-[repeat(auto-fit,minmax(10rem,1fr))]">
+                {facts.map((fact) => (
+                  <div
+                    key={fact.label}
+                    className="space-y-2 border-r border-b border-[#353535] p-4 first:pl-5 last:border-r-0 sm:p-5 sm:first:pl-8"
+                  >
+                    <dt className="breakpoint-eyebrow text-xs text-[#a2a2a2]">{fact.label}</dt>
+                    <dd className="text-base text-white">{fact.value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="space-y-6 p-5 sm:p-8">
+                {!hasTime && !session.greenlightTime && (
+                  <StatusNote marker="bg-[#3c91ff]" label="Scheduling in progress" />
+                )}
+                {session.greenlightTime && !hasTime && (
+                  <StatusNote marker="bg-[#aa67fb]" label="Planned window" text={session.greenlightTime} />
+                )}
+                {hasTime && (
+                  <StatusNote
+                    marker="bg-[#14f195]"
+                    label="Check-in"
+                    text="The speaker team will confirm your check-in time and location."
+                  />
+                )}
+
+                {session.speakers && session.speakers.length > 0 && (
+                  <div className="space-y-3">
+                    <p className="breakpoint-eyebrow text-xs text-[#a2a2a2]">Participants</p>
+                    <ul className="unstyled-list flex flex-wrap gap-2">
+                      {session.speakers.map((speaker) => (
+                        <li
+                          key={speaker.id}
+                          className="flex items-center gap-3 border border-[#353535] bg-black py-1.5 pr-3 pl-1.5"
+                        >
+                          <Avatar className="size-7 rounded-none">
+                            <AvatarImage
+                              src={speaker.imageUrl}
+                              alt={`${speaker.firstName} ${speaker.lastName}`}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="rounded-none bg-[#353535] text-xs text-white">
+                              {speaker.firstName?.charAt(0)}
+                              {speaker.lastName?.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm text-white">
+                            {speaker.firstName} {speaker.lastName}
+                          </span>
+                          {speaker.sessionRole && (
+                            <span className="breakpoint-eyebrow text-xs text-[#a2a2a2]">{speaker.sessionRole}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {(hasTime || session.portalTelegramGroup) && (
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    {hasTime && calendarUrl && (
+                      <Button size="lg" asChild className="w-full sm:w-auto">
+                        <a href={calendarUrl} target="_blank" rel="noopener noreferrer">
+                          <Calendar aria-hidden="true" />
+                          Add my sessions to calendar
+                        </a>
+                      </Button>
+                    )}
+                    {hasTime && allSessionsCalendarUrl && (
+                      <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
+                        <a href={allSessionsCalendarUrl} target="_blank" rel="noopener noreferrer">
+                          <Calendar aria-hidden="true" />
+                          Add all sessions to calendar
+                        </a>
+                      </Button>
+                    )}
+                    {session.portalTelegramGroup && (
+                      <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
+                        <a href={session.portalTelegramGroup} target="_blank" rel="noopener noreferrer">
+                          <MessageCircle aria-hidden="true" />
+                          Join speaker Telegram group
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </article>
+          );
+        })}
       </div>
-    </>
+    </section>
+  );
+}
+
+function StatusNote({ marker, label, text }: { marker: string; label: string; text?: string }) {
+  return (
+    <div className="flex items-start gap-3 border border-[#353535] bg-black p-4">
+      <span aria-hidden="true" className={`mt-1.5 size-2 shrink-0 ${marker}`} />
+      <p className="text-base leading-[1.4] text-white">
+        <span className="breakpoint-eyebrow mr-3 text-xs text-[#a2a2a2]">{label}</span>
+        {text}
+      </p>
+    </div>
   );
 }

@@ -1,51 +1,30 @@
 "use client";
 
-import { LockKeyhole } from "@/components/ui/icons";
+import { BreakpointHero, EventMeta } from "@/components/breakpoint-hero";
 import { EmailForm } from "@/components/email-form";
+import { SectionHeading } from "@/components/section-heading";
 import { useSearchParams } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { Suspense } from "react";
-import Image from "next/image";
-import { EVENT_DATES_LABEL, EVENT_LOCATION, EVENT_NAME } from "@/lib/site";
 
 export default function Home() {
   return (
-    <main className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-6xl bg-black lg:grid-cols-[1.1fr_0.9fr]">
-      <div className="relative isolate flex min-h-72 flex-col justify-between overflow-hidden border-b border-white/20 p-6 sm:p-10 lg:min-h-full lg:border-r lg:border-b-0">
-        <Image
-          src="/breakpoint/speakers-hero.webp"
-          alt=""
-          fill
-          priority
-          sizes="(min-width: 1024px) 640px, 100vw"
-          className="object-cover object-center opacity-70"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
-        <div className="breakpoint-eyebrow relative text-[#14f195]">{EVENT_NAME} / Speakers</div>
-        <div className="relative">
-          <h1 className="breakpoint-display max-w-lg text-4xl leading-[1.08] text-white sm:text-6xl">
-            Your speaker portal
-          </h1>
-          <p className="breakpoint-eyebrow mt-5 flex flex-wrap gap-x-6 gap-y-2 text-white/70">
-            {EVENT_DATES_LABEL && <span>{EVENT_DATES_LABEL}</span>}
-            {EVENT_LOCATION && <span>{EVENT_LOCATION}</span>}
-          </p>
-        </div>
-      </div>
-      <div className="flex items-center px-6 py-12 sm:px-10">
-        <div className="w-full max-w-md space-y-6">
-          <div>
-            <LockKeyhole className="mb-5 h-7 w-7 text-[#14f195]" aria-hidden="true" />
-            <h2 className="breakpoint-display text-2xl text-white sm:text-3xl">Get your access link</h2>
-            <p className="mt-3 text-sm leading-relaxed text-white/60">
+    <main className="min-h-screen bg-black pb-24">
+      <BreakpointHero title="Speaker portal" id="speaker-access-title" />
+      <div className="mx-auto max-w-[1728px] px-4 lg:px-8">
+        <EventMeta />
+        <section className="grid gap-10 py-16 lg:grid-cols-2 lg:gap-24 lg:py-24" aria-labelledby="access-link-title">
+          <SectionHeading eyebrow="Private speaker access" title="Get your access link" id="access-link-title" />
+          <div className="w-full max-w-[32rem] space-y-6">
+            <p className="max-w-[28rem] text-base leading-[1.45] text-[#a2a2a2] lg:text-lg">
               Enter the email address the speaker team has for you. We&apos;ll send a secure link to your portal.
             </p>
+            <Suspense fallback={null}>
+              <ExpiredAlert />
+            </Suspense>
+            <EmailForm />
           </div>
-          <Suspense fallback={null}>
-            <ExpiredAlert />
-          </Suspense>
-          <EmailForm />
-        </div>
+        </section>
       </div>
     </main>
   );
@@ -56,7 +35,7 @@ function ExpiredAlert() {
   const expired = searchParams.get("expired") === "1";
 
   return expired ? (
-    <Alert className="border-[#aa67fb]/30 bg-[#aa67fb]/10">
+    <Alert className="border-[#aa67fb] bg-[#1e1e1e]">
       <AlertTitle>Link expired</AlertTitle>
       <AlertDescription>Your access link has expired. Enter your email to get a new one.</AlertDescription>
     </Alert>

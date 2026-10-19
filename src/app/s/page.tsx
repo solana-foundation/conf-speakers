@@ -13,8 +13,7 @@ import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
 import SpeakerResourceLinks from "@/components/speaker-portal/SpeakerResourceLinks";
 import { getSpeakerSessionIds, normalizeDeckStatus } from "@/lib/airtable/utils";
 import { EVENT_DESCRIPTION, EVENT_NAME } from "@/lib/site";
-import { EVENT_DATES_LABEL, EVENT_LOCATION } from "@/lib/site";
-import Image from "next/image";
+import { BreakpointHero, EventMeta } from "@/components/breakpoint-hero";
 
 export const generateMetadata = async ({
   searchParams,
@@ -137,36 +136,9 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="min-h-screen bg-black font-sans">
-      <main className="mx-auto flex max-w-6xl flex-col gap-10 px-4 pt-6 pb-20 sm:px-6 sm:pt-8">
-        <section
-          className="relative isolate overflow-hidden border border-white/20 bg-[#1e1e1e]"
-          aria-labelledby="portal-heading"
-        >
-          <Image
-            src="/breakpoint/speakers-hero.webp"
-            alt=""
-            fill
-            priority
-            sizes="(min-width: 1152px) 1152px, 100vw"
-            className="object-cover object-center opacity-55"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/25" />
-          <div className="relative flex min-h-72 flex-col justify-between p-6 sm:min-h-80 sm:p-10">
-            <span className="breakpoint-eyebrow text-[#14f195]">{EVENT_NAME} / Speaker access</span>
-            <div>
-              <h1
-                id="portal-heading"
-                className="breakpoint-display max-w-3xl text-4xl leading-[1.08] text-white sm:text-6xl"
-              >
-                Speaker briefing
-              </h1>
-              <div className="breakpoint-eyebrow mt-5 flex flex-wrap gap-x-6 gap-y-2 text-white/70">
-                {EVENT_DATES_LABEL && <span>{EVENT_DATES_LABEL}</span>}
-                {EVENT_LOCATION && <span>{EVENT_LOCATION}</span>}
-              </div>
-            </div>
-          </div>
-        </section>
+      <BreakpointHero title="Speaker briefing" id="portal-heading" />
+      <main className="mx-auto flex max-w-[1728px] flex-col gap-12 px-4 pb-24 lg:gap-16 lg:px-8">
+        <EventMeta />
         <SpeakerCard
           {...speakerData}
           sessions={sessionsForChecklist}
@@ -174,22 +146,24 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           speakerCardUrl={speakerData.speakerCardUrl}
         />
 
-        <div className="section-divider" />
-
         <SessionsCards
           items={allSessionsData}
           calendarUrl={speakerCalendarUrl}
           allSessionsCalendarUrl={allSessionsCalendarUrl}
         />
 
-        <div className="flex gap-3">
+        <div className="flex flex-col gap-4 border border-[#353535] bg-black p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="space-y-2">
+            <p className="breakpoint-eyebrow text-[#a2a2a2]">Event day</p>
+            <p className="text-xl leading-[1.2] tracking-[-0.03rem] text-white sm:text-2xl">
+              Check-in, speaker lounge, wardrobe and travel notes
+            </p>
+          </div>
           <LogisticsDialogButton
             stage={allSessionsData[0]?.stage}
             stages={Array.from(new Set(allSessionsData.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
           />
         </div>
-
-        <div className="section-divider" />
 
         <ActionsChecklist
           sessions={sessionsForChecklist}
@@ -204,8 +178,6 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           youtubeVideoUrl={speakerData.youtubeVideoUrl}
           speakerPhotoLink={speakerData.speakerPhotoLink}
         />
-
-        <div className="section-divider" />
 
         <SpeakerResourceLinks />
 
