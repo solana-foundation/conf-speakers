@@ -13,6 +13,8 @@ import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
 import SpeakerResourceLinks from "@/components/speaker-portal/SpeakerResourceLinks";
 import { getSpeakerSessionIds, normalizeDeckStatus } from "@/lib/airtable/utils";
 import { EVENT_DESCRIPTION, EVENT_NAME } from "@/lib/site";
+import { EVENT_DATES_LABEL, EVENT_LOCATION } from "@/lib/site";
+import Image from "next/image";
 
 export const generateMetadata = async ({
   searchParams,
@@ -65,7 +67,11 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   const speakerCalendarUrl = getSpeakerCalendarUrl(speakerId, calendarKey);
 
   // Generate all-sessions calendar URL (no speakerId filter)
-  const allSessionsCalendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
+  const allSessionsCalendarKey = generateKey(
+    Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0),
+    "ics",
+    speakerId,
+  );
   const allSessionsCalendarUrl = getSessionsCalendarUrl(allSessionsCalendarKey);
 
   // Fetch main speaker directly (cacheable - small payload)
@@ -130,8 +136,37 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   });
 
   return (
-    <div className="min-h-screen bg-black p-8 font-sans">
-      <main className="mx-auto flex max-w-6xl flex-col gap-10">
+    <div className="min-h-screen bg-black font-sans">
+      <main className="mx-auto flex max-w-6xl flex-col gap-10 px-4 pt-6 pb-20 sm:px-6 sm:pt-8">
+        <section
+          className="relative isolate overflow-hidden border border-white/20 bg-[#1e1e1e]"
+          aria-labelledby="portal-heading"
+        >
+          <Image
+            src="/breakpoint/speakers-hero.webp"
+            alt=""
+            fill
+            priority
+            sizes="(min-width: 1152px) 1152px, 100vw"
+            className="object-cover object-center opacity-55"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/25" />
+          <div className="relative flex min-h-72 flex-col justify-between p-6 sm:min-h-80 sm:p-10">
+            <span className="breakpoint-eyebrow text-[#14f195]">{EVENT_NAME} / Speaker access</span>
+            <div>
+              <h1
+                id="portal-heading"
+                className="breakpoint-display max-w-3xl text-4xl leading-[1.08] text-white sm:text-6xl"
+              >
+                Speaker briefing
+              </h1>
+              <div className="breakpoint-eyebrow mt-5 flex flex-wrap gap-x-6 gap-y-2 text-white/70">
+                {EVENT_DATES_LABEL && <span>{EVENT_DATES_LABEL}</span>}
+                {EVENT_LOCATION && <span>{EVENT_LOCATION}</span>}
+              </div>
+            </div>
+          </div>
+        </section>
         <SpeakerCard
           {...speakerData}
           sessions={sessionsForChecklist}

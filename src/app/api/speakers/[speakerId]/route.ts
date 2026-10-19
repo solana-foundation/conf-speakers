@@ -1,4 +1,4 @@
-import { isAuthenticated } from "@/lib/sign.server";
+import { getTokenPayload } from "@/lib/sign.server";
 import { NextRequest, NextResponse } from "next/server";
 import { fetchSpeaker } from "@/lib/airtable/fetch";
 import { parseSpeakerRecord } from "@/lib/airtable/schemas";
@@ -7,7 +7,9 @@ import { getZodErrorMessage, isZodError } from "@/lib/airtable/utils";
 export const GET = async (request: NextRequest, { params }: { params: Promise<{ speakerId: string }> }) => {
   const { speakerId } = await params;
 
-  if (!isAuthenticated(request)) {
+  const key = request.nextUrl.searchParams.get("key");
+  const payload = key ? getTokenPayload(key) : null;
+  if (payload?.slug !== "auth" || payload.speakerId !== speakerId) {
     return NextResponse.json({ error: "Invalid key" }, { status: 401 });
   }
 

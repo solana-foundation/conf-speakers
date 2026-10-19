@@ -30,8 +30,8 @@ export const airtableFieldMap = {
     jobTitle: ["Role or Title"],
     company: ["Company"],
     bio: ["Bio"],
-    image: ["Headshot_For Web", "Headshot"],
-    speakerCard: ["Speaker Card (Individual)"],
+    image: ["Headshot_For Web (PNG)", "Headshot_For Web", "Headshot"],
+    speakerCard: ["Speaker Card (Individual)", "Speaker Card"],
     twitter: ["Twitter"],
     slideDeckFile: ["Slide Deck File"],
     lumaTicketSpeaker: ["Luma Speaker Ticket"],
@@ -44,6 +44,7 @@ export const airtableFieldMap = {
     parkingTicket: ["Parking Ticket"],
     youtubeVideoUrl: ["YouTube Speaker Video"],
     speakerPhotoLink: ["Speaker Photo Link"],
+    portalLink: ["Speaker Portal Link", "Speaker Portal"],
     actionsDeckReceived: ["Actions_Deck Received"],
     greenlightTime: ["Portal_Greenlight Time"],
     publishToWeb: ["Publish To Web", "Publish to web"],
@@ -61,9 +62,9 @@ export const airtableRequiredFields = {
 } as const;
 
 export const airtableSpeakerSessionLinkFields = [
-  "Link to Agenda",
   "Speaking On",
   "Moderator On",
+  "Link to Agenda",
   "MC On",
   "Session Assigned",
 ] as const;

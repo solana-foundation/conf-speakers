@@ -1,6 +1,6 @@
 # BP Speakers
 
-Next.js 15 App Router app for a speaker portal and private public-facing event schedule backed by Airtable. The app serves:
+Next.js 15 App Router app for a speaker portal and public event schedule backed by Airtable. The app serves:
 
 - `/` for the event schedule
 - `/s?key=...` for the speaker portal
@@ -97,8 +97,11 @@ Speaker fields in use:
 - `Role or Title`
 - `Company`
 - `Bio`
-- `Headshot_For Web`
-- `Speaker Card`
+- `Headshot_For Web (PNG)`
+- `Speaker Card (Individual)`
+- `Speaker Portal Link`
+- `Speaking On`
+- `Moderator On`
 - `Twitter`
 - `Slide Deck File`
 - `Luma Speaker Ticket`
@@ -115,6 +118,7 @@ Speaker fields in use:
 Format fields in use:
 
 - `Format`
+- `Duration (minutes)`
 
 Known data gotchas:
 
@@ -124,40 +128,38 @@ Known data gotchas:
 
 ## Environment
 
-Start from `.env.example` and create `.env.local`.
+Start from `.env.example` and create `.env.local`. The example contains Breakpoint 2026's public event settings and Airtable IDs. Supply the PAT, a strong signing secret, API key, and SendGrid credentials separately.
 
 ```bash
 AIRTABLE_PAT=
-AIRTABLE_BASE=
-AIRTABLE_TABLE_SPEAKERS=
-AIRTABLE_TABLE_AGENDA=
-AIRTABLE_TABLE_FORMATS=
+AIRTABLE_BASE=appCy7M2j24UF6QqT
+AIRTABLE_TABLE_SPEAKERS=tbljHJh3sx1zrwMSD
+AIRTABLE_TABLE_AGENDA=tbl802700wD64jBNI
+AIRTABLE_TABLE_FORMATS=tbltJYMgzlVFeibNU
+AIRTABLE_SPEAKER_GREENLIGHT_VIEW=viwkuL7VXtygPpd5b
 
 DATA_CACHING_OFF=false
 
-SITE_SECRET=secret
-API_KEY=key
+SITE_SECRET=<strong-private-secret>
+API_KEY=<private-api-key>
 
-NEXT_PUBLIC_VENUE_TZ=America/New_York
+NEXT_PUBLIC_VENUE_TZ=Europe/London
 NEXT_PUBLIC_KEY_EXP=7776000000
-NEXT_PUBLIC_BASE_URL=localhost:3000
-NEXT_PUBLIC_EVENT_NAME=Event
-NEXT_PUBLIC_SITE_NAME="Speaker Portal"
-NEXT_PUBLIC_EVENT_DESCRIPTION="Agenda and speaker information for this event."
-NEXT_PUBLIC_EVENT_LOCATION="New York City"
-NEXT_PUBLIC_ORGANIZER_NAME="Events Team"
-NEXT_PUBLIC_SPEAKER_GUIDE_URL=
-NEXT_PUBLIC_HOME_SCHEDULE_ENABLED=true
+NEXT_PUBLIC_BASE_URL=https://speakers.solana.com
+NEXT_PUBLIC_EVENT_NAME="Breakpoint 2026"
+NEXT_PUBLIC_SITE_NAME="Breakpoint 2026 Speaker Portal"
+NEXT_PUBLIC_EVENT_LOCATION="Olympia London, London, UK"
+NEXT_PUBLIC_ORGANIZER_NAME="Solana Foundation"
+NEXT_PUBLIC_SPEAKER_CONTACT_EMAIL=breakpoint@solana.org
+NEXT_PUBLIC_HOME_SCHEDULE_ENABLED=false
 
-EVENT_CALENDAR_NAME="Event Schedule"
-EVENT_ORGANIZER_EMAIL=noreply@example.com
+EVENT_CALENDAR_NAME="Breakpoint 2026 Speaker Schedule"
+EVENT_ORGANIZER_EMAIL=breakpoint@solana.org
 EVENT_GEO_LAT=
 EVENT_GEO_LON=
 
 SENDGRID_API_KEY=
-SENDGRID_TEMPLATE_ID=
-SENDGRID_FROM_EMAIL=noreply@example.com
-SENDGRID_FROM_NAME="Events Team"
+SENDGRID_FROM_EMAIL=<verified-sender-email>
 SENDGRID_SANDBOX_MODE=true
 ```
 
@@ -165,7 +167,8 @@ Notes:
 
 - Airtable credentials are server-only
 - Site metadata and ICS labels are driven from `src/lib/site.ts`
-- Set `NEXT_PUBLIC_HOME_SCHEDULE_ENABLED=false` to hide the public home-page schedule behind a feature flag
+- `NEXT_PUBLIC_HOME_SCHEDULE_ENABLED=false` sends the home page to speaker login while public publishing statuses are empty
+- The current guide URL is the 2025 reference; replace it when the 2026 guide is ready
 - Venue timezone is required and initializes Luxon globally
 - Airtable caching is enabled by default
 - Set `DATA_CACHING_OFF=true` only when you need to bypass Next's data cache
@@ -200,7 +203,8 @@ Notes:
 
 - The repo already documents the current Airtable table IDs in `AGENTS.md`
 - For local email-link testing, SendGrid is optional
-- If `SENDGRID_API_KEY` and `SENDGRID_TEMPLATE_ID` are not set, the app will log the magic link to the server console in development instead of sending an email
+- If `SENDGRID_API_KEY` is not set, the app logs the magic link in development instead of sending an email
+- Set `NEXT_PUBLIC_BASE_URL=http://localhost:3000` for local email-link testing
 
 3. Start the dev server:
 
@@ -313,11 +317,15 @@ pnpm lint
 pnpm format
 pnpm format:check
 pnpm test
+pnpm airtable:audit
+pnpm airtable:sync-portal-links
 ```
+
+`airtable:sync-portal-links` reports how many records in the Greenlight view lack links. After the Breakpoint portal is deployed and verified, run it with `--write` using the deployed `SITE_SECRET`; it fills only blank `Speaker Portal Link` cells.
 
 ## Testing
 
-The repo includes Jest tests for utility modules and key UI components, including:
+The repo includes Vitest tests for utility modules and key UI components, including:
 
 - timezone helpers
 - JWT helpers

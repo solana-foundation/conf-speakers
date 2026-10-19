@@ -1,5 +1,5 @@
 import sgMail from "@sendgrid/mail";
-import { SITE_NAME } from "@/lib/site";
+import { ORGANIZER_NAME, SITE_NAME } from "@/lib/site";
 
 type SendMagicLinkArgs = {
   to: string;
@@ -10,9 +10,7 @@ type SendMagicLinkArgs = {
 };
 
 const apiKey = process.env.SENDGRID_API_KEY;
-const defaultTemplateId = process.env.SENDGRID_TEMPLATE_ID;
 const fromEmail = process.env.SENDGRID_FROM_EMAIL ?? "noreply@example.com";
-const fromName = process.env.SENDGRID_FROM_NAME ?? "Events Team";
 const sandboxMode = process.env.SENDGRID_SANDBOX_MODE === "true";
 
 if (apiKey) {
@@ -30,27 +28,27 @@ export async function sendMagicLinkEmail({
     throw new Error("SENDGRID_API_KEY is not set");
   }
 
-  if (!defaultTemplateId) {
-    throw new Error("SENDGRID_TEMPLATE_ID is not set");
-  }
+  const title = eventTitle ?? SITE_NAME;
+  const name = recipientName?.trim() || "there";
+  const expiry = expiresInLabel ?? "90 days";
+  const escapeHtml = (value: string) =>
+    value.replace(/[&<>"']/g, (character) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    })[character]!);
 
   const email = {
     from: {
       email: fromEmail,
-      name: fromName,
+      name: ORGANIZER_NAME,
     },
-    personalizations: [
-      {
-        to: [{ email: to }],
-        dynamicTemplateData: {
-          recipient_name: recipientName ?? "there",
-          magic_link: magicLink,
-          expires_in: expiresInLabel ?? "a month",
-          event_title: eventTitle ?? SITE_NAME,
-        },
-      },
-    ],
-    templateId: defaultTemplateId,
+    to,
+    subject: `Your ${title} access link`,
+    text: `Hi ${name},\n\nOpen your speaker portal: ${magicLink}\n\nThis link expires in ${expiry}.\n\n${ORGANIZER_NAME}`,
+    html: `<div style="background:#000;color:#fff;font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:40px 32px"><p style="color:#14f195;font-size:12px;letter-spacing:.12em;text-transform:uppercase">${escapeHtml(title)} / Speaker access</p><h1 style="font-size:30px;line-height:1.1;margin:32px 0 20px">Your speaker portal</h1><p style="color:#c0c0c0;line-height:1.5">Hi ${escapeHtml(name)},<br>Open your private portal to see your sessions and speaker information.</p><p style="margin:32px 0"><a href="${escapeHtml(magicLink)}" style="display:inline-block;background:#14f195;color:#000;padding:14px 20px;font-weight:bold;text-decoration:none">Open speaker portal</a></p><p style="color:#a2a2a2;font-size:13px">This link expires in ${escapeHtml(expiry)}. If you did not request it, you can ignore this email.</p></div>`,
     mailSettings: sandboxMode
       ? {
           sandboxMode: {

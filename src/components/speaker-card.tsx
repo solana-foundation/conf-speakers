@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import { Twitter, Check, CircleMinus, Clock } from "lucide-react";
+import { Twitter, Check, CircleMinus, Clock } from "@/components/ui/icons";
 import { DeckStatus } from "@/lib/airtable/types";
 import { getWebPublishingStatus } from "@/lib/airtable/utils";
 
@@ -69,9 +69,14 @@ export default function SpeakerCard({
       return status?.hasDoNotPublish === true;
     });
 
-    if (hasDoNotPublishSession && sessions.some((session) => session.greenlightTime)) {
+    if (
+      sessions.some(
+        (session) =>
+          session.greenlightTime && !getWebPublishingStatus(session.webPublishingStatus ?? undefined).hasTime,
+      )
+    ) {
       badges.push({
-        label: "Schedule Pending",
+        label: "Time to be confirmed",
         variant: "schedule-pending",
         icon: <Clock className="h-3 w-3" />,
       });
@@ -83,7 +88,13 @@ export default function SpeakerCard({
         session.actionsDeckReceived === null ||
         session.actionsDeckReceived === undefined,
     );
-    if (badges.length === 0 && sessions.length > 0 && allCompletedSessions.length === sessions.length) {
+    if (
+      badges.length === 0 &&
+      sessions.length > 0 &&
+      allCompletedSessions.length === sessions.length &&
+      !hasDoNotPublishSession &&
+      sessions.every((session) => getWebPublishingStatus(session.webPublishingStatus ?? undefined).hasTime)
+    ) {
       badges.push({
         label: "All Set",
         variant: "all-set",
@@ -97,14 +108,14 @@ export default function SpeakerCard({
   const statusBadges = getStatusBadges();
 
   return (
-    <div>
-      <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
+    <section className="border border-white/20 bg-[#1e1e1e] p-5 sm:p-8" aria-label="Your speaker profile">
+      <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
         <div className="flex flex-col items-center gap-4 lg:items-start">
           <div className="relative">
-            <div className="rounded-[48px] p-[2px]" style={{ background: "linear-gradient(135deg, #9945ff, #19fb9b, #00d4ff)" }}>
-              <Avatar className="size-24 rounded-[46px] lg:size-32">
+            <div className="border border-[#14f195]/60 p-1">
+              <Avatar className="size-24 rounded-none lg:size-32">
                 {imageUrl && <AvatarImage src={imageUrl} alt={`${firstName} ${lastName}`} />}
-                <AvatarFallback className="rounded-[46px] bg-[#0d0d0d] text-3xl font-semibold text-white">
+                <AvatarFallback className="rounded-none bg-black text-3xl font-semibold text-white">
                   {firstName?.charAt(0)}
                   {lastName?.charAt(0)}
                 </AvatarFallback>
@@ -118,29 +129,29 @@ export default function SpeakerCard({
               target="_blank"
               rel="noopener noreferrer"
               title="Download Speaker Card"
-              className="flex items-center text-xs text-[#9945ff] underline transition-colors hover:text-[#19fb9b]"
+              className="breakpoint-eyebrow flex items-center text-[#14f195] underline underline-offset-4 transition-colors hover:text-white"
             >
               Social Media Card
             </a>
           )}
         </div>
 
-        <div className="flex-1 space-y-4">
+        <div className="min-w-0 flex-1 space-y-4">
           <div>
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="gradient-text font-space-grotesk text-4xl font-light tracking-tight">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <h2 className="breakpoint-display text-3xl leading-none text-white sm:text-5xl">
                 {firstName} {lastName}
-              </h1>
+              </h2>
               <div className="flex flex-wrap items-center gap-2">
                 {statusBadges.map((badge, index) => (
                   <Badge
                     key={index}
                     className={`gap-1.5 ${
                       badge.variant === "awaiting-deck"
-                        ? "bg-[#2a88de]/20 text-[#2a88de]"
+                        ? "bg-[#3c91ff]/20 text-[#3c91ff]"
                         : badge.variant === "schedule-pending"
-                          ? "bg-[#c9ff7c]/20 text-[#c9ff7c]"
-                          : "bg-[#19fb9b]/20 text-[#19fb9b]"
+                          ? "bg-[#c0e021]/20 text-[#c0e021]"
+                          : "bg-[#14f195]/20 text-[#14f195]"
                     }`}
                   >
                     {badge.icon}
@@ -149,9 +160,9 @@ export default function SpeakerCard({
                 ))}
               </div>
             </div>
-            <p className="text-p2-mono mt-2 uppercase">
+            <p className="breakpoint-eyebrow mt-3 leading-relaxed">
               {jobTitle && <span className="text-white/70">{jobTitle}</span>}
-              <br />
+              {jobTitle && company && <span className="mx-2 text-white/30">/</span>}
               {company && <span className="text-white/50">{company}</span>}
             </p>
 
@@ -159,7 +170,7 @@ export default function SpeakerCard({
               <div className="mt-2 flex items-center gap-2">
                 <Twitter className="h-4 w-4 text-white/40" />
                 <a
-                  className="text-[#9945ff] text-md transition-colors hover:text-[#19fb9b] hover:underline"
+                  className="text-md text-[#aa67fb] transition-colors hover:text-[#14f195] hover:underline"
                   href={xLink}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -177,6 +188,6 @@ export default function SpeakerCard({
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

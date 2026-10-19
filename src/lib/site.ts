@@ -59,30 +59,41 @@ export const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME?.trim() || `${EVENT_N
 export const EVENT_DESCRIPTION =
   process.env.NEXT_PUBLIC_EVENT_DESCRIPTION?.trim() || "Agenda and speaker information for this event.";
 export const EVENT_LOCATION = process.env.NEXT_PUBLIC_EVENT_LOCATION?.trim() || "";
+export const EVENT_DATES_LABEL = process.env.NEXT_PUBLIC_EVENT_DATES?.trim() || "";
 export const ORGANIZER_NAME =
   process.env.NEXT_PUBLIC_ORGANIZER_NAME?.trim() || process.env.SENDGRID_FROM_NAME?.trim() || "Events Team";
 export const ORGANIZER_EMAIL =
   process.env.EVENT_ORGANIZER_EMAIL?.trim() || process.env.SENDGRID_FROM_EMAIL?.trim() || "noreply@example.com";
 export const CALENDAR_NAME = process.env.EVENT_CALENDAR_NAME?.trim() || `${EVENT_NAME} Schedule`;
 export const EVENT_URL = normalizeOptionalUrl(process.env.NEXT_PUBLIC_EVENT_URL);
+export const EVENT_SITE_URL = normalizeOptionalUrl(process.env.NEXT_PUBLIC_EVENT_SITE_URL);
 export const EVENT_REGISTRATION_PLATFORM = process.env.NEXT_PUBLIC_EVENT_REGISTRATION_PLATFORM?.trim() || "Luma";
 export const EVENT_COUPON_PARAM = process.env.NEXT_PUBLIC_EVENT_COUPON_PARAM?.trim() || "coupon";
 export const SPEAKER_CONTACT_EMAIL = process.env.NEXT_PUBLIC_SPEAKER_CONTACT_EMAIL?.trim() || ORGANIZER_EMAIL;
 export const SPEAKER_GUIDE_URL = process.env.NEXT_PUBLIC_SPEAKER_GUIDE_URL?.trim() || "";
+export const SPEAKER_GUIDE_LABEL = process.env.NEXT_PUBLIC_SPEAKER_GUIDE_LABEL?.trim() || "Speaker guide";
+export const SPEAKER_GUIDE_NOTE = process.env.NEXT_PUBLIC_SPEAKER_GUIDE_NOTE?.trim() || "";
 export const HOME_SCHEDULE_ENABLED = parseBooleanEnv(process.env.NEXT_PUBLIC_HOME_SCHEDULE_ENABLED, true);
 const configuredSocialImagePath = process.env.NEXT_PUBLIC_SOCIAL_IMAGE_PATH?.trim() || "";
 const configuredSocialBackgroundImagePath = process.env.NEXT_PUBLIC_SOCIAL_BG_IMAGE_PATH?.trim() || "";
-export const SITE_LOGO_PATH = process.env.NEXT_PUBLIC_SITE_LOGO_PATH?.trim() || "/accelerate-usa-logo.png";
-export const SITE_LOGO_WIDTH = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_WIDTH, 197);
-export const SITE_LOGO_HEIGHT = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_HEIGHT, 99);
+export const SITE_LOGO_PATH = process.env.NEXT_PUBLIC_SITE_LOGO_PATH?.trim() || "/breakpoint/nav-bp26.svg";
+export const SITE_LOGO_WIDTH = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_WIDTH, 104);
+export const SITE_LOGO_HEIGHT = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_HEIGHT, 20);
 export const SOCIAL_IMAGE_PATH =
   process.env.NEXT_PUBLIC_SOCIAL_OUTPUT_IMAGE_PATH?.trim() ||
-  (configuredSocialImagePath && configuredSocialImagePath !== "/opengraph-image" && configuredSocialImagePath !== "/social-card.webp"
+  (configuredSocialImagePath &&
+  configuredSocialImagePath !== "/opengraph-image" &&
+  configuredSocialImagePath !== "/social-card.webp"
     ? configuredSocialImagePath
     : "/social-image.png");
 export const SOCIAL_BACKGROUND_IMAGE_PATH =
   configuredSocialBackgroundImagePath ||
-  (configuredSocialImagePath.toLowerCase().endsWith(".webp") ? configuredSocialImagePath : "/social-card.webp");
+  (configuredSocialImagePath.toLowerCase().endsWith(".webp") ? configuredSocialImagePath : "/breakpoint/social-card.jpg");
+
+export const EVENT_FILE_SLUG =
+  EVENT_NAME.toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "") || "event";
 
 export function buildEventCouponUrl(code: string): string | null {
   if (!EVENT_URL) {

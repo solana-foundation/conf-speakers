@@ -4,6 +4,7 @@ import { generateSpeakerIcsContent } from "@/lib/ics/build";
 import { getTokenPayload, isAuthenticated } from "@/lib/sign.server";
 import { getSpeakerSessionIds } from "@/lib/airtable/utils";
 import { NextRequest, NextResponse } from "next/server";
+import { EVENT_FILE_SLUG } from "@/lib/site";
 
 export const GET = async (request: NextRequest, { params }: { params: Promise<{ speakerId: string }> }) => {
   const { speakerId: paramSpeakerId } = await params;
@@ -55,7 +56,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
       status: 200,
       headers: {
         "Content-Type": "text/calendar; charset=utf-8",
-        "Content-Disposition": `attachment; filename="breakpoint-2025-speaker-${speakerId}.ics"`,
+        "Content-Disposition": `attachment; filename="${EVENT_FILE_SLUG}-speaker-${speakerId}.ics"`,
         "Cache-Control": "public, max-age=3600, s-maxage=3600",
         "X-Content-Type-Options": "nosniff",
         // Add CORS headers for cross-origin requests

@@ -3,10 +3,10 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { MapPin, Clock, Coffee, Shirt, Luggage, ExternalLink } from "lucide-react";
-import { StageTitle, StageValues } from "@/lib/airtable/types";
+import { MapPin, Clock, Coffee, Shirt, Luggage, ExternalLink } from "@/components/ui/icons";
+import { StageTitle } from "@/lib/airtable/types";
 import { normalizeStageTitle } from "@/lib/airtable/stages";
-import { SPEAKER_GUIDE_URL } from "@/lib/site";
+import { SPEAKER_GUIDE_LABEL, SPEAKER_GUIDE_NOTE, SPEAKER_GUIDE_URL } from "@/lib/site";
 
 type StageConfig = {
   name: string;
@@ -15,36 +15,7 @@ type StageConfig = {
   checkInLocation: string;
 };
 
-const STAGE_LOGISTICS: Record<string, StageConfig> = {
-  [StageValues.Main]: {
-    name: StageValues.Main,
-    entrance: "Follow venue signage and speaker check-in directions.",
-    arrivalTime: "45 minutes before your session start time",
-    checkInLocation: "Speaker check-in for mic fitting and stage brief",
-  },
-  [StageValues.Side]: {
-    name: StageValues.Side,
-    entrance: "Follow venue signage and speaker check-in directions.",
-    arrivalTime: "45 minutes before your session start time",
-    checkInLocation: "Speaker check-in for equipment check and brief",
-  },
-  [StageValues.Cafe]: {
-    name: StageValues.Cafe,
-    entrance: "Follow venue signage and speaker check-in directions.",
-    arrivalTime: "45 minutes before your session start time",
-    checkInLocation: "Speaker check-in",
-  },
-  [StageValues.Etihad]: {
-    name: StageValues.Etihad,
-    entrance: "Follow venue signage and speaker check-in directions.",
-    arrivalTime: "45 minutes before your session start time",
-    checkInLocation: "Speaker check-in",
-  },
-};
-
-// Hardcoded configuration data
 const LOGISTICS_CONFIG = {
-  stages: STAGE_LOGISTICS,
   shared: {
     speakerLounge: "Refer to the latest event logistics for speaker lounge access, refreshments, power, and Wi-Fi.",
     wardrobe: {
@@ -61,7 +32,12 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
       ?.map((value) => normalizeStageTitle(value))
       .filter((value, index, self): value is string => Boolean(value) && self.indexOf(value) === index) ||
     (stage ? [normalizeStageTitle(stage)].filter((value): value is string => Boolean(value)) : []);
-  const stageConfigs = uniqueStages.map((s) => LOGISTICS_CONFIG.stages[s]).filter((config): config is StageConfig => Boolean(config));
+  const stageConfigs: StageConfig[] = uniqueStages.map((name) => ({
+    name,
+    entrance: "Follow the latest speaker check-in directions from the event team.",
+    arrivalTime: "Your check-in time will be confirmed by the speaker team.",
+    checkInLocation: "the designated speaker check-in desk",
+  }));
 
   return (
     <Dialog>
@@ -70,7 +46,7 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
           Key Information
         </Button>
       </DialogTrigger>
-      <DialogContent className="border-white/10 max-h-[85vh] overflow-y-auto">
+      <DialogContent className="max-h-[85vh] overflow-y-auto border-white/10">
         <DialogHeader className="pb-6">
           <DialogTitle className="text-h2 text-center">Speaker Logistics</DialogTitle>
         </DialogHeader>
@@ -80,10 +56,10 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
               <React.Fragment key={index}>
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-[#19fb9b]/10 text-[#19fb9b] flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#14f195]/10 text-[#14f195]">
                       <MapPin className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 font-medium uppercase text-white">
+                    <h4 className="text-h3 font-medium text-white uppercase">
                       Venue & Stage Location{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
                     </h4>
                   </div>
@@ -93,63 +69,67 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
                   </div>
                 </section>
 
-                <div className="bg-white/10 h-px" />
+                <div className="h-px bg-white/10" />
 
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-[#2a88de]/10 text-[#2a88de] flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#3c91ff]/10 text-[#3c91ff]">
                       <Clock className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 font-medium uppercase text-white">
+                    <h4 className="text-h3 font-medium text-white uppercase">
                       Arrival{stageConfigs.length > 1 ? ` ${index + 1}` : ""}
                     </h4>
                   </div>
                   <div className="space-y-2 pl-11">
-                    <p className="text-p1">Please arrive {stageConfig.arrivalTime}.</p>
+                    <p className="text-p1">{stageConfig.arrivalTime}</p>
                     <p className="text-p2 text-white/50">Check in at {stageConfig.checkInLocation}.</p>
                   </div>
                 </section>
 
-                {index < stageConfigs.length - 1 && <div className="bg-white/10 h-px" />}
+                {index < stageConfigs.length - 1 && <div className="h-px bg-white/10" />}
               </React.Fragment>
             ))
           ) : (
             <section className="group">
               <div className="mb-3 flex items-center gap-3">
-                <div className="bg-[#19fb9b]/10 text-[#19fb9b] flex h-8 w-8 items-center justify-center rounded-full">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#14f195]/10 text-[#14f195]">
                   <MapPin className="h-4 w-4" />
                 </div>
-                <h4 className="text-h3 font-medium uppercase text-white">Venue & Stage Location</h4>
+                <h4 className="text-h3 font-medium text-white uppercase">Venue & Stage Location</h4>
               </div>
               <div className="space-y-2 pl-11">
-                <p className="text-p1 font-medium">Venue details will appear here when stage information is assigned.</p>
-                <p className="text-p2 text-white/50">Follow the latest event logistics and speaker check-in directions.</p>
+                <p className="text-p1 font-medium">
+                  Venue details will appear here when stage information is assigned.
+                </p>
+                <p className="text-p2 text-white/50">
+                  Follow the latest event logistics and speaker check-in directions.
+                </p>
               </div>
             </section>
           )}
 
-          <div className="bg-white/10 h-px" />
+          <div className="h-px bg-white/10" />
 
           <section className="group">
             <div className="mb-3 flex items-center gap-3">
-              <div className="bg-[#c9ff7c]/10 text-[#c9ff7c] flex h-8 w-8 items-center justify-center rounded-full">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c0e021]/10 text-[#c0e021]">
                 <Coffee className="h-4 w-4" />
               </div>
-              <h4 className="text-h3 font-medium uppercase text-white">Speaker Lounge</h4>
+              <h4 className="text-h3 font-medium text-white uppercase">Speaker Lounge</h4>
             </div>
             <div className="pl-11">
               <p className="text-p1">{LOGISTICS_CONFIG.shared.speakerLounge}</p>
             </div>
           </section>
 
-          <div className="bg-white/10 h-px" />
+          <div className="h-px bg-white/10" />
 
           <section className="group">
             <div className="mb-3 flex items-center gap-3">
-              <div className="bg-[#9945ff]/10 text-[#9945ff] flex h-8 w-8 items-center justify-center rounded-full">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#aa67fb]/10 text-[#aa67fb]">
                 <Shirt className="h-4 w-4" />
               </div>
-              <h4 className="text-h3 font-medium uppercase text-white">Wardrobe</h4>
+              <h4 className="text-h3 font-medium text-white uppercase">Wardrobe</h4>
             </div>
             <div className="space-y-2 pl-11">
               <p className="text-p1">{LOGISTICS_CONFIG.shared.wardrobe.tips}</p>
@@ -157,20 +137,20 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
             </div>
           </section>
 
-          <div className="bg-white/10 h-px" />
+          <div className="h-px bg-white/10" />
 
           <section className="group">
             <div className="mb-3 flex items-center gap-3">
-              <div className="bg-white/10 text-white/80 flex h-8 w-8 items-center justify-center rounded-full">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/80">
                 <Luggage className="h-4 w-4" />
               </div>
-              <h4 className="text-h3 font-medium uppercase text-white">Travel & Packing Notes</h4>
+              <h4 className="text-h3 font-medium text-white uppercase">Travel & Packing Notes</h4>
             </div>
             <div className="pl-11">
               <p className="text-p1">{LOGISTICS_CONFIG.shared.travel}</p>
             </div>
           </section>
-          <div className="bg-white/10 h-px" />
+          <div className="h-px bg-white/10" />
 
           {SPEAKER_GUIDE_URL ? (
             <section className="group">
@@ -179,14 +159,12 @@ export default function LogisticsDialogButton({ stage, stages }: { stage?: Stage
                   href={SPEAKER_GUIDE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-p1 text-[#9945ff] hover:text-[#19fb9b] inline-flex items-center gap-2 font-medium transition-colors"
+                  className="text-p1 inline-flex items-center gap-2 font-medium text-[#aa67fb] transition-colors hover:text-[#14f195]"
                 >
-                  View full speaker information & best practices guide
+                  {SPEAKER_GUIDE_LABEL}
                   <ExternalLink className="h-4 w-4" />
                 </a>
-                <p className="text-p2 text-white/50 mt-2">
-                  For more detailed information about speaking at this event, including best practices and additional resources.
-                </p>
+                {SPEAKER_GUIDE_NOTE && <p className="text-p2 mt-2 text-white/50">{SPEAKER_GUIDE_NOTE}</p>}
               </div>
             </section>
           ) : null}

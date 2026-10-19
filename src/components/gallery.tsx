@@ -4,7 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 
 interface GalleryProps {

@@ -1,15 +1,14 @@
-/* Colors — Accelerate Miami palette */
+/* Breakpoint 2026 colors, aligned with the event site. */
 @theme {
-  /* Primary: Accelerate brand */
-  --color-primary-null: #0d0d0d;
-  --color-primary-byte: #9945ff;
-  --color-primary-wisp: #d2d2d2;
+  --color-primary-null: #000000;
+  --color-primary-byte: #aa67fb;
+  --color-primary-wisp: #ffffff;
 
-  /* Secondary: Accelerate accents */
-  --color-secondary-lime: #c9ff7c;
-  --color-secondary-mint: #19fb9b;
-  --color-secondary-azure: #2a88de;
-  --color-secondary-cyan: #00d4ff;
+  /* Secondary event accents */
+  --color-secondary-lime: #c0e021;
+  --color-secondary-mint: #14f195;
+  --color-secondary-azure: #3c91ff;
+  --color-secondary-cyan: #3c91ff;
 
   /* Transparent variants */
   --color-transparent-wisp-80: #d2d2d2cc;
@@ -24,11 +23,11 @@
   --color-transparent-null-20: #0d0d0d33;
   --color-transparent-null-10: #0d0d0d1a;
 
-  /* Accelerate gray scale */
-  --color-accelerate-gray-100: #b3b2bc;
-  --color-accelerate-gray-200: #838191;
-  --color-accelerate-gray-300: #3b3b40;
-  --color-accelerate-muted: #bcbcbc;
+  /* Neutral gray scale */
+  --color-accelerate-gray-100: #c0c0c0;
+  --color-accelerate-gray-200: #a2a2a2;
+  --color-accelerate-gray-300: #353535;
+  --color-accelerate-muted: #c0c0c0;
 
   /* Section Tokens */
   --color-byte: var(--color-primary-byte);

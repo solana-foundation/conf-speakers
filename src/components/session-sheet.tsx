@@ -7,7 +7,7 @@ import { Speaker, StageTitle } from "@/lib/airtable/types";
 import { getWebPublishingStatus } from "@/lib/airtable/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
-import { Calendar, Clock } from "lucide-react";
+import { Calendar, Clock } from "@/components/ui/icons";
 
 export interface SessionSheetProps {
   name?: string;
@@ -95,7 +95,7 @@ export default function SessionSheet({
 
           {speakers && (
             <div className="mt-4 text-sm">
-              <div className="text-white/50 font-bold">Speakers:</div>
+              <div className="font-bold text-white/50">Speakers:</div>
               {speakers.map((speaker) => (
                 <div key={speaker.id} className="mt-1 flex items-center gap-2">
                   <Avatar className="size-4">

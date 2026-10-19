@@ -18,7 +18,7 @@ import SessionSheet from "./session-sheet";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import StageBadge from "@/components/stage-badge";
-import { CircleMinus, EyeIcon } from "lucide-react";
+import { CircleMinus, EyeIcon } from "@/components/ui/icons";
 
 const columnHelper = createColumnHelper<Session & { subscribeUrl?: string; speakers?: Speaker[] }>();
 

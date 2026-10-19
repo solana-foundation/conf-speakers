@@ -5,9 +5,9 @@
 @import "./styles/typography.css";
 
 @theme inline {
-  --font-sans: var(--font-abc-diatype);
-  --font-mono: var(--font-macan-mono);
-  --font-space-grotesk: var(--font-space-grotesk);
+  --font-sans: var(--font-breakpoint-body);
+  --font-mono: var(--font-breakpoint-mono);
+  --font-space-grotesk: var(--font-breakpoint-body);
 
   /* Core theme mapping to project color tokens */
   --color-background: var(--color-background-primary);
@@ -72,7 +72,7 @@ html {
   body {
     background: var(--color-background-primary);
     color: var(--color-wisp);
-    font-family: var(--font-abc-diatype);
+    font-family: var(--font-breakpoint-body);
   }
   table {
     @apply text-wisp;
@@ -100,9 +100,23 @@ html {
   }
 }
 
-/* ─── Accelerate gradient text ─── */
+/* Event display and utility type */
+.breakpoint-display {
+  font-family: var(--font-breakpoint-display), Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+
+.breakpoint-eyebrow {
+  font-family: var(--font-breakpoint-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
 .gradient-text {
-  background: linear-gradient(135deg, #9945ff 0%, #19fb9b 50%, #00d4ff 100%);
+  background: linear-gradient(100deg, #ffffff 0%, #aa67fb 55%, #14f195 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -111,15 +125,15 @@ html {
 /* ─── Gradient CTA button (purple → green) ─── */
 .btn-cta {
   @apply inline-flex items-center justify-center gap-2 rounded-full text-black transition-all hover:opacity-90;
-  background: linear-gradient(to right, #9945ff, #19fb9b);
+  background: linear-gradient(to right, #aa67fb, #14f195);
 }
 
 /* ─── Gradient border button ─── */
 .btn-outline-gradient {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-transparent font-semibold uppercase tracking-[0.05em] text-white transition-colors hover:bg-white/5;
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-transparent font-semibold tracking-[0.05em] text-white uppercase transition-colors hover:bg-white/5;
   background:
     linear-gradient(black, black) padding-box,
-    linear-gradient(to right, #9945ff, #19fb9b) border-box;
+    linear-gradient(to right, #aa67fb, #14f195) border-box;
   border: 1px solid transparent;
 }
 
@@ -134,11 +148,11 @@ html {
 
 /* ─── Selection & focus styles ─── */
 ::selection {
-  background: rgba(153, 69, 255, 0.2);
+  background: rgba(170, 103, 251, 0.35);
 }
 
 :focus-visible {
-  @apply outline-none ring-2 ring-[#9945ff] ring-offset-2 ring-offset-black;
+  @apply ring-2 ring-[#aa67fb] ring-offset-2 ring-offset-black outline-none;
 }
 
 /* ─── Custom scrollbar ─── */

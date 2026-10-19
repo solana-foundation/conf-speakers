@@ -1,16 +1,10 @@
 @theme {
-  /* Fonts */
-  --font-fh-lecturis: var(--font-fh-lecturis);
-  --font-abc-diatype: var(--font-abc-diatype);
-  --font-macan-mono: var(--font-macan-mono);
-  --font-space-grotesk: var(--font-space-grotesk);
-
   --font-regular: 400;
   --font-medium: 500;
   --font-semibold: 600;
   --font-bold: 700;
 
-  /* Font sizes — Accelerate scale */
+  /* Font sizes — Breakpoint scale */
   --text-4xs: 0.625rem; /* 10px */
   --text-3xs: 0.75rem; /* 12px */
   --text-2xs: 0.8125rem; /* 13px */
@@ -30,7 +24,7 @@
   --text-9xl: 5rem; /* 80px */
   --text-10xl: 7.5rem; /* 120px */
 
-  /* Heading tokens — Space Grotesk, lighter weights (Accelerate style) */
+  /* Heading tokens */
   --text-h1: var(--text-4xl);
   --text-h1--line-height: 1;
   --text-h1--letter-spacing: -0.02rem;
@@ -67,7 +61,7 @@
   --text-stat-display--letter-spacing: clamp(-0.25rem, -0.282rem + 0.135vw, -0.16rem);
   --text-stat-display--font-weight: var(--font-regular);
 
-  /* Body text — ABC Diatype */
+  /* Body text */
   --text-p1: var(--text-base);
   --text-p1--line-height: 1.5rem;
   --text-p1--letter-spacing: 0.0045rem;
@@ -132,7 +126,7 @@
 }
 
 @layer base {
-  /* Headings use Space Grotesk (Accelerate style) */
+  /* Heading styles */
   h1,
   .h1 {
     @apply font-space-grotesk text-h1;
@@ -145,29 +139,29 @@
 
   h3,
   .h3 {
-    @apply font-abc-diatype text-h3;
+    @apply font-sans text-h3;
   }
 
   h4,
   .h4 {
-    @apply font-abc-diatype text-h4;
+    @apply font-sans text-h4;
   }
 
   h5,
   .h5 {
-    @apply font-abc-diatype text-h5;
+    @apply font-sans text-h5;
   }
 
   p {
-    @apply font-abc-diatype text-p1;
+    @apply font-sans text-p1;
   }
 
   .text-micro {
-    @apply font-macan-mono uppercase;
+    @apply font-mono uppercase;
   }
 
   .text-p1 {
-    @apply font-abc-diatype;
+    @apply font-sans;
 
     + .text-p1 {
       margin-top: var(--spacing-2xs-a);
@@ -187,7 +181,7 @@
   }
 
   .text-p2-mono {
-    @apply font-macan-mono uppercase;
+    @apply font-mono uppercase;
   }
 
   .text-hero {
@@ -199,11 +193,11 @@
   }
 
   .text-inline-link {
-    @apply font-abc-diatype relative underline underline-offset-7;
+    @apply font-sans relative underline underline-offset-7;
   }
 
   .text-caption {
-    @apply font-macan-mono uppercase;
+    @apply font-mono uppercase;
   }
 
   ul:not(.unstyled-list) {
@@ -226,14 +220,14 @@
       @apply relative ps-[25px] not-first:mt-[var(--spacing-2xs)] sm:not-first:mt-[var(--spacing-xs)];
 
       &::before {
-        @apply font-macan-mono absolute start-[0];
+        @apply font-mono absolute start-[0];
         content: counter(list-item) ".";
       }
     }
   }
 
   .text-eyebrow {
-    @apply font-macan-mono px-3xs before:-left-3xs ms-3xs after:-right-3xs relative mr-auto inline-block self-start uppercase before:absolute before:content-['['] after:absolute after:content-[']'];
+    @apply font-mono px-3xs before:-left-3xs ms-3xs after:-right-3xs relative mr-auto inline-block self-start uppercase before:absolute before:content-['['] after:absolute after:content-[']'];
   }
 
   .text-discount {
@@ -241,7 +235,7 @@
   }
 
   .text-ticker {
-    @apply font-macan-mono mr-xs relative pr-[calc(var(--spacing-xs)+4px)] text-sm uppercase after:absolute after:top-[2px] after:right-0 after:bottom-0 after:my-auto after:h-[4px] after:text-[0.438rem] after:leading-0 after:content-['\25A0'];
+    @apply font-mono mr-xs relative pr-[calc(var(--spacing-xs)+4px)] text-sm uppercase after:absolute after:top-[2px] after:right-0 after:bottom-0 after:my-auto after:h-[4px] after:text-[0.438rem] after:leading-0 after:content-['\25A0'];
   }
 
   button:not(.text-inline-link),

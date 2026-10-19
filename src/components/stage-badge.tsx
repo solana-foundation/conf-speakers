@@ -3,14 +3,14 @@ import { normalizeStageTitle } from "@/lib/airtable/stages";
 import { Badge } from "./ui/badge";
 
 export const stageColorMap: Record<string, string> = {
-  "Main Stage": "bg-[#2a88de]/20 text-[#2a88de]",
-  "Side Stage": "bg-[#c9ff7c]/20 text-[#c9ff7c]",
-  "Lounge Stage": "bg-[#9945ff]/20 text-[#9945ff]",
-  "Arena Stage": "bg-[#19fb9b]/20 text-[#19fb9b]",
+  "Main Stage": "bg-[#3c91ff]/20 text-[#3c91ff]",
+  "Side Stage": "bg-[#c0e021]/20 text-[#c0e021]",
+  "Lounge Stage": "bg-[#aa67fb]/20 text-[#aa67fb]",
+  "Arena Stage": "bg-[#14f195]/20 text-[#14f195]",
 };
 
 export function getStageBadgeClass(title: string): string {
-  return stageColorMap[normalizeStageTitle(title) ?? ""] || "bg-[#9945ff]/20 text-[#9945ff]";
+  return stageColorMap[normalizeStageTitle(title) ?? ""] || "bg-[#aa67fb]/20 text-[#aa67fb]";
 }
 
 export default function StageBadge({ title }: { title: StageTitle | undefined }) {

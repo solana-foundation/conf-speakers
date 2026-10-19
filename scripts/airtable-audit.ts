@@ -4,6 +4,7 @@ import { airtableFieldMap, airtableRequiredFields, airtableTableIds } from "../s
 
 type EnvMap = Record<string, string>;
 type AirtableRecord = { id: string; fields?: Record<string, unknown> };
+type AirtableTableSchema = { id: string; fields: Array<{ name: string }> };
 
 const cwd = process.cwd();
 
@@ -68,8 +69,22 @@ async function fetchAllRecords(baseId: string, tableId: string, token: string) {
   return records;
 }
 
+async function fetchTableSchemas(baseId: string, token: string): Promise<AirtableTableSchema[]> {
+  const response = await fetch(`https://api.airtable.com/v0/meta/bases/${baseId}/tables`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const payload = (await response.json()) as { tables?: AirtableTableSchema[]; error?: unknown };
+  if (!response.ok || !payload.tables) {
+    throw new Error(`Failed to fetch Airtable schema: ${JSON.stringify(payload.error)}`);
+  }
+  return payload.tables;
+}
+
 function normalizeName(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
 }
 
 function suggestAliases(canonicalField: string, actualFields: string[]) {
@@ -89,8 +104,10 @@ function printTableAudit(
   label: keyof typeof airtableFieldMap,
   records: AirtableRecord[],
   aliases: (typeof airtableFieldMap)[typeof label],
+  schemaFields: string[],
 ) {
-  const actualFields = [...new Set(records.flatMap((record) => Object.keys(record.fields ?? {})))].sort();
+  const actualFields = schemaFields.sort();
+  const populatedFields = new Set(records.flatMap((record) => Object.keys(record.fields ?? {})));
   const requiredFields = new Set(airtableRequiredFields[label] as readonly string[]);
 
   console.log(`\n== ${label.toUpperCase()} ==`);
@@ -106,13 +123,16 @@ function printTableAudit(
     console.log(`  aliases: ${(fieldAliases as readonly string[]).join(" | ")}`);
     if (matchedAlias) {
       console.log(`  matched: ${matchedAlias}`);
+      if (!populatedFields.has(matchedAlias)) console.log("  data: present in schema, empty in current records");
     }
     if (!matchedAlias && suggestions.length > 0) {
       console.log(`  suggestions: ${suggestions.join(" | ")}`);
     }
   }
 
-  const configuredAliases = new Set(Object.values(aliases).flatMap((fieldAliases) => fieldAliases as readonly string[]));
+  const configuredAliases = new Set(
+    Object.values(aliases).flatMap((fieldAliases) => fieldAliases as readonly string[]),
+  );
   const unmappedFields = actualFields.filter((field) => !configuredAliases.has(field));
 
   console.log(`- unmapped live fields: ${unmappedFields.length}`);
@@ -132,9 +152,9 @@ async function main() {
     throw new Error("AIRTABLE_BASE or AIRTABLE_PAT is missing from .env/.env.local");
   }
 
-  const sessionsTable = airtableTableIds.sessions ?? env.AIRTABLE_TABLE_AGENDA;
-  const speakersTable = airtableTableIds.speakers ?? env.AIRTABLE_TABLE_SPEAKERS;
-  const formatsTable = airtableTableIds.formats ?? env.AIRTABLE_TABLE_FORMATS;
+  const sessionsTable = airtableTableIds.sessions || env.AIRTABLE_TABLE_AGENDA;
+  const speakersTable = airtableTableIds.speakers || env.AIRTABLE_TABLE_SPEAKERS;
+  const formatsTable = airtableTableIds.formats || env.AIRTABLE_TABLE_FORMATS;
 
   if (!sessionsTable || !speakersTable || !formatsTable) {
     throw new Error("One or more Airtable table ids are missing");
@@ -151,9 +171,13 @@ async function main() {
     fetchAllRecords(baseId, formatsTable, token),
   ]);
 
-  printTableAudit("session", sessions, airtableFieldMap.session);
-  printTableAudit("speaker", speakers, airtableFieldMap.speaker);
-  printTableAudit("format", formats, airtableFieldMap.format);
+  const tableSchemas = await fetchTableSchemas(baseId, token);
+  const fieldsFor = (tableId: string) =>
+    tableSchemas.find((table) => table.id === tableId)?.fields.map((field) => field.name) ?? [];
+
+  printTableAudit("session", sessions, airtableFieldMap.session, fieldsFor(sessionsTable));
+  printTableAudit("speaker", speakers, airtableFieldMap.speaker, fieldsFor(speakersTable));
+  printTableAudit("format", formats, airtableFieldMap.format, fieldsFor(formatsTable));
 }
 
 main().catch((error) => {

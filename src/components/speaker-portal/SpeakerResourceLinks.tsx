@@ -1,81 +1,40 @@
-import Image from "next/image";
-import { ArrowUpRight, Images, PlayCircle } from "lucide-react";
+import { ArrowUpRight, CalendarDays, MapPin, Ticket, Users } from "@/components/ui/icons";
+import { EVENT_SITE_URL } from "@/lib/site";
 
 const RESOURCE_LINKS = [
-  {
-    title: "Solana Accelerate 2026",
-    label: "Watch video",
-    href: "https://vimeo.com/1189785623?share=copy&fl=sv&fe=ci",
-    image: "/speaker-links/solana-accelerate-2026-video.webp",
-    alt: "Solana Accelerate 2026 announcement video thumbnail",
-    icon: PlayCircle,
-  },
-  {
-    title: "Miami Vibes",
-    label: "View gallery",
-    href: "https://gallery.xollective.co/solanaacceleratemiamivibes/",
-    image: "/speaker-links/solana-accelerate-miami-vibes.webp",
-    alt: "Solana Accelerate Miami vibes gallery preview",
-    icon: Images,
-  },
-  {
-    title: "Miami Sponsors",
-    label: "View gallery",
-    href: "https://gallery.xollective.co/solanaacceleratemiamisponsors/",
-    image: "/speaker-links/solana-accelerate-miami-sponsors.webp",
-    alt: "Solana Accelerate Miami sponsors gallery preview",
-    icon: Images,
-  },
-  {
-    title: "Miami Speakers",
-    label: "View gallery",
-    href: "https://gallery.xollective.co/solanaacceleratemiamispeakers/",
-    image: "/speaker-links/solana-accelerate-miami-speakers.webp",
-    alt: "Solana Accelerate Miami speakers gallery preview",
-    icon: Images,
-  },
+  { title: "Event schedule", description: "See the latest event programme.", path: "/schedule", icon: CalendarDays },
+  { title: "Speakers", description: "Explore the speaker lineup.", path: "/speakers", icon: Users },
+  { title: "Plan your visit", description: "Travel and venue information.", path: "/travel", icon: MapPin },
+  { title: "Registration", description: "Ticket information and event access.", path: "/registration", icon: Ticket },
 ];
 
 export default function SpeakerResourceLinks() {
+  if (!EVENT_SITE_URL) return null;
+
   return (
     <section className="space-y-4" aria-labelledby="speaker-resource-links-title">
-      <h2
-        id="speaker-resource-links-title"
-        className="font-space-grotesk text-sm font-semibold tracking-[0.15em] text-white/60 uppercase"
-      >
-        Event Links
+      <h2 id="speaker-resource-links-title" className="breakpoint-display text-2xl text-white sm:text-3xl">
+        Around the event
       </h2>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {RESOURCE_LINKS.map(({ title, label, href, image, alt, icon: Icon }) => (
+      <div className="grid gap-px border border-white/20 bg-white/20 sm:grid-cols-2 lg:grid-cols-4">
+        {RESOURCE_LINKS.map(({ title, description, path, icon: Icon }) => (
           <a
-            key={href}
-            href={href}
+            key={path}
+            href={`${EVENT_SITE_URL.replace(/\/$/, "")}${path}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="group overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] text-white shadow-sm backdrop-blur-sm transition-colors hover:border-[#19fb9b]/50 hover:bg-white/[0.04] focus-visible:ring-offset-black"
+            className="group flex min-h-44 flex-col justify-between bg-black p-5 text-white transition-colors hover:bg-[#1e1e1e]"
           >
-            <div className="relative aspect-video overflow-hidden bg-white/[0.03]">
-              <Image
-                src={image}
-                alt={alt}
-                fill
-                sizes="(min-width: 1024px) 264px, (min-width: 640px) 50vw, 100vw"
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+            <div className="flex items-start justify-between">
+              <Icon className="h-6 w-6 text-[#14f195]" aria-hidden="true" />
+              <ArrowUpRight
+                className="h-5 w-5 text-white/40 transition-colors group-hover:text-[#14f195]"
+                aria-hidden="true"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             </div>
-
-            <div className="space-y-3 p-4">
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="font-space-grotesk text-lg leading-tight font-light">{title}</h3>
-                <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-white/45 transition-colors group-hover:text-[#19fb9b]" />
-              </div>
-
-              <div className="flex items-center gap-2 text-sm font-medium text-white/55">
-                <Icon className="h-4 w-4 text-[#9945ff]" />
-                <span>{label}</span>
-              </div>
+            <div>
+              <h3 className="breakpoint-eyebrow mb-2 text-white">{title}</h3>
+              <p className="text-sm leading-relaxed text-white/55">{description}</p>
             </div>
           </a>
         ))}

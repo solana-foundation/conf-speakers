@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Check, CircleMinus, Film, Info, X } from "lucide-react";
+import { Check, CircleMinus, Film, Info, X } from "@/components/ui/icons";
 import { DeckStatus } from "@/lib/airtable/types";
 import { buildEventCouponUrl, EVENT_REGISTRATION_PLATFORM, SPEAKER_CONTACT_EMAIL } from "@/lib/site";
 
@@ -211,25 +211,24 @@ export default function ActionsChecklist({
         status = "todo"; // DeckStatus.ToUpload
       }
 
-      // Determine link based on deck status:
-      // - ToUpload: Show upload link so user can upload their deck
-      // - Uploaded: Show link in case user needs to re-upload
-      // - Approved: No link needed, deck is finalized
-      // - null/undefined: Filtered out above
-      const getDeckLink = (): string | null => {
-        if (isApproved) return null;
-        // For ToUpload and Uploaded states, show link only if available
-        return slideDeckFile || null;
-      };
+      const deckLink = isApproved
+        ? null
+        : slideDeckFile ||
+          `mailto:${SPEAKER_CONTACT_EMAIL}?subject=${encodeURIComponent(`Deck upload link for ${session.name ?? "my session"}`)}`;
 
       return {
         id: `upload-deck-${session.id}`,
-        title: `Deck upload status for - ${session.name}`,
-        description:
-          "Only Product Keynote speakers need to upload a deck. If requested for this session, use 16:9, embed fonts, and upload Keynote or PowerPoint files. Upload video files separately.",
+        title: `Deck: ${session.name ?? "Your session"}`,
+        description: isApproved
+          ? "Your deck is approved."
+          : slideDeckFile
+            ? isUploaded
+              ? "Your deck is awaiting review. Use the link if you need to replace it."
+              : "Upload your deck using the link provided by the speaker team."
+            : "The upload link is not available yet. Ask the speaker team for it.",
         status,
-        link: getDeckLink(),
-        linkText: getDeckLink() ? "Deck Files Dropbox" : null,
+        link: deckLink,
+        linkText: deckLink ? (slideDeckFile ? "Open upload link" : "Ask for upload link") : null,
         type: "task" as const,
       };
     });
@@ -249,23 +248,23 @@ export default function ActionsChecklist({
     {
       id: "stage-team-questions",
       title: "Questions",
-      description: `Email: ${SPEAKER_CONTACT_EMAIL}`,
+      description: "Contact the speaker team about your session or event day.",
       status: "pending" as const,
-      link: null,
-      linkText: null,
+      link: `mailto:${SPEAKER_CONTACT_EMAIL}`,
+      linkText: "Email speaker team",
       type: "info" as const,
     },
   ];
 
   const getTaskIcon = (task: Task) => {
     if (task.type === "info") {
-      return <Info className="h-5 w-5 text-[#2a88de]" />;
+      return <Info className="h-5 w-5 text-[#3c91ff]" />;
     }
     if (task.type === "media") {
-      return <Film className="h-5 w-5 text-[#9945ff]" />;
+      return <Film className="h-5 w-5 text-[#aa67fb]" />;
     }
     if (task.status === "approved" || task.status === "Approved") {
-      return <Check className="h-5 w-5 text-[#19fb9b]" />;
+      return <Check className="h-5 w-5 text-[#14f195]" />;
     }
     if (task.status === "Denied") {
       return <X className="h-5 w-5 text-red-500" />;
@@ -290,29 +289,29 @@ export default function ActionsChecklist({
             key={task.id}
             className={`flex items-start gap-3 rounded-lg border p-3 ${
               task.type === "info"
-                ? "border-[#2a88de]/20 bg-[#2a88de]/5"
+                ? "border-[#3c91ff]/20 bg-[#3c91ff]/5"
                 : task.status === "Denied"
                   ? "border-red-500/30 bg-red-500/5"
                   : "border-white/10 bg-white/[0.02]"
             }`}
           >
             <div className="flex items-start justify-center">{getTaskIcon(task)}</div>
-            <div className="flex-1 space-y-2">
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex items-center gap-2">
+            <div className="min-w-0 flex-1 space-y-2">
+              <div className="flex flex-col items-start gap-2 sm:flex-row sm:justify-between">
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
                   <h4 className={"h4"}>{task.title}</h4>
                   {task.type === "task" && (task.status === "approved" || task.status === "Approved") && (
-                    <span className="rounded-full bg-[#19fb9b]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#19fb9b] uppercase">
+                    <span className="rounded-full bg-[#14f195]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#14f195] uppercase">
                       Approved
                     </span>
                   )}
                   {task.type === "task" && task.status === "todo" && (
-                    <span className="rounded-full bg-[#2a88de]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#2a88de] uppercase">
+                    <span className="rounded-full bg-[#3c91ff]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#3c91ff] uppercase">
                       To Do
                     </span>
                   )}
                   {task.type === "task" && (task.status === "pending" || task.status === "Pending") && (
-                    <span className="rounded-full bg-[#c9ff7c]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#c9ff7c] uppercase">
+                    <span className="rounded-full bg-[#c0e021]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#c0e021] uppercase">
                       Pending
                     </span>
                   )}
@@ -323,7 +322,7 @@ export default function ActionsChecklist({
                   )}
                 </div>
                 {task.link && task.linkText && (
-                  <Button size="sm" variant="azure" asChild>
+                  <Button size="sm" variant="azure" className="max-w-full shrink-0" asChild>
                     <a target="_blank" rel="noopener noreferrer" href={task.link}>
                       {task.linkText}
                     </a>
@@ -342,7 +341,7 @@ export default function ActionsChecklist({
                             target="_blank"
                             rel="noopener noreferrer"
                             href={couponUrl}
-                            className="text-[#9945ff] transition-colors hover:text-[#19fb9b] hover:underline"
+                            className="text-[#aa67fb] transition-colors hover:text-[#14f195] hover:underline"
                           >
                             {code}
                           </a>
@@ -362,7 +361,7 @@ export default function ActionsChecklist({
                         target="_blank"
                         rel="noopener noreferrer"
                         href={mediaLink.url}
-                        className="text-[#9945ff] transition-colors hover:text-[#19fb9b] hover:underline"
+                        className="text-[#aa67fb] transition-colors hover:text-[#14f195] hover:underline"
                       >
                         {mediaLink.label}
                       </a>

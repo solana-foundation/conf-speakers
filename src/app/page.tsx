@@ -8,10 +8,11 @@ import { getSessionCalendarUrl, getSessionsCalendarUrl } from "@/lib/ics/utils";
 import { GlobalStateProvider } from "@/lib/state";
 import ScheduleSessionsTable from "@/components/schedule-sessions-table";
 import ScheduleSubscribeButton from "@/components/schedule-subscribe-button";
-import { EVENT_DESCRIPTION, EVENT_NAME, HOME_SCHEDULE_ENABLED } from "@/lib/site";
+import { EVENT_DESCRIPTION, EVENT_NAME, HOME_SCHEDULE_ENABLED, SITE_NAME } from "@/lib/site";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: `${EVENT_NAME} Schedule`,
+  title: HOME_SCHEDULE_ENABLED ? `${EVENT_NAME} Schedule` : SITE_NAME,
   description: EVENT_DESCRIPTION,
   robots: {
     index: false,
@@ -22,6 +23,8 @@ export const metadata: Metadata = {
 export const revalidate = 600; // 10 minutes
 
 export default async function SchedulePage() {
+  if (!HOME_SCHEDULE_ENABLED) redirect("/email-link");
+
   const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
   let filteredSessionsData: Array<
     ReturnType<typeof parseSessionRecord> & { subscribeUrl: string; speakers: Speaker[] }

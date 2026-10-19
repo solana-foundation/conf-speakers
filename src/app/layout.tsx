@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { abcDiatype, macanMono, fhLecturis, spaceGrotesk } from "../fonts";
+import { breakpointBody, breakpointDisplay, breakpointMono } from "../fonts";
 import { SiteHeader } from "@/components/header";
 import { Suspense } from "react";
 import { EVENT_DESCRIPTION, EVENT_NAME, SITE_NAME, SITE_URL, SOCIAL_IMAGE_PATH } from "@/lib/site";
@@ -38,7 +38,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${abcDiatype.variable} ${macanMono.variable} ${fhLecturis.variable} ${spaceGrotesk.variable} antialiased`}>
+      <body
+        className={`${breakpointBody.variable} ${breakpointDisplay.variable} ${breakpointMono.variable} antialiased`}
+      >
         <Suspense fallback={null}>
           <SiteHeader />
         </Suspense>

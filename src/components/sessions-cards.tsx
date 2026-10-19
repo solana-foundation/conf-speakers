@@ -8,15 +8,8 @@ import { Session, Speaker } from "@/lib/airtable/types";
 import { getWebPublishingStatus } from "@/lib/airtable/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StageBadge from "@/components/stage-badge";
-import { Calendar, Clock, Users, AlertTriangle, Info, MessageCircle } from "lucide-react";
+import { Calendar, Clock, Users, AlertTriangle, Info, MessageCircle } from "@/components/ui/icons";
 import { useCallback } from "react";
-
-// TODO: check opening times for each day
-const VENUE_OPENING_TIMES: Record<string, string> = {
-  "Dec 11": "Doors open 9:30am",
-  "Dec 12": "Doors open 10am",
-  "Dec 13": "Doors open 10am",
-};
 
 const FORMAT_DESCRIPTIONS: Record<string, string> = {
   "Debate (20 min)":
@@ -76,16 +69,6 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
     [],
   );
 
-  const getDoorsOpenTime = useCallback((session: Session & { startTime?: Session["startTime"] }) => {
-    if (!session.startTime) {
-      return null;
-    }
-
-    const dateKey = formatVenueTime(session.startTime, "MMM d");
-
-    return VENUE_OPENING_TIMES[dateKey] ?? null;
-  }, []);
-
   const getFormatDescription = useCallback((format?: string[] | null) => {
     if (!format || format.length === 0) {
       return null;
@@ -98,21 +81,22 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
 
   return (
     <>
-      <h2 className="font-space-grotesk text-sm font-semibold uppercase tracking-[0.15em] text-white/60">Your Schedule</h2>
+      <h2 className="breakpoint-display text-2xl text-white sm:text-3xl">Your schedule</h2>
       <div className="space-y-6">
+        {items.length === 0 && (
+          <div className="border border-white/20 bg-[#1e1e1e] p-6 text-white/70">
+            Your sessions will appear here when the speaker team assigns them.
+          </div>
+        )}
         {/* Sessions Cards */}
         <div className="space-y-4">
           {items.map((session) => {
             const publishingStatusFlags = getPublishingStatusFlags(session);
             const sessionDuration = getSessionDuration(session);
-            const doorsOpenTime = getDoorsOpenTime(session);
             const formatDescription = getFormatDescription(session.format);
 
             return (
-              <Card
-                key={session.id}
-                className="overflow-hidden border-white/10 bg-white/[0.02] backdrop-blur-sm"
-              >
+              <Card key={session.id} className="overflow-hidden rounded-none border-white/20 bg-[#1e1e1e]">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-2">
@@ -137,26 +121,26 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                 <CardContent className="space-y-4">
                   {/* Greenlight Time Display */}
                   {!publishingStatusFlags?.hasTime && !session.greenlightTime && (
-                    <div className="flex items-center gap-2 rounded-lg border border-[#2a88de]/30 bg-[#2a88de]/10 px-3 py-2 text-sm">
-                      <Info className="h-4 w-4 text-[#2a88de]" />
+                    <div className="flex items-center gap-2 rounded-lg border border-[#3c91ff]/30 bg-[#3c91ff]/10 px-3 py-2 text-sm">
+                      <Info className="h-4 w-4 text-[#3c91ff]" />
                       <span className="font-medium text-white">Scheduling in progress</span>
                     </div>
                   )}
 
                   {/* Greenlight Time Display */}
-                  {session.greenlightTime && publishingStatusFlags?.hasDoNotPublish && (
-                    <div className="flex items-center gap-2 rounded-lg border border-[#c9ff7c]/30 bg-[#c9ff7c]/10 px-3 py-2 text-sm">
-                      <AlertTriangle className="h-4 w-4 text-[#c9ff7c]" />
+                  {session.greenlightTime && !publishingStatusFlags?.hasTime && (
+                    <div className="flex items-center gap-2 rounded-lg border border-[#c0e021]/30 bg-[#c0e021]/10 px-3 py-2 text-sm">
+                      <AlertTriangle className="h-4 w-4 text-[#c0e021]" />
                       <span className="font-medium text-white">{session.greenlightTime}</span>
                     </div>
                   )}
 
                   {/* Arrival Time Alert */}
                   {publishingStatusFlags?.hasTime && (
-                    <div className="flex items-center gap-2 rounded-lg border border-[#19fb9b]/30 bg-[#19fb9b]/10 px-3 py-2 text-sm">
-                      <AlertTriangle className="h-4 w-4 text-[#19fb9b]" />
+                    <div className="flex items-center gap-2 rounded-lg border border-[#14f195]/30 bg-[#14f195]/10 px-3 py-2 text-sm">
+                      <AlertTriangle className="h-4 w-4 text-[#14f195]" />
                       <span className="font-medium text-white">
-                        Please arrive 45 minutes before your session starts
+                        The speaker team will confirm your check-in time and location.
                       </span>
                     </div>
                   )}
@@ -185,10 +169,7 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                         {sessionDuration && (
                           <div className="flex items-center gap-1">
                             <Clock className="h-4 w-4" />
-                            <span>
-                              {sessionDuration}
-                              {doorsOpenTime ? ` - ${doorsOpenTime}` : ""}
-                            </span>
+                            <span>{sessionDuration}</span>
                           </div>
                         )}
                       </>
@@ -228,7 +209,10 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                               {speaker.firstName} {speaker.lastName}
                             </span>
                             {speaker.sessionRole && (
-                              <Badge variant="secondary" className="border-white/10 bg-white/10 text-[10px] tracking-[0.12em] uppercase">
+                              <Badge
+                                variant="secondary"
+                                className="border-white/10 bg-white/10 text-[10px] tracking-[0.12em] uppercase"
+                              >
                                 {speaker.sessionRole}
                               </Badge>
                             )}
@@ -252,7 +236,7 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                       {publishingStatusFlags?.hasTime && allSessionsCalendarUrl && (
                         <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                           <a href={allSessionsCalendarUrl} target="_blank" rel="noopener noreferrer">
-                            <Calendar className="mr-2 h-4 w-4" />+ Add All Sessions to Calendar
+                            <Calendar className="mr-2 h-4 w-4" />+ Add All My Sessions to Calendar
                           </a>
                         </Button>
                       )}
@@ -262,7 +246,7 @@ export default function SessionsCards({ items, calendarUrl, allSessionsCalendarU
                           size="sm"
                           variant="outline"
                           asChild
-                          className="border-[#2a88de]/30 text-[#2a88de] hover:bg-[#2a88de]/10 w-full sm:w-auto"
+                          className="w-full border-[#3c91ff]/30 text-[#3c91ff] hover:bg-[#3c91ff]/10 sm:w-auto"
                         >
                           <a href={session.portalTelegramGroup} target="_blank" rel="noopener noreferrer">
                             <MessageCircle className="mr-2 h-4 w-4" />

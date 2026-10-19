@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
       console.info(`[auth] link=${link}`);
     }
 
-    const hasSendGridConfig = Boolean(process.env.SENDGRID_API_KEY && process.env.SENDGRID_TEMPLATE_ID);
+    const hasSendGridConfig = Boolean(process.env.SENDGRID_API_KEY);
 
     if (!hasSendGridConfig) {
       if (isDevelopment) {
