@@ -1,5 +1,4 @@
 import fs from "node:fs/promises";
-import { createRequire } from "node:module";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -11,11 +10,6 @@ const BODY_FONT_SIZE = 30;
 const FOOTER_FONT_SIZE = 24;
 const BODY_LINE_HEIGHT = 40;
 const FOOTER_LINE_HEIGHT = 30;
-const require = createRequire(import.meta.url);
-const { loadEnvConfig } = require("@next/env") as {
-  loadEnvConfig: (dir: string) => void;
-};
-
 function toPublicPath(assetPath: string): string {
   const normalizedPath = assetPath.startsWith("/") ? assetPath.slice(1) : assetPath;
   return path.join(process.cwd(), "public", normalizedPath);
@@ -120,8 +114,6 @@ function buildOverlaySvg(eventName: string, eventDescription: string, eventLocat
 }
 
 async function generate() {
-  loadEnvConfig(process.cwd());
-
   const {
     EVENT_DESCRIPTION,
     EVENT_LOCATION,
