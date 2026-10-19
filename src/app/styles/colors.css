@@ -23,12 +23,6 @@
   --color-transparent-null-20: #00000033;
   --color-transparent-null-10: #0000001a;
 
-  /* Neutral gray scale */
-  --color-accelerate-gray-100: #c0c0c0;
-  --color-accelerate-gray-200: #a2a2a2;
-  --color-accelerate-gray-300: #353535;
-  --color-accelerate-muted: #c0c0c0;
-
   /* Section Tokens */
   --color-byte: var(--color-primary-byte);
   --color-azure: var(--color-secondary-azure);

@@ -137,37 +137,6 @@ html {
   }
 }
 
-.gradient-text {
-  background: linear-gradient(100deg, #ffffff 0%, #aa67fb 55%, #14f195 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ─── Gradient CTA button (purple → green) ─── */
-.btn-cta {
-  @apply inline-flex items-center justify-center gap-2 rounded-full text-black transition-all hover:opacity-90;
-  background: linear-gradient(to right, #aa67fb, #14f195);
-}
-
-/* ─── Gradient border button ─── */
-.btn-outline-gradient {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-transparent font-semibold tracking-[0.05em] text-white uppercase transition-colors hover:bg-white/5;
-  background:
-    linear-gradient(black, black) padding-box,
-    linear-gradient(to right, #aa67fb, #14f195) border-box;
-  border: 1px solid transparent;
-}
-
-/* ─── Section utilities ─── */
-.section-accelerate {
-  @apply bg-black py-12 lg:py-16;
-}
-
-.section-divider {
-  @apply border-t border-[#353535];
-}
-
 /* BP26 display face for section titles (reference H2) */
 .breakpoint-section-title {
   font-family: var(--font-breakpoint-display), Arial, sans-serif;
