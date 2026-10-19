@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 import { unstable_cache } from "next/cache";
 import { getAirtableRecord, listAirtableRecords } from "./client";
 import { airtableTableIds } from "./config";
@@ -6,7 +7,7 @@ const tableSessions = airtableTableIds.sessions;
 const tableSpeakers = airtableTableIds.speakers;
 const tableFormats = airtableTableIds.formats;
 const REVALIDATE_TIME = 300; // 5 minutes
-const DATA_CACHING_OFF = process.env.DATA_CACHING_OFF === "true";
+const DATA_CACHING_OFF = APP_CONFIG.DATA_CACHING_OFF;
 
 if (!tableSessions || !tableSpeakers || !tableFormats) {
   throw new Error("AIRTABLE_TABLE_AGENDA or AIRTABLE_TABLE_SPEAKERS or AIRTABLE_TABLE_FORMATS is not set");

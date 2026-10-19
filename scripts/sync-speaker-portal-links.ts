@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "../src/lib/app-config";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -23,11 +24,11 @@ async function main() {
   const { SITE_URL } = await import("../src/lib/site");
 
   const write = process.argv.includes("--write");
-  const baseId = process.env.AIRTABLE_BASE;
-  const tableId = process.env.AIRTABLE_TABLE_SPEAKERS;
-  const viewId = process.env.AIRTABLE_SPEAKER_GREENLIGHT_VIEW;
+  const baseId = APP_CONFIG.AIRTABLE_BASE;
+  const tableId = APP_CONFIG.AIRTABLE_TABLE_SPEAKERS;
+  const viewId = APP_CONFIG.AIRTABLE_SPEAKER_GREENLIGHT_VIEW;
   const token = process.env.AIRTABLE_PAT;
-  const lifetime = Number(process.env.NEXT_PUBLIC_KEY_EXP);
+  const lifetime = APP_CONFIG.NEXT_PUBLIC_KEY_EXP;
   const secret = process.env.SITE_SECRET;
 
   if (!baseId || !tableId || !viewId || !token || !secret || !Number.isFinite(lifetime) || lifetime <= 0) {

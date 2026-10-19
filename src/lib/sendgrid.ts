@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 import sgMail from "@sendgrid/mail";
 import { ORGANIZER_NAME, SITE_NAME } from "@/lib/site";
 
@@ -10,8 +11,8 @@ type SendMagicLinkArgs = {
 };
 
 const apiKey = process.env.SENDGRID_API_KEY;
-const fromEmail = process.env.SENDGRID_FROM_EMAIL ?? "noreply@example.com";
-const sandboxMode = process.env.SENDGRID_SANDBOX_MODE === "true";
+const fromEmail = APP_CONFIG.SENDGRID_FROM_EMAIL;
+const sandboxMode = APP_CONFIG.SENDGRID_SANDBOX_MODE;
 
 if (apiKey) {
   sgMail.setApiKey(apiKey);
@@ -32,13 +33,17 @@ export async function sendMagicLinkEmail({
   const name = recipientName?.trim() || "there";
   const expiry = expiresInLabel ?? "90 days";
   const escapeHtml = (value: string) =>
-    value.replace(/[&<>"']/g, (character) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    })[character]!);
+    value.replace(
+      /[&<>"']/g,
+      (character) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[character]!,
+    );
 
   const email = {
     from: {

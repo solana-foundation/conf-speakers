@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 import { Metadata } from "next/types";
 import { generateKey, isKeyValid, getTokenPayload } from "@/lib/sign.server";
 import { notFound, redirect } from "next/navigation";
@@ -62,15 +63,11 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
     notFound();
   }
 
-  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics", speakerId);
+  const calendarKey = generateKey(Date.now() + APP_CONFIG.NEXT_PUBLIC_KEY_EXP, "ics", speakerId);
   const speakerCalendarUrl = getSpeakerCalendarUrl(speakerId, calendarKey);
 
   // Generate all-sessions calendar URL (no speakerId filter)
-  const allSessionsCalendarKey = generateKey(
-    Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0),
-    "ics",
-    speakerId,
-  );
+  const allSessionsCalendarKey = generateKey(Date.now() + APP_CONFIG.NEXT_PUBLIC_KEY_EXP, "ics", speakerId);
   const allSessionsCalendarUrl = getSessionsCalendarUrl(allSessionsCalendarKey);
 
   // Fetch main speaker directly (cacheable - small payload)

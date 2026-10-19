@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 import { DateTime, Settings } from "luxon";
 
 const TZ_ALIASES: Record<string, string> = {
@@ -6,7 +7,7 @@ const TZ_ALIASES: Record<string, string> = {
   "NEW YORK CITY": "America/New_York",
 };
 
-function normalizeVenueTimezone(value?: string): string | undefined {
+export function normalizeVenueTimezone(value?: string): string | undefined {
   if (!value) {
     return undefined;
   }
@@ -14,7 +15,7 @@ function normalizeVenueTimezone(value?: string): string | undefined {
   return TZ_ALIASES[value.trim().toUpperCase()] ?? value;
 }
 
-const VENUE_TIMEZONE = normalizeVenueTimezone(process.env.NEXT_PUBLIC_VENUE_TZ);
+const VENUE_TIMEZONE = normalizeVenueTimezone(APP_CONFIG.NEXT_PUBLIC_VENUE_TZ);
 
 if (!VENUE_TIMEZONE) {
   throw new Error("NEXT_PUBLIC_VENUE_TZ is not set");

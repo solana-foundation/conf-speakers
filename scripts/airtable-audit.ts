@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "../src/lib/app-config";
 import fs from "node:fs";
 import path from "node:path";
 import { airtableFieldMap, airtableRequiredFields, airtableTableIds } from "../src/lib/airtable/config";
@@ -145,16 +146,16 @@ function printTableAudit(
 
 async function main() {
   const env = loadEnv();
-  const baseId = env.AIRTABLE_BASE;
+  const baseId = APP_CONFIG.AIRTABLE_BASE;
   const token = env.AIRTABLE_PAT;
 
   if (!baseId || !token) {
     throw new Error("AIRTABLE_BASE or AIRTABLE_PAT is missing from .env/.env.local");
   }
 
-  const sessionsTable = airtableTableIds.sessions || env.AIRTABLE_TABLE_AGENDA;
-  const speakersTable = airtableTableIds.speakers || env.AIRTABLE_TABLE_SPEAKERS;
-  const formatsTable = airtableTableIds.formats || env.AIRTABLE_TABLE_FORMATS;
+  const sessionsTable = airtableTableIds.sessions;
+  const speakersTable = airtableTableIds.speakers;
+  const formatsTable = airtableTableIds.formats;
 
   if (!sessionsTable || !speakersTable || !formatsTable) {
     throw new Error("One or more Airtable table ids are missing");

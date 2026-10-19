@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 /**
  * Get the base URL for the application
  */
@@ -6,7 +7,7 @@ function getBaseUrl(): string {
     return window.location.origin;
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL;
+  const baseUrl = APP_CONFIG.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL;
   if (baseUrl) {
     // Strip protocol if already present
     const cleanUrl = baseUrl.replace(/^https?:\/\//, "");

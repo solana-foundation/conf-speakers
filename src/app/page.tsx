@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 import { Metadata } from "next/types";
 import { getCachedSessions, getCachedSpeakers } from "@/lib/airtable/fetch";
 import { parseSessionRecord, parseSpeakerRecord } from "@/lib/airtable/schemas";
@@ -25,7 +26,7 @@ export const revalidate = 600; // 10 minutes
 export default async function SchedulePage() {
   if (!HOME_SCHEDULE_ENABLED) redirect("/email-link");
 
-  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
+  const calendarKey = generateKey(Date.now() + APP_CONFIG.NEXT_PUBLIC_KEY_EXP, "ics");
   let filteredSessionsData: Array<
     ReturnType<typeof parseSessionRecord> & { subscribeUrl: string; speakers: Speaker[] }
   > = [];

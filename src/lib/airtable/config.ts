@@ -1,11 +1,12 @@
+import { APP_CONFIG } from "@/lib/app-config";
 // Update this file first when onboarding a new Airtable base for an event.
 // The app reads canonical field names from these alias lists instead of hardcoding
 // a single Airtable column label throughout the codebase.
 
 export const airtableTableIds = {
-  sessions: process.env.AIRTABLE_TABLE_AGENDA,
-  speakers: process.env.AIRTABLE_TABLE_SPEAKERS,
-  formats: process.env.AIRTABLE_TABLE_FORMATS,
+  sessions: APP_CONFIG.AIRTABLE_TABLE_AGENDA,
+  speakers: APP_CONFIG.AIRTABLE_TABLE_SPEAKERS,
+  formats: APP_CONFIG.AIRTABLE_TABLE_FORMATS,
 } as const;
 
 export const airtableFieldMap = {

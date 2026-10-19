@@ -1,3 +1,5 @@
+import { APP_CONFIG } from "@/lib/app-config";
+
 function normalizeBaseUrl(value?: string): string {
   const raw = value?.trim();
   if (!raw) {
@@ -24,71 +26,31 @@ function normalizeOptionalUrl(value?: string): string {
   return `https://${raw}`;
 }
 
-function parseBooleanEnv(value: string | undefined, defaultValue: boolean): boolean {
-  if (value == null) {
-    return defaultValue;
-  }
-
-  const normalized = value.trim().toLowerCase();
-
-  if (["1", "true", "yes", "on"].includes(normalized)) {
-    return true;
-  }
-
-  if (["0", "false", "no", "off"].includes(normalized)) {
-    return false;
-  }
-
-  return defaultValue;
-}
-
-function parseNumberEnv(value: string | undefined, defaultValue: number): number {
-  if (value == null) {
-    return defaultValue;
-  }
-
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : defaultValue;
-}
-
-export const SITE_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL);
+export const SITE_URL = normalizeBaseUrl(APP_CONFIG.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL);
 export const SITE_HOST = new URL(SITE_URL).host;
 
-export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME?.trim() || "Event";
-export const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME?.trim() || `${EVENT_NAME} Speaker Portal`;
-export const EVENT_DESCRIPTION =
-  process.env.NEXT_PUBLIC_EVENT_DESCRIPTION?.trim() || "Agenda and speaker information for this event.";
-export const EVENT_LOCATION = process.env.NEXT_PUBLIC_EVENT_LOCATION?.trim() || "";
-export const EVENT_DATES_LABEL = process.env.NEXT_PUBLIC_EVENT_DATES?.trim() || "";
-export const ORGANIZER_NAME =
-  process.env.NEXT_PUBLIC_ORGANIZER_NAME?.trim() || process.env.SENDGRID_FROM_NAME?.trim() || "Events Team";
-export const ORGANIZER_EMAIL =
-  process.env.EVENT_ORGANIZER_EMAIL?.trim() || process.env.SENDGRID_FROM_EMAIL?.trim() || "noreply@example.com";
-export const CALENDAR_NAME = process.env.EVENT_CALENDAR_NAME?.trim() || `${EVENT_NAME} Schedule`;
-export const EVENT_URL = normalizeOptionalUrl(process.env.NEXT_PUBLIC_EVENT_URL);
-export const EVENT_SITE_URL = normalizeOptionalUrl(process.env.NEXT_PUBLIC_EVENT_SITE_URL);
-export const EVENT_REGISTRATION_PLATFORM = process.env.NEXT_PUBLIC_EVENT_REGISTRATION_PLATFORM?.trim() || "Luma";
-export const EVENT_COUPON_PARAM = process.env.NEXT_PUBLIC_EVENT_COUPON_PARAM?.trim() || "coupon";
-export const SPEAKER_CONTACT_EMAIL = process.env.NEXT_PUBLIC_SPEAKER_CONTACT_EMAIL?.trim() || ORGANIZER_EMAIL;
-export const SPEAKER_GUIDE_URL = process.env.NEXT_PUBLIC_SPEAKER_GUIDE_URL?.trim() || "";
-export const SPEAKER_GUIDE_LABEL = process.env.NEXT_PUBLIC_SPEAKER_GUIDE_LABEL?.trim() || "Speaker guide";
-export const SPEAKER_GUIDE_NOTE = process.env.NEXT_PUBLIC_SPEAKER_GUIDE_NOTE?.trim() || "";
-export const HOME_SCHEDULE_ENABLED = parseBooleanEnv(process.env.NEXT_PUBLIC_HOME_SCHEDULE_ENABLED, true);
-const configuredSocialImagePath = process.env.NEXT_PUBLIC_SOCIAL_IMAGE_PATH?.trim() || "";
-const configuredSocialBackgroundImagePath = process.env.NEXT_PUBLIC_SOCIAL_BG_IMAGE_PATH?.trim() || "";
-export const SITE_LOGO_PATH = process.env.NEXT_PUBLIC_SITE_LOGO_PATH?.trim() || "/breakpoint/nav-bp26.svg";
-export const SITE_LOGO_WIDTH = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_WIDTH, 104);
-export const SITE_LOGO_HEIGHT = parseNumberEnv(process.env.NEXT_PUBLIC_SITE_LOGO_HEIGHT, 20);
-export const SOCIAL_IMAGE_PATH =
-  process.env.NEXT_PUBLIC_SOCIAL_OUTPUT_IMAGE_PATH?.trim() ||
-  (configuredSocialImagePath &&
-  configuredSocialImagePath !== "/opengraph-image" &&
-  configuredSocialImagePath !== "/social-card.webp"
-    ? configuredSocialImagePath
-    : "/social-image.png");
-export const SOCIAL_BACKGROUND_IMAGE_PATH =
-  configuredSocialBackgroundImagePath ||
-  (configuredSocialImagePath.toLowerCase().endsWith(".webp") ? configuredSocialImagePath : "/breakpoint/social-card.jpg");
+export const EVENT_NAME = APP_CONFIG.NEXT_PUBLIC_EVENT_NAME;
+export const SITE_NAME = APP_CONFIG.NEXT_PUBLIC_SITE_NAME;
+export const EVENT_DESCRIPTION = APP_CONFIG.NEXT_PUBLIC_EVENT_DESCRIPTION;
+export const EVENT_LOCATION = APP_CONFIG.NEXT_PUBLIC_EVENT_LOCATION;
+export const EVENT_DATES_LABEL = APP_CONFIG.NEXT_PUBLIC_EVENT_DATES;
+export const ORGANIZER_NAME = APP_CONFIG.NEXT_PUBLIC_ORGANIZER_NAME || APP_CONFIG.SENDGRID_FROM_NAME;
+export const ORGANIZER_EMAIL = APP_CONFIG.EVENT_ORGANIZER_EMAIL || APP_CONFIG.SENDGRID_FROM_EMAIL;
+export const CALENDAR_NAME = APP_CONFIG.EVENT_CALENDAR_NAME;
+export const EVENT_URL = normalizeOptionalUrl(APP_CONFIG.NEXT_PUBLIC_EVENT_URL);
+export const EVENT_SITE_URL = normalizeOptionalUrl(APP_CONFIG.NEXT_PUBLIC_EVENT_SITE_URL);
+export const EVENT_REGISTRATION_PLATFORM = APP_CONFIG.NEXT_PUBLIC_EVENT_REGISTRATION_PLATFORM;
+export const EVENT_COUPON_PARAM = APP_CONFIG.NEXT_PUBLIC_EVENT_COUPON_PARAM;
+export const SPEAKER_CONTACT_EMAIL = APP_CONFIG.NEXT_PUBLIC_SPEAKER_CONTACT_EMAIL || ORGANIZER_EMAIL;
+export const SPEAKER_GUIDE_URL = APP_CONFIG.NEXT_PUBLIC_SPEAKER_GUIDE_URL;
+export const SPEAKER_GUIDE_LABEL = APP_CONFIG.NEXT_PUBLIC_SPEAKER_GUIDE_LABEL;
+export const SPEAKER_GUIDE_NOTE = APP_CONFIG.NEXT_PUBLIC_SPEAKER_GUIDE_NOTE;
+export const HOME_SCHEDULE_ENABLED = APP_CONFIG.NEXT_PUBLIC_HOME_SCHEDULE_ENABLED;
+export const SITE_LOGO_PATH = APP_CONFIG.NEXT_PUBLIC_SITE_LOGO_PATH;
+export const SITE_LOGO_WIDTH = APP_CONFIG.NEXT_PUBLIC_SITE_LOGO_WIDTH;
+export const SITE_LOGO_HEIGHT = APP_CONFIG.NEXT_PUBLIC_SITE_LOGO_HEIGHT;
+export const SOCIAL_IMAGE_PATH = APP_CONFIG.NEXT_PUBLIC_SOCIAL_IMAGE_PATH;
+export const SOCIAL_BACKGROUND_IMAGE_PATH = APP_CONFIG.NEXT_PUBLIC_SOCIAL_BG_IMAGE_PATH;
 
 export const EVENT_FILE_SLUG =
   EVENT_NAME.toLowerCase()

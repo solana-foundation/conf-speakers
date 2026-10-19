@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 import { NextRequest, NextResponse } from "next/server";
 import { generateKey } from "@/lib/sign.server";
 import { z } from "zod";
@@ -36,7 +37,7 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const exp = Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP!);
+  const exp = Date.now() + APP_CONFIG.NEXT_PUBLIC_KEY_EXP;
   try {
     const token = generateKey(exp, "auth", speakerId);
     return NextResponse.json({
