@@ -62,65 +62,59 @@ const getFirstAttachmentUrl = (fields: AirtableFields, aliases: readonly string[
   return undefined;
 };
 
-export const SessionFieldsSchema = z
-  .object(AirtableRecordSchema.shape)
-  .transform((data) => ({
-    id: data.id,
-    name: getStringField(data.fields, getFieldAliases("session", "name")),
-    description: getStringField(data.fields, getFieldAliases("session", "description")),
-    startTime: getStringField(data.fields, getFieldAliases("session", "startTime")),
-    endTime: getStringField(data.fields, getFieldAliases("session", "endTime")),
-    stage: normalizeStageTitle(getStringField(data.fields, getFieldAliases("session", "stage"))),
-    speakerIds: getStringArrayField(data.fields, getFieldAliases("session", "speakerIds")),
-    moderatorIds: getStringArrayField(data.fields, getFieldAliases("session", "moderatorIds")),
-    format: getStringArrayField(data.fields, getFieldAliases("session", "formatIds")),
-    actionsDeckReceived: getStringField(data.fields, getFieldAliases("session", "actionsDeckReceived")),
-    portalTelegramGroup: getStringField(data.fields, getFieldAliases("session", "portalTelegramGroup")),
-    greenlightTime: getStringField(data.fields, getFieldAliases("session", "greenlightTime")),
-    webPublishingStatus: getStringArrayField(data.fields, getFieldAliases("session", "webPublishingStatus")),
-  }));
+export const SessionFieldsSchema = z.object(AirtableRecordSchema.shape).transform((data) => ({
+  id: data.id,
+  name: getStringField(data.fields, getFieldAliases("session", "name")),
+  description: getStringField(data.fields, getFieldAliases("session", "description")),
+  startTime: getStringField(data.fields, getFieldAliases("session", "startTime")),
+  endTime: getStringField(data.fields, getFieldAliases("session", "endTime")),
+  stage: normalizeStageTitle(getStringField(data.fields, getFieldAliases("session", "stage"))),
+  speakerIds: getStringArrayField(data.fields, getFieldAliases("session", "speakerIds")),
+  moderatorIds: getStringArrayField(data.fields, getFieldAliases("session", "moderatorIds")),
+  format: getStringArrayField(data.fields, getFieldAliases("session", "formatIds")),
+  actionsDeckReceived: getStringField(data.fields, getFieldAliases("session", "actionsDeckReceived")),
+  portalTelegramGroup: getStringField(data.fields, getFieldAliases("session", "portalTelegramGroup")),
+  greenlightTime: getStringField(data.fields, getFieldAliases("session", "greenlightTime")),
+  webPublishingStatus: getStringArrayField(data.fields, getFieldAliases("session", "webPublishingStatus")),
+}));
 
-export const SpeakerFieldsSchema = z
-  .object(AirtableRecordSchema.shape)
-  .transform((data) => ({
-    id: data.id,
-    _name: getStringField(data.fields, getFieldAliases("speaker", "name")),
-    firstName: getStringField(data.fields, getFieldAliases("speaker", "firstName")),
-    lastName: getStringField(data.fields, getFieldAliases("speaker", "lastName")),
-    jobTitle: getStringField(data.fields, getFieldAliases("speaker", "jobTitle")),
-    company: getStringField(data.fields, getFieldAliases("speaker", "company")),
-    bio: getStringField(data.fields, getFieldAliases("speaker", "bio")),
-    imageUrl: getFirstAttachmentUrl(data.fields, getFieldAliases("speaker", "image")),
-    speakerCardUrl: getFirstAttachmentUrl(data.fields, getFieldAliases("speaker", "speakerCard")),
-    xLink: getStringField(data.fields, getFieldAliases("speaker", "twitter"))
-      ? (sanitizeXLink(getStringField(data.fields, getFieldAliases("speaker", "twitter"))!) ?? undefined)
-      : undefined,
-    xName: getStringField(data.fields, getFieldAliases("speaker", "twitter"))
-      ? (sanitizeXName(getStringField(data.fields, getFieldAliases("speaker", "twitter"))!) ?? undefined)
-      : undefined,
-    slideDeckFile: getStringField(data.fields, getFieldAliases("speaker", "slideDeckFile")),
-    lumaTicketSpeaker: getStringField(data.fields, getFieldAliases("speaker", "lumaTicketSpeaker")),
-    lumaTicketPlusOne: getStringField(data.fields, getFieldAliases("speaker", "lumaTicketPlusOne")),
-    invitationCode: getStringField(data.fields, getFieldAliases("speaker", "invitationCode")),
-    discountCode: getStringField(data.fields, getFieldAliases("speaker", "discountCode")),
-    dietary: getStringField(data.fields, getFieldAliases("speaker", "dietary")),
-    speakerPermitApproval: getStringField(data.fields, getFieldAliases("speaker", "speakerPermitApproval")),
-    mcInfo: getStringField(data.fields, getFieldAliases("speaker", "mcInfo")),
-    parkingTicket: getStringField(data.fields, getFieldAliases("speaker", "parkingTicket")),
-    youtubeVideoUrl: getStringField(data.fields, getFieldAliases("speaker", "youtubeVideoUrl")),
-    speakerPhotoLink: getStringField(data.fields, getFieldAliases("speaker", "speakerPhotoLink")),
-    actionsDeckReceived: getStringField(data.fields, getFieldAliases("speaker", "actionsDeckReceived")),
-    greenlightTime: getStringField(data.fields, getFieldAliases("speaker", "greenlightTime")),
-    publishToWeb: getBooleanField(data.fields, getFieldAliases("speaker", "publishToWeb")),
-  }));
+export const SpeakerFieldsSchema = z.object(AirtableRecordSchema.shape).transform((data) => ({
+  id: data.id,
+  _name: getStringField(data.fields, getFieldAliases("speaker", "name")),
+  firstName: getStringField(data.fields, getFieldAliases("speaker", "firstName")),
+  lastName: getStringField(data.fields, getFieldAliases("speaker", "lastName")),
+  jobTitle: getStringField(data.fields, getFieldAliases("speaker", "jobTitle")),
+  company: getStringField(data.fields, getFieldAliases("speaker", "company")),
+  bio: getStringField(data.fields, getFieldAliases("speaker", "bio")),
+  imageUrl: getFirstAttachmentUrl(data.fields, getFieldAliases("speaker", "image")),
+  speakerCardUrl: getFirstAttachmentUrl(data.fields, getFieldAliases("speaker", "speakerCard")),
+  xLink: getStringField(data.fields, getFieldAliases("speaker", "twitter"))
+    ? (sanitizeXLink(getStringField(data.fields, getFieldAliases("speaker", "twitter"))!) ?? undefined)
+    : undefined,
+  xName: getStringField(data.fields, getFieldAliases("speaker", "twitter"))
+    ? (sanitizeXName(getStringField(data.fields, getFieldAliases("speaker", "twitter"))!) ?? undefined)
+    : undefined,
+  slideDeckFile: getStringField(data.fields, getFieldAliases("speaker", "slideDeckFile")),
+  lumaTicketSpeaker: getStringField(data.fields, getFieldAliases("speaker", "lumaTicketSpeaker")),
+  lumaTicketPlusOne: getStringField(data.fields, getFieldAliases("speaker", "lumaTicketPlusOne")),
+  invitationCode: getStringField(data.fields, getFieldAliases("speaker", "invitationCode")),
+  discountCode: getStringField(data.fields, getFieldAliases("speaker", "discountCode")),
+  dietary: getStringField(data.fields, getFieldAliases("speaker", "dietary")),
+  speakerPermitApproval: getStringField(data.fields, getFieldAliases("speaker", "speakerPermitApproval")),
+  mcInfo: getStringField(data.fields, getFieldAliases("speaker", "mcInfo")),
+  parkingTicket: getStringField(data.fields, getFieldAliases("speaker", "parkingTicket")),
+  youtubeVideoUrl: getStringField(data.fields, getFieldAliases("speaker", "youtubeVideoUrl")),
+  speakerPhotoLink: getStringField(data.fields, getFieldAliases("speaker", "speakerPhotoLink")),
+  actionsDeckReceived: getStringField(data.fields, getFieldAliases("speaker", "actionsDeckReceived")),
+  greenlightTime: getStringField(data.fields, getFieldAliases("speaker", "greenlightTime")),
+  publishToWeb: getBooleanField(data.fields, getFieldAliases("speaker", "publishToWeb")),
+}));
 
-export const FormatFieldsSchema = z
-  .object(AirtableRecordSchema.shape)
-  .transform((data) => ({
-    id: data.id,
-    label: getStringField(data.fields, getFieldAliases("format", "label")),
-    durationMinutes: getFieldValue(data.fields, getFieldAliases("format", "durationMinutes")),
-  }));
+export const FormatFieldsSchema = z.object(AirtableRecordSchema.shape).transform((data) => ({
+  id: data.id,
+  label: getStringField(data.fields, getFieldAliases("format", "label")),
+  durationMinutes: getFieldValue(data.fields, getFieldAliases("format", "durationMinutes")),
+}));
 
 export const parseSessionRecord = (record: unknown) => SessionFieldsSchema.parse(record);
 export const parseSpeakerRecord = (record: unknown) => SpeakerFieldsSchema.parse(record);

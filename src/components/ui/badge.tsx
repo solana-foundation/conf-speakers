@@ -5,18 +5,18 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-full border-0 px-2.5 py-0.5 text-xs font-medium uppercase tracking-wider w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none transition-colors overflow-hidden",
+  "inline-flex items-center justify-center rounded-none border border-[#353535] bg-black px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.07em] w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none transition-colors overflow-hidden",
   {
     variants: {
       variant: {
-        default: "bg-[#9945ff]/20 text-[#9945ff]",
-        secondary: "bg-white/10 text-white/60",
-        destructive: "bg-red-500/20 text-red-400",
-        outline: "bg-transparent border border-white/10 text-white/70 hover:bg-white/5",
-        success: "bg-[#19fb9b]/20 text-[#19fb9b]",
-        info: "bg-[#2a88de]/20 text-[#2a88de]",
-        warning: "bg-[#c9ff7c]/20 text-[#c9ff7c]",
-        cyan: "bg-[#00d4ff]/20 text-[#00d4ff]",
+        default: "text-white",
+        secondary: "text-[#a2a2a2]",
+        destructive: "text-red-400",
+        outline: "text-[#c0c0c0] hover:bg-[#1e1e1e]",
+        success: "text-[#14f195]",
+        info: "text-[#3c91ff]",
+        warning: "text-[#c0e021]",
+        cyan: "text-[#3c91ff]",
       },
     },
     defaultVariants: {

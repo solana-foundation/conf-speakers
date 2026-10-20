@@ -1,53 +1,19 @@
 import { DateTime } from "luxon";
-import { vi } from "vitest";
-
-// Mock the environment variable for testing
-const originalEnv = process.env.NEXT_PUBLIC_VENUE_TZ;
-
-beforeAll(() => {
-  process.env.NEXT_PUBLIC_VENUE_TZ = "America/New_York";
-});
-
-afterAll(() => {
-  if (originalEnv) {
-    process.env.NEXT_PUBLIC_VENUE_TZ = originalEnv;
-  } else {
-    delete process.env.NEXT_PUBLIC_VENUE_TZ;
-  }
-});
+import { formatVenueTime, normalizeVenueTimezone } from "./tz";
 
 describe("formatVenueTime", () => {
-  it("should format a DateTime object with default format", async () => {
-    vi.resetModules();
-    process.env.NEXT_PUBLIC_VENUE_TZ = "America/New_York";
-
-    const { formatVenueTime } = await import("./tz");
+  it("formats a DateTime in the configured venue timezone", () => {
     const dateTime = DateTime.fromISO("2025-01-15T10:00:00.000Z");
-    const result = formatVenueTime(dateTime);
-
-    expect(result).toBe("Wed, Jan 15, 2025 5:00 AM America/New_York");
+    expect(formatVenueTime(dateTime)).toBe("Wed, Jan 15, 2025 10:00 AM Europe/London");
   });
 
-  it("should format an ISO string with custom format", async () => {
-    vi.resetModules();
-    process.env.NEXT_PUBLIC_VENUE_TZ = "America/New_York";
-
-    const { formatVenueTime } = await import("./tz");
-    const isoString = "2025-01-15T14:30:00.000Z";
-    const result = formatVenueTime(isoString, "MMM d, yyyy 'at' h:mm a");
-
-    expect(result).toBe("Jan 15, 2025 at 9:30 AM");
+  it("formats an ISO string with a custom format", () => {
+    expect(formatVenueTime("2025-01-15T14:30:00.000Z", "MMM d, yyyy 'at' h:mm a")).toBe("Jan 15, 2025 at 2:30 PM");
   });
 });
 
-describe("NYC timezone alias", () => {
-  it("normalizes NYC to America/New_York", async () => {
-    vi.resetModules();
-    process.env.NEXT_PUBLIC_VENUE_TZ = "NYC";
-
-    const { formatVenueTime: formatWithAlias } = await import("./tz");
-    const result = formatWithAlias("2025-01-15T14:30:00.000Z", "MMM d, yyyy 'at' h:mm a");
-
-    expect(result).toBe("Jan 15, 2025 at 9:30 AM");
+describe("timezone aliases", () => {
+  it("normalizes NYC to America/New_York", () => {
+    expect(normalizeVenueTimezone("NYC")).toBe("America/New_York");
   });
 });

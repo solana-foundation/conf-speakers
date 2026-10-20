@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 import { Metadata } from "next/types";
 import { generateKey, isKeyValid, getTokenPayload } from "@/lib/sign.server";
 import { notFound, redirect } from "next/navigation";
@@ -13,6 +14,7 @@ import ActionsChecklist from "@/components/speaker-portal/ActionsChecklist";
 import SpeakerResourceLinks from "@/components/speaker-portal/SpeakerResourceLinks";
 import { getSpeakerSessionIds, normalizeDeckStatus } from "@/lib/airtable/utils";
 import { EVENT_DESCRIPTION, EVENT_NAME } from "@/lib/site";
+import { BreakpointHero, EventMeta } from "@/components/breakpoint-hero";
 
 export const generateMetadata = async ({
   searchParams,
@@ -61,11 +63,11 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
     notFound();
   }
 
-  const calendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics", speakerId);
+  const calendarKey = generateKey(Date.now() + APP_CONFIG.NEXT_PUBLIC_KEY_EXP, "ics", speakerId);
   const speakerCalendarUrl = getSpeakerCalendarUrl(speakerId, calendarKey);
 
   // Generate all-sessions calendar URL (no speakerId filter)
-  const allSessionsCalendarKey = generateKey(Date.now() + Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0), "ics");
+  const allSessionsCalendarKey = generateKey(Date.now() + APP_CONFIG.NEXT_PUBLIC_KEY_EXP, "ics", speakerId);
   const allSessionsCalendarUrl = getSessionsCalendarUrl(allSessionsCalendarKey);
 
   // Fetch main speaker directly (cacheable - small payload)
@@ -130,8 +132,10 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
   });
 
   return (
-    <div className="min-h-screen bg-black p-8 font-sans">
-      <main className="mx-auto flex max-w-6xl flex-col gap-10">
+    <div className="min-h-screen bg-black font-sans">
+      <BreakpointHero title="Speaker briefing" id="portal-heading" />
+      <main className="mx-auto flex max-w-[1728px] flex-col gap-12 px-4 pb-24 lg:gap-16 lg:px-8">
+        <EventMeta />
         <SpeakerCard
           {...speakerData}
           sessions={sessionsForChecklist}
@@ -139,22 +143,24 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           speakerCardUrl={speakerData.speakerCardUrl}
         />
 
-        <div className="section-divider" />
-
         <SessionsCards
           items={allSessionsData}
           calendarUrl={speakerCalendarUrl}
           allSessionsCalendarUrl={allSessionsCalendarUrl}
         />
 
-        <div className="flex gap-3">
+        <div className="flex flex-col gap-4 border border-[#353535] bg-black p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="space-y-2">
+            <p className="breakpoint-eyebrow text-[#a2a2a2]">Event day</p>
+            <p className="text-xl leading-[1.2] tracking-[-0.03rem] text-white sm:text-2xl">
+              Check-in, speaker lounge, wardrobe and travel notes
+            </p>
+          </div>
           <LogisticsDialogButton
             stage={allSessionsData[0]?.stage}
             stages={Array.from(new Set(allSessionsData.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
           />
         </div>
-
-        <div className="section-divider" />
 
         <ActionsChecklist
           sessions={sessionsForChecklist}
@@ -169,8 +175,6 @@ export default async function SpeakerPage({ searchParams }: { searchParams: Prom
           youtubeVideoUrl={speakerData.youtubeVideoUrl}
           speakerPhotoLink={speakerData.speakerPhotoLink}
         />
-
-        <div className="section-divider" />
 
         <SpeakerResourceLinks />
 

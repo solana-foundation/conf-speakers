@@ -1,34 +1,27 @@
-/* Colors — Accelerate Miami palette */
+/* Breakpoint 2026 colors, aligned with the event site. */
 @theme {
-  /* Primary: Accelerate brand */
-  --color-primary-null: #0d0d0d;
-  --color-primary-byte: #9945ff;
-  --color-primary-wisp: #d2d2d2;
+  --color-primary-null: #000000;
+  --color-primary-byte: #aa67fb;
+  --color-primary-wisp: #ffffff;
 
-  /* Secondary: Accelerate accents */
-  --color-secondary-lime: #c9ff7c;
-  --color-secondary-mint: #19fb9b;
-  --color-secondary-azure: #2a88de;
-  --color-secondary-cyan: #00d4ff;
+  /* Secondary event accents */
+  --color-secondary-lime: #c0e021;
+  --color-secondary-mint: #14f195;
+  --color-secondary-azure: #3c91ff;
+  --color-secondary-cyan: #3c91ff;
 
   /* Transparent variants */
-  --color-transparent-wisp-80: #d2d2d2cc;
-  --color-transparent-wisp-60: #d2d2d299;
-  --color-transparent-wisp-40: #d2d2d266;
-  --color-transparent-wisp-30: #d2d2d24d;
-  --color-transparent-wisp-20: #d2d2d233;
-  --color-transparent-wisp-10: #d2d2d21a;
-  --color-transparent-null-80: #0d0d0dcc;
-  --color-transparent-null-60: #0d0d0d99;
-  --color-transparent-null-40: #0d0d0d66;
-  --color-transparent-null-20: #0d0d0d33;
-  --color-transparent-null-10: #0d0d0d1a;
-
-  /* Accelerate gray scale */
-  --color-accelerate-gray-100: #b3b2bc;
-  --color-accelerate-gray-200: #838191;
-  --color-accelerate-gray-300: #3b3b40;
-  --color-accelerate-muted: #bcbcbc;
+  --color-transparent-wisp-80: #ffffffcc;
+  --color-transparent-wisp-60: #ffffff99;
+  --color-transparent-wisp-40: #ffffff66;
+  --color-transparent-wisp-30: #ffffff4d;
+  --color-transparent-wisp-20: #ffffff33;
+  --color-transparent-wisp-10: #ffffff1a;
+  --color-transparent-null-80: #000000cc;
+  --color-transparent-null-60: #00000099;
+  --color-transparent-null-40: #00000066;
+  --color-transparent-null-20: #00000033;
+  --color-transparent-null-10: #0000001a;
 
   /* Section Tokens */
   --color-byte: var(--color-primary-byte);
@@ -43,7 +36,7 @@
 
   /* Background Tokens */
   --color-background-primary: #000000;
-  --color-background-secondary: var(--color-transparent-wisp-10);
+  --color-background-secondary: #1e1e1e;
   --color-background-invert: var(--color-primary-wisp);
 
   /* Font Tokens */
@@ -52,14 +45,14 @@
   --color-invert: var(--color-primary-null);
 
   /* Stroke Tokens */
-  --color-stroke-primary: rgba(255, 255, 255, 0.1);
-  --color-stroke-secondary: rgba(255, 255, 255, 0.15);
+  --color-stroke-primary: #353535;
+  --color-stroke-secondary: #4e4e4e;
   --color-stroke-tertiary: var(--color-primary-wisp);
   --color-stroke-mint: var(--color-secondary-mint);
   --color-stroke-azure: var(--color-secondary-azure);
 
   /* Button Tokens */
-  --color-button-fill: var(--color-primary-byte);
-  --color-button-fill-hover: var(--color-primary-wisp);
-  --color-button-fill-disabled: var(--color-transparent-wisp-10);
+  --color-button-fill: #ffffff;
+  --color-button-fill-hover: #c0c0c0;
+  --color-button-fill-disabled: #4e4e4e;
 }

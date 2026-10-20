@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import { Twitter, Check, CircleMinus, Clock } from "lucide-react";
+import { Twitter } from "@/components/ui/icons";
+import { Button } from "./ui/button";
 import { DeckStatus } from "@/lib/airtable/types";
 import { getWebPublishingStatus } from "@/lib/airtable/utils";
 
@@ -28,7 +29,6 @@ export interface SpeakerCardProps {
 interface StatusBadge {
   label: string;
   variant: "awaiting-deck" | "schedule-pending" | "all-set";
-  icon: React.ReactNode;
 }
 
 export default function SpeakerCard({
@@ -51,7 +51,6 @@ export default function SpeakerCard({
       badges.push({
         label: `Awaiting Deck${pendingDeckSessions.length > 1 ? ` (${pendingDeckSessions.length})` : ""}`,
         variant: "awaiting-deck",
-        icon: <CircleMinus className="h-3 w-3" />,
       });
     }
 
@@ -60,7 +59,6 @@ export default function SpeakerCard({
       badges.push({
         label: `Approved Deck${approvedDeckSessions.length > 1 ? ` (${approvedDeckSessions.length})` : ""}`,
         variant: "all-set",
-        icon: <Check className="h-3 w-3" />,
       });
     }
 
@@ -69,11 +67,15 @@ export default function SpeakerCard({
       return status?.hasDoNotPublish === true;
     });
 
-    if (hasDoNotPublishSession && sessions.some((session) => session.greenlightTime)) {
+    if (
+      sessions.some(
+        (session) =>
+          session.greenlightTime && !getWebPublishingStatus(session.webPublishingStatus ?? undefined).hasTime,
+      )
+    ) {
       badges.push({
-        label: "Schedule Pending",
+        label: "Time to be confirmed",
         variant: "schedule-pending",
-        icon: <Clock className="h-3 w-3" />,
       });
     }
 
@@ -83,11 +85,16 @@ export default function SpeakerCard({
         session.actionsDeckReceived === null ||
         session.actionsDeckReceived === undefined,
     );
-    if (badges.length === 0 && sessions.length > 0 && allCompletedSessions.length === sessions.length) {
+    if (
+      badges.length === 0 &&
+      sessions.length > 0 &&
+      allCompletedSessions.length === sessions.length &&
+      !hasDoNotPublishSession &&
+      sessions.every((session) => getWebPublishingStatus(session.webPublishingStatus ?? undefined).hasTime)
+    ) {
       badges.push({
         label: "All Set",
         variant: "all-set",
-        icon: <Check className="h-3 w-3" />,
       });
     }
 
@@ -96,70 +103,64 @@ export default function SpeakerCard({
 
   const statusBadges = getStatusBadges();
 
+  const markerClass = {
+    "awaiting-deck": "bg-[#3c91ff]",
+    "schedule-pending": "bg-[#aa67fb]",
+    "all-set": "bg-[#14f195]",
+  } as const;
+
   return (
-    <div>
-      <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-        <div className="flex flex-col items-center gap-4 lg:items-start">
-          <div className="relative">
-            <div className="rounded-[48px] p-[2px]" style={{ background: "linear-gradient(135deg, #9945ff, #19fb9b, #00d4ff)" }}>
-              <Avatar className="size-24 rounded-[46px] lg:size-32">
-                {imageUrl && <AvatarImage src={imageUrl} alt={`${firstName} ${lastName}`} />}
-                <AvatarFallback className="rounded-[46px] bg-[#0d0d0d] text-3xl font-semibold text-white">
-                  {firstName?.charAt(0)}
-                  {lastName?.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
+    <section className="border border-[#353535] bg-black p-5 sm:p-8 lg:p-10" aria-label="Your speaker profile">
+      <div className="flex flex-col gap-6 sm:flex-row sm:gap-8 lg:gap-12">
+        <div className="flex shrink-0 flex-col items-start gap-4">
+          <Avatar className="size-28 rounded-none sm:size-40 lg:size-[200px]">
+            {imageUrl && <AvatarImage src={imageUrl} alt={`${firstName} ${lastName}`} className="object-cover" />}
+            <AvatarFallback className="rounded-none bg-[#353535] text-4xl text-white">
+              {firstName?.charAt(0)}
+              {lastName?.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
           {speakerCardUrl && (
-            <a
-              href={speakerCardUrl}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Download Speaker Card"
-              className="flex items-center text-xs text-[#9945ff] underline transition-colors hover:text-[#19fb9b]"
-            >
-              Social Media Card
-            </a>
+            <Button size="sm" variant="outline" asChild>
+              <a href={speakerCardUrl} download target="_blank" rel="noopener noreferrer">
+                Social media card
+              </a>
+            </Button>
           )}
         </div>
 
-        <div className="flex-1 space-y-4">
-          <div>
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="gradient-text font-space-grotesk text-4xl font-light tracking-tight">
+        <div className="min-w-0 flex-1 space-y-6">
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+              <h2 className="text-4xl leading-[1.05] tracking-[-0.06rem] text-white sm:text-5xl lg:text-[3.75rem] lg:tracking-[-0.15rem]">
                 {firstName} {lastName}
-              </h1>
-              <div className="flex flex-wrap items-center gap-2">
-                {statusBadges.map((badge, index) => (
-                  <Badge
-                    key={index}
-                    className={`gap-1.5 ${
-                      badge.variant === "awaiting-deck"
-                        ? "bg-[#2a88de]/20 text-[#2a88de]"
-                        : badge.variant === "schedule-pending"
-                          ? "bg-[#c9ff7c]/20 text-[#c9ff7c]"
-                          : "bg-[#19fb9b]/20 text-[#19fb9b]"
-                    }`}
-                  >
-                    {badge.icon}
-                    <span>{badge.label}</span>
-                  </Badge>
-                ))}
-              </div>
+              </h2>
+              {statusBadges.length > 0 && (
+                <ul className="unstyled-list flex flex-wrap items-center gap-2" aria-label="Your status">
+                  {statusBadges.map((badge) => (
+                    <li key={badge.variant + badge.label}>
+                      <Badge className="gap-2 text-white">
+                        <span aria-hidden="true" className={`size-2 shrink-0 ${markerClass[badge.variant]}`} />
+                        {badge.label}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-            <p className="text-p2-mono mt-2 uppercase">
-              {jobTitle && <span className="text-white/70">{jobTitle}</span>}
-              <br />
-              {company && <span className="text-white/50">{company}</span>}
-            </p>
+            {(jobTitle || company) && (
+              <p className="breakpoint-eyebrow">
+                {company && <span className="text-white">{company}</span>}
+                {jobTitle && company && <span className="mx-2 text-[#696969]">/</span>}
+                {jobTitle && <span className="text-[#a2a2a2]">{jobTitle}</span>}
+              </p>
+            )}
 
             {xLink && (
-              <div className="mt-2 flex items-center gap-2">
-                <Twitter className="h-4 w-4 text-white/40" />
+              <div className="flex items-center gap-2">
+                <Twitter className="h-4 w-4 text-[#a2a2a2]" aria-hidden="true" />
                 <a
-                  className="text-[#9945ff] text-md transition-colors hover:text-[#19fb9b] hover:underline"
+                  className="text-base text-white underline underline-offset-4 transition-colors hover:text-[#aa67fb]"
                   href={xLink}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -170,13 +171,9 @@ export default function SpeakerCard({
             )}
           </div>
 
-          {bio && (
-            <div className="max-w-none leading-relaxed">
-              <p className="text-p text-white/70">{bio}</p>
-            </div>
-          )}
+          {bio && <p className="max-w-[48rem] text-base leading-[1.45] text-[#a2a2a2] lg:text-lg">{bio}</p>}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

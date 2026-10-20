@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Check, CircleMinus, Film, Info, X } from "lucide-react";
+import { SectionHeading } from "@/components/section-heading";
+import { Check, CircleMinus, Film, Info, X } from "@/components/ui/icons";
 import { DeckStatus } from "@/lib/airtable/types";
 import { buildEventCouponUrl, EVENT_REGISTRATION_PLATFORM, SPEAKER_CONTACT_EMAIL } from "@/lib/site";
 
@@ -211,25 +212,24 @@ export default function ActionsChecklist({
         status = "todo"; // DeckStatus.ToUpload
       }
 
-      // Determine link based on deck status:
-      // - ToUpload: Show upload link so user can upload their deck
-      // - Uploaded: Show link in case user needs to re-upload
-      // - Approved: No link needed, deck is finalized
-      // - null/undefined: Filtered out above
-      const getDeckLink = (): string | null => {
-        if (isApproved) return null;
-        // For ToUpload and Uploaded states, show link only if available
-        return slideDeckFile || null;
-      };
+      const deckLink = isApproved
+        ? null
+        : slideDeckFile ||
+          `mailto:${SPEAKER_CONTACT_EMAIL}?subject=${encodeURIComponent(`Deck upload link for ${session.name ?? "my session"}`)}`;
 
       return {
         id: `upload-deck-${session.id}`,
-        title: `Deck upload status for - ${session.name}`,
-        description:
-          "Only Product Keynote speakers need to upload a deck. If requested for this session, use 16:9, embed fonts, and upload Keynote or PowerPoint files. Upload video files separately.",
+        title: `Deck: ${session.name ?? "Your session"}`,
+        description: isApproved
+          ? "Your deck is approved."
+          : slideDeckFile
+            ? isUploaded
+              ? "Your deck is awaiting review. Use the link if you need to replace it."
+              : "Upload your deck using the link provided by the speaker team."
+            : "The upload link is not available yet. Ask the speaker team for it.",
         status,
-        link: getDeckLink(),
-        linkText: getDeckLink() ? "Deck Files Dropbox" : null,
+        link: deckLink,
+        linkText: deckLink ? (slideDeckFile ? "Open upload link" : "Ask for upload link") : null,
         type: "task" as const,
       };
     });
@@ -249,131 +249,130 @@ export default function ActionsChecklist({
     {
       id: "stage-team-questions",
       title: "Questions",
-      description: `Email: ${SPEAKER_CONTACT_EMAIL}`,
+      description: "Contact the speaker team about your session or event day.",
       status: "pending" as const,
-      link: null,
-      linkText: null,
+      link: `mailto:${SPEAKER_CONTACT_EMAIL}`,
+      linkText: "Email speaker team",
       type: "info" as const,
     },
   ];
 
+  const isApproved = (task: Task) => task.status === "approved" || task.status === "Approved";
+  const isTodo = (task: Task) => task.status === "todo";
+  const isPending = (task: Task) => task.status === "pending" || task.status === "Pending";
+
   const getTaskIcon = (task: Task) => {
     if (task.type === "info") {
-      return <Info className="h-5 w-5 text-[#2a88de]" />;
+      return <Info className="h-5 w-5 text-[#a2a2a2]" aria-hidden="true" />;
     }
     if (task.type === "media") {
-      return <Film className="h-5 w-5 text-[#9945ff]" />;
+      return <Film className="h-5 w-5 text-[#a2a2a2]" aria-hidden="true" />;
     }
-    if (task.status === "approved" || task.status === "Approved") {
-      return <Check className="h-5 w-5 text-[#19fb9b]" />;
+    if (isApproved(task)) {
+      return <Check className="h-5 w-5 text-[#14f195]" aria-hidden="true" />;
     }
     if (task.status === "Denied") {
-      return <X className="h-5 w-5 text-red-500" />;
+      return <X className="h-5 w-5 text-red-500" aria-hidden="true" />;
     }
-    if (task.status === "todo") {
-      return <CircleMinus className="h-5 w-5 text-red-500" />;
+    if (isTodo(task)) {
+      return <CircleMinus className="h-5 w-5 text-[#3c91ff]" aria-hidden="true" />;
     }
-    if (task.status === "Pending") {
-      return <CircleMinus className="h-5 w-5 text-yellow-500" />;
-    }
-    return <CircleMinus className="h-5 w-5 text-yellow-500" />;
+    return <CircleMinus className="h-5 w-5 text-[#aa67fb]" aria-hidden="true" />;
   };
 
+  const getStatusLabel = (task: Task): { label: string; marker: string } | null => {
+    if (task.type !== "task") return null;
+    if (isApproved(task)) return { label: "Approved", marker: "bg-[#14f195]" };
+    if (isTodo(task)) return { label: "To do", marker: "bg-[#3c91ff]" };
+    if (isPending(task)) return { label: "Pending", marker: "bg-[#aa67fb]" };
+    if (task.status === "Denied") return { label: "Declined", marker: "bg-red-500" };
+    return null;
+  };
+
+  const linkClass = "text-white underline underline-offset-4 transition-colors hover:text-[#aa67fb]";
+
   return (
-    <div className="space-y-4">
-      <h3 className="font-space-grotesk text-sm font-semibold tracking-[0.15em] text-white/60 uppercase">
-        Actions Checklist
-      </h3>
-      <div className="space-y-3">
-        {tasks.map((task) => (
-          <div
-            key={task.id}
-            className={`flex items-start gap-3 rounded-lg border p-3 ${
-              task.type === "info"
-                ? "border-[#2a88de]/20 bg-[#2a88de]/5"
-                : task.status === "Denied"
-                  ? "border-red-500/30 bg-red-500/5"
-                  : "border-white/10 bg-white/[0.02]"
-            }`}
-          >
-            <div className="flex items-start justify-center">{getTaskIcon(task)}</div>
-            <div className="flex-1 space-y-2">
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <h4 className={"h4"}>{task.title}</h4>
-                  {task.type === "task" && (task.status === "approved" || task.status === "Approved") && (
-                    <span className="rounded-full bg-[#19fb9b]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#19fb9b] uppercase">
-                      Approved
-                    </span>
-                  )}
-                  {task.type === "task" && task.status === "todo" && (
-                    <span className="rounded-full bg-[#2a88de]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#2a88de] uppercase">
-                      To Do
-                    </span>
-                  )}
-                  {task.type === "task" && (task.status === "pending" || task.status === "Pending") && (
-                    <span className="rounded-full bg-[#c9ff7c]/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-[#c9ff7c] uppercase">
-                      Pending
-                    </span>
-                  )}
-                  {task.type === "task" && task.status === "Denied" && (
-                    <span className="rounded-full bg-red-500/20 px-2.5 py-0.5 font-mono text-[12px] tracking-wider text-red-400 uppercase">
-                      Declined
-                    </span>
+    <section className="space-y-10" aria-labelledby="checklist-title">
+      <SectionHeading eyebrow="Before the event" title="Actions checklist" id="checklist-title" />
+      <ul className="unstyled-list grid gap-px border border-[#353535] bg-[#353535]">
+        {tasks.map((task) => {
+          const status = getStatusLabel(task);
+          const needsAction = isTodo(task) || isPending(task) || task.status === "Denied";
+
+          return (
+            <li
+              key={task.id}
+              className={`flex items-start gap-4 p-4 sm:p-6 ${needsAction ? "bg-[#1e1e1e]" : "bg-black"}`}
+            >
+              <div className="flex size-10 shrink-0 items-center justify-center border border-[#353535] bg-black">
+                {getTaskIcon(task)}
+              </div>
+              <div className="min-w-0 flex-1 space-y-3">
+                <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0 space-y-2">
+                    {status && (
+                      <p className="breakpoint-eyebrow flex items-center gap-2 text-xs text-[#a2a2a2]">
+                        <span aria-hidden="true" className={`size-2 ${status.marker}`} />
+                        {status.label}
+                      </p>
+                    )}
+                    <h3 className="text-xl leading-[1.2] tracking-[-0.03rem] break-words text-white sm:text-2xl">
+                      {task.title}
+                    </h3>
+                  </div>
+                  {task.link && task.linkText && (
+                    <Button
+                      size="lg"
+                      variant={needsAction ? "default" : "outline"}
+                      className="w-full max-w-full shrink-0 sm:w-auto"
+                      asChild
+                    >
+                      <a target="_blank" rel="noopener noreferrer" href={task.link}>
+                        {task.linkText}
+                      </a>
+                    </Button>
                   )}
                 </div>
-                {task.link && task.linkText && (
-                  <Button size="sm" variant="azure" asChild>
-                    <a target="_blank" rel="noopener noreferrer" href={task.link}>
-                      {task.linkText}
-                    </a>
-                  </Button>
+                <p className="text-base leading-[1.4] text-[#a2a2a2]">{task.description}</p>
+                {task.codes && task.codes.length > 0 && (
+                  <ul className="unstyled-list space-y-1 font-mono text-sm">
+                    {task.codes.map((code: string, index: number) => {
+                      const couponUrl = buildEventCouponUrl(code);
+                      return (
+                        <li key={index}>
+                          {couponUrl ? (
+                            <a target="_blank" rel="noopener noreferrer" href={couponUrl} className={linkClass}>
+                              {code}
+                            </a>
+                          ) : (
+                            <span
+                              className="text-white"
+                              title={`Use this code during checkout on ${EVENT_REGISTRATION_PLATFORM}`}
+                            >
+                              {code}
+                            </span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+                {task.mediaLinks && task.mediaLinks.length > 0 && (
+                  <ul className="unstyled-list space-y-1 text-base">
+                    {task.mediaLinks.map((mediaLink: MediaLink, index: number) => (
+                      <li key={index}>
+                        <a target="_blank" rel="noopener noreferrer" href={mediaLink.url} className={linkClass}>
+                          {mediaLink.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
-              <p className="text-sm text-white/50">{task.description}</p>
-              {task.codes && task.codes.length > 0 && (
-                <ul className="text-muted-foreground mt-2 space-y-1 text-sm">
-                  {task.codes.map((code: string, index: number) => {
-                    const couponUrl = buildEventCouponUrl(code);
-                    return (
-                      <li key={index} className="font-mono">
-                        {couponUrl ? (
-                          <a
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={couponUrl}
-                            className="text-[#9945ff] transition-colors hover:text-[#19fb9b] hover:underline"
-                          >
-                            {code}
-                          </a>
-                        ) : (
-                          <span title={`Use this code during checkout on ${EVENT_REGISTRATION_PLATFORM}`}>{code}</span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-              {task.mediaLinks && task.mediaLinks.length > 0 && (
-                <ul className="text-muted-foreground mt-2 space-y-1 text-sm">
-                  {task.mediaLinks.map((mediaLink: MediaLink, index: number) => (
-                    <li key={index}>
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={mediaLink.url}
-                        className="text-[#9945ff] transition-colors hover:text-[#19fb9b] hover:underline"
-                      >
-                        {mediaLink.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }

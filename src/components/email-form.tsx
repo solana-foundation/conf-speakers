@@ -44,7 +44,7 @@ function SubmitButton({ pending, cooldownMs }: { pending: boolean; cooldownMs?: 
   }, [pending, cooldown]);
 
   return (
-    <Button type="submit" disabled={pending || cooldown > 0}>
+    <Button type="submit" className="h-10 w-full" disabled={pending || cooldown > 0}>
       {label}
     </Button>
   );
@@ -77,7 +77,7 @@ export function EmailForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto max-w-md space-y-5 p-6">
+    <form onSubmit={onSubmit} className="w-full space-y-5">
       {/* Honeypot */}
       <input
         type="text"
@@ -89,13 +89,18 @@ export function EmailForm() {
         autoComplete="off"
       />
       <div className="space-y-2">
-        <label htmlFor="email" className="block text-sm font-medium">
+        <label htmlFor="email" className="breakpoint-eyebrow block text-[#a2a2a2]">
           Email address
         </label>
-        <Input id="email" name="email" type="email" placeholder="you@example.com" required />
-        <p className="text-xs text-white/40">
-          You&apos;ll receive a magic link from {ORGANIZER_NAME}.
-        </p>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+          required
+          className="h-12 border-[#353535] bg-black px-4 text-white focus:border-white"
+        />
+        <p className="text-sm text-[#a2a2a2]">You&apos;ll receive a secure link from {ORGANIZER_NAME}.</p>
         <EmailFieldError error={state.fieldErrors?.email} />
       </div>
       <SubmitButton pending={pending} cooldownMs={state.cooldownMs} />

@@ -1,5 +1,6 @@
+import { APP_CONFIG } from "@/lib/app-config";
 const pat = process.env.AIRTABLE_PAT;
-const base = process.env.AIRTABLE_BASE;
+const base = APP_CONFIG.AIRTABLE_BASE;
 
 if (!base || !pat) {
   throw new Error("AIRTABLE_BASE or AIRTABLE_PAT is not set");
@@ -41,7 +42,9 @@ type AirtableListOptions = {
 const AIRTABLE_API_URL = `https://api.airtable.com/v0/${base}`;
 
 const buildAirtableUrl = (tableId: string, path?: string, params?: URLSearchParams) => {
-  const url = new URL(`${AIRTABLE_API_URL}/${encodeURIComponent(tableId)}${path ? `/${encodeURIComponent(path)}` : ""}`);
+  const url = new URL(
+    `${AIRTABLE_API_URL}/${encodeURIComponent(tableId)}${path ? `/${encodeURIComponent(path)}` : ""}`,
+  );
 
   if (params) {
     url.search = params.toString();
@@ -83,7 +86,10 @@ export const getAirtableRecord = async (tableId: string, recordId: string): Prom
   return requestAirtable<AirtableRecordResponse>(buildAirtableUrl(tableId, recordId));
 };
 
-export const listAirtableRecords = async (tableId: string, options: AirtableListOptions = {}): Promise<AirtableRecord[]> => {
+export const listAirtableRecords = async (
+  tableId: string,
+  options: AirtableListOptions = {},
+): Promise<AirtableRecord[]> => {
   const records: AirtableRecord[] = [];
   let offset: string | undefined;
 

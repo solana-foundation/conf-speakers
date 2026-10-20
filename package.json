@@ -9,12 +9,14 @@
     "start": "next start",
     "lint": "eslint",
     "airtable:audit": "tsx --tsconfig tsconfig.json scripts/airtable-audit.ts",
+    "airtable:sync-portal-links": "tsx --tsconfig tsconfig.json scripts/sync-speaker-portal-links.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
     "prepare": "husky"
   },
   "dependencies": {
+    "@boxicons/react": "^1.0.3",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-checkbox": "^1.1.5",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -33,7 +35,6 @@
     "clsx": "^2.1.1",
     "ics": "^3.8.1",
     "jsonwebtoken": "^9.0.3",
-    "lucide-react": "^0.541.0",
     "luxon": "^3.7.2",
     "next": "15.5.9",
     "react": "19.1.4",

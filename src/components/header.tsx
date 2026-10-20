@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { CircleUserIcon } from "lucide-react";
-import { SITE_LOGO_HEIGHT, SITE_LOGO_PATH, SITE_LOGO_WIDTH, SITE_NAME } from "@/lib/site";
+import { CircleUserIcon } from "@/components/ui/icons";
+import { HOME_SCHEDULE_ENABLED, SITE_LOGO_HEIGHT, SITE_LOGO_PATH, SITE_LOGO_WIDTH, SITE_NAME } from "@/lib/site";
 
 export function SiteHeader() {
   const searchParams = useSearchParams();
@@ -12,40 +12,56 @@ export function SiteHeader() {
   const qs = key ? `?key=${encodeURIComponent(key)}` : "";
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-black/80 backdrop-blur-xl">
-      {/* Gradient accent line at top */}
-      <div
-        className="h-[2px] w-full"
-        style={{
-          background: "linear-gradient(to right, #9945ff, #19fb9b, #00d4ff)",
-        }}
-      />
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6 sm:h-16 xl:px-0">
-        <Link href={`/${qs}`} className="group flex items-center gap-3 transition-opacity hover:opacity-80">
-          <Image src={SITE_LOGO_PATH} alt={SITE_NAME} width={SITE_LOGO_WIDTH} height={SITE_LOGO_HEIGHT} className="h-10 w-auto sm:h-12" />
+    <header className="fixed top-3 left-1/2 z-40 w-[calc(100%-32px)] max-w-[466px] -translate-x-1/2 bg-black">
+      <div className="flex h-12 items-center justify-between gap-3 px-3 sm:px-4">
+        <Link
+          href={qs && !HOME_SCHEDULE_ENABLED ? `/s${qs}` : `/${qs}`}
+          className="group flex shrink-0 items-center gap-[6px] transition-opacity hover:opacity-80"
+          aria-label={SITE_NAME}
+        >
+          <Image
+            src="/breakpoint/nav-solana.svg"
+            alt=""
+            aria-hidden="true"
+            width={23}
+            height={20}
+            className="h-4 w-auto sm:h-5"
+          />
+          <Image
+            src={SITE_LOGO_PATH}
+            alt=""
+            aria-hidden="true"
+            width={SITE_LOGO_WIDTH}
+            height={SITE_LOGO_HEIGHT}
+            className="h-4 w-auto sm:h-5"
+          />
         </Link>
-        <nav className="flex items-center gap-6">
+        <nav className="flex shrink-0 items-center gap-2 sm:gap-3" aria-label="Speaker portal">
           {!qs && (
             <Link
-              href={`/email-link`}
-              className="font-space-grotesk text-sm font-semibold uppercase tracking-[0.05em] text-white transition-colors hover:text-white/80"
+              href="/email-link"
+              className="inline-flex h-8 items-center bg-white px-3 font-mono text-[11px] font-bold tracking-[0.07em] text-black uppercase transition-colors hover:bg-[#c0c0c0] sm:text-xs"
             >
-              Speakers
+              Speaker access
             </Link>
           )}
           {qs && (
             <>
-              <Link
-                href={`/${qs}`}
-                className="font-space-grotesk text-sm font-semibold uppercase tracking-[0.05em] text-white/60 transition-colors hover:text-white"
-              >
-                Schedule
-              </Link>
+              {HOME_SCHEDULE_ENABLED && (
+                <Link
+                  href={`/${qs}`}
+                  className="font-mono text-[11px] font-bold tracking-[0.07em] text-white uppercase transition-colors hover:text-[#aa67fb] sm:text-xs"
+                >
+                  Schedule
+                </Link>
+              )}
               <Link
                 href={`/s${qs}`}
-                className="text-white/60 transition-colors hover:text-white"
+                className="inline-flex h-8 items-center gap-2 bg-white px-3 font-mono text-[11px] font-bold tracking-[0.07em] text-black uppercase transition-colors hover:bg-[#c0c0c0] sm:text-xs"
+                aria-label="Speaker portal"
               >
-                <CircleUserIcon className="h-5 w-5" />
+                <CircleUserIcon className="h-4 w-4" />
+                <span>My portal</span>
               </Link>
             </>
           )}

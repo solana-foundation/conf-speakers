@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 import { createEvents, EventAttributes } from "ics";
 import { parseISO } from "@/lib/time/tz";
 import { CALENDAR_NAME, EVENT_NAME, EVENT_LOCATION, ORGANIZER_EMAIL, ORGANIZER_NAME, SITE_HOST } from "@/lib/site";
@@ -5,8 +6,8 @@ import { normalizeStageTitle } from "@/lib/airtable/stages";
 
 const DEFAULT_ICS_LOCATION = EVENT_LOCATION;
 const DEFAULT_ICS_GEO =
-  process.env.EVENT_GEO_LAT && process.env.EVENT_GEO_LON
-    ? { lat: Number(process.env.EVENT_GEO_LAT), lon: Number(process.env.EVENT_GEO_LON) }
+  APP_CONFIG.EVENT_GEO_LAT && APP_CONFIG.EVENT_GEO_LON
+    ? { lat: Number(APP_CONFIG.EVENT_GEO_LAT), lon: Number(APP_CONFIG.EVENT_GEO_LON) }
     : undefined;
 
 export interface SessionEvent {

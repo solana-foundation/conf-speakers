@@ -5,7 +5,7 @@ import Section from "./Section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ExternalLink, HelpCircle, CheckCircle, Clock, Copy, AlertCircle } from "lucide-react";
+import { ExternalLink, HelpCircle, CheckCircle, Clock, Copy, AlertCircle } from "@/components/ui/icons";
 import { EVENT_REGISTRATION_PLATFORM, SPEAKER_CONTACT_EMAIL } from "@/lib/site";
 
 function Row({
@@ -18,10 +18,10 @@ function Row({
   description?: string;
 }) {
   return (
-    <div className="text-white border-white/10 flex flex-col gap-3 border-b py-4 first:pt-0 last:border-b-0 last:pb-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+    <div className="flex flex-col gap-3 border-b border-white/10 py-4 text-white first:pt-0 last:border-b-0 last:pb-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
       <div className="min-w-0 flex-1">
         <div className="text-base font-medium">{label}</div>
-        {description && <div className="text-white/50 mt-1 text-sm">{description}</div>}
+        {description && <div className="mt-1 text-sm text-white/50">{description}</div>}
       </div>
       <div className="flex-shrink-0 shrink-0">{children}</div>
     </div>
@@ -59,9 +59,9 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
             <div className="flex items-center gap-2">
               <span>Speaker Ticket</span>
               {speakerTicket ? (
-                <CheckCircle className="text-[#19fb9b] h-4 w-4" aria-label="Confirmed" />
+                <CheckCircle className="h-4 w-4 text-[#14f195]" aria-label="Confirmed" />
               ) : (
-                <Clock className="text-white/40 h-4 w-4" aria-label="Pending" />
+                <Clock className="h-4 w-4 text-white/40" aria-label="Pending" />
               )}
             </div>
           }
@@ -93,9 +93,9 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
             <div className="flex items-center gap-2">
               <span>Plus One Ticket</span>
               {plusOneTicket ? (
-                <CheckCircle className="text-[#2a88de] h-4 w-4" aria-label="Available" />
+                <CheckCircle className="h-4 w-4 text-[#3c91ff]" aria-label="Available" />
               ) : (
-                <AlertCircle className="text-white/40 h-4 w-4" aria-label="Not available" />
+                <AlertCircle className="h-4 w-4 text-white/40" aria-label="Not available" />
               )}
             </div>
           }
@@ -127,9 +127,9 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
             <div className="flex items-center gap-2">
               <span>Invitation Code</span>
               {invitationCode ? (
-                <CheckCircle className="text-[#c9ff7c] h-4 w-4" aria-label="Code available" />
+                <CheckCircle className="h-4 w-4 text-[#c0e021]" aria-label="Code available" />
               ) : (
-                <AlertCircle className="text-white/40 h-4 w-4" aria-label="No code" />
+                <AlertCircle className="h-4 w-4 text-white/40" aria-label="No code" />
               )}
             </div>
           }
@@ -145,7 +145,7 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                 className="h-8 w-8 p-0"
                 aria-label="Copy invitation code"
               >
-                {copiedCode ? <CheckCircle className="text-[#c9ff7c] h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copiedCode ? <CheckCircle className="h-4 w-4 text-[#c0e021]" /> : <Copy className="h-4 w-4" />}
               </Button>
             </div>
           ) : (
@@ -170,51 +170,53 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                 <span className="sm:hidden">Help</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="border-white/10 max-h-[85vh] overflow-y-auto">
+            <DialogContent className="max-h-[85vh] overflow-y-auto border-white/10">
               <DialogHeader className="pb-6">
                 <DialogTitle className="text-h2 text-center">Ticket Redemption Guide</DialogTitle>
               </DialogHeader>
               <div className="space-y-6">
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-[#19fb9b]/10 text-[#19fb9b] flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#14f195]/10 text-[#14f195]">
                       <CheckCircle className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 font-medium uppercase text-white">Speaker Ticket</h4>
+                    <h4 className="text-h3 font-medium text-white uppercase">Speaker Ticket</h4>
                   </div>
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">Your speaker ticket provides complimentary access to the event.</p>
                     <p className="text-p2 text-white/50">
-                      Click the &#34;Redeem Ticket&#34; button above to claim your speaker access on {EVENT_REGISTRATION_PLATFORM}.
+                      Click the &#34;Redeem Ticket&#34; button above to claim your speaker access on{" "}
+                      {EVENT_REGISTRATION_PLATFORM}.
                     </p>
                   </div>
                 </section>
 
-                <div className="bg-white/10 h-px" />
+                <div className="h-px bg-white/10" />
 
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-[#2a88de]/10 text-[#2a88de] flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#3c91ff]/10 text-[#3c91ff]">
                       <CheckCircle className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 font-medium uppercase text-white">Plus One Ticket</h4>
+                    <h4 className="text-h3 font-medium text-white uppercase">Plus One Ticket</h4>
                   </div>
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">Your plus-one ticket allows you to bring a guest to the event.</p>
                     <p className="text-p2 text-white/50">
-                      Click the &#34;Redeem Guest Ticket&#34; button above to claim your plus-one access on {EVENT_REGISTRATION_PLATFORM}.
+                      Click the &#34;Redeem Guest Ticket&#34; button above to claim your plus-one access on{" "}
+                      {EVENT_REGISTRATION_PLATFORM}.
                     </p>
                   </div>
                 </section>
 
-                <div className="bg-white/10 h-px" />
+                <div className="h-px bg-white/10" />
 
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-[#c9ff7c]/10 text-[#c9ff7c] flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c0e021]/10 text-[#c0e021]">
                       <Copy className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 font-medium uppercase text-white">Using Invitation Codes</h4>
+                    <h4 className="text-h3 font-medium text-white uppercase">Using Invitation Codes</h4>
                   </div>
                   <div className="space-y-2 pl-11">
                     <p className="text-p1">
@@ -229,21 +231,21 @@ export default function TicketsSection({ speakerTicket, plusOneTicket, invitatio
                   </div>
                 </section>
 
-                <div className="bg-white/10 h-px" />
+                <div className="h-px bg-white/10" />
 
                 <section className="group">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="bg-[#9945ff]/10 text-[#9945ff] flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#aa67fb]/10 text-[#aa67fb]">
                       <AlertCircle className="h-4 w-4" />
                     </div>
-                    <h4 className="text-h3 font-medium uppercase text-white">Need Help?</h4>
+                    <h4 className="text-h3 font-medium text-white uppercase">Need Help?</h4>
                   </div>
                   <div className="pl-11">
                     <p className="text-p1">
                       If you encounter any issues with ticket redemption, please contact the event organizers at{" "}
                       <a
                         href={`mailto:${SPEAKER_CONTACT_EMAIL}`}
-                        className="text-[#9945ff] hover:text-[#19fb9b] hover:underline transition-colors"
+                        className="text-[#aa67fb] transition-colors hover:text-[#14f195] hover:underline"
                         aria-label="Contact event organizers via email"
                       >
                         {SPEAKER_CONTACT_EMAIL}

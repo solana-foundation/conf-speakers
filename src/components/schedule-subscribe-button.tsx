@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useGlobalState } from "@/lib/state";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check } from "@/components/ui/icons";
 
 interface ScheduleSubscribeButtonProps {
   href: string;
@@ -29,14 +29,14 @@ export default function ScheduleSubscribeButton({ href }: ScheduleSubscribeButto
 
   return (
     <div className="flex items-center gap-1">
-      <Button variant="gradient" asChild>
+      <Button asChild>
         <a href={currentHref} target="_blank" rel="noopener noreferrer">
           {buttonText}
         </a>
       </Button>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant="gradient" size="icon" onClick={handleCopy} aria-label="Copy link">
+          <Button variant="outline" size="icon" onClick={handleCopy} aria-label="Copy link">
             {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
           </Button>
         </TooltipTrigger>

@@ -1,4 +1,4 @@
-import { Separator } from "@/components/ui/separator";
+import { BreakpointHero, EventMeta } from "@/components/breakpoint-hero";
 import { Metadata } from "next/types";
 import SpeakerCard from "@/components/speaker-card";
 import SessionsCards from "@/components/sessions-cards";
@@ -158,11 +158,11 @@ export default function DemoSpeakerPage() {
   const allSessionsData = sessions;
 
   return (
-    <div className="min-h-screen p-8 font-sans">
-      <main className="mx-auto flex max-w-6xl flex-col gap-8">
+    <div className="min-h-screen bg-black font-sans">
+      <BreakpointHero title="Speaker briefing" id="portal-heading" />
+      <main className="mx-auto flex max-w-[1728px] flex-col gap-12 px-4 pb-24 lg:gap-16 lg:px-8">
+        <EventMeta />
         <SpeakerCard {...speaker} sessions={sessionsForChecklist} dietaryStatus={speaker.dietary} />
-
-        <Separator />
 
         <SessionsCards
           items={allSessionsData}
@@ -170,14 +170,18 @@ export default function DemoSpeakerPage() {
           allSessionsCalendarUrl={allSessionsCalendarUrl}
         />
 
-        <div className="flex gap-3">
+        <div className="flex flex-col gap-4 border border-[#353535] bg-black p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="space-y-2">
+            <p className="breakpoint-eyebrow text-[#a2a2a2]">Event day</p>
+            <p className="text-xl leading-[1.2] tracking-[-0.03rem] text-white sm:text-2xl">
+              Check-in, speaker lounge, wardrobe and travel notes
+            </p>
+          </div>
           <LogisticsDialogButton
             stage={sessions[0]?.stage as StageTitle | undefined}
             stages={Array.from(new Set(sessions.map((s) => s.stage).filter(Boolean))) as StageTitle[]}
           />
         </div>
-
-        <Separator />
 
         <ActionsChecklist
           sessions={sessionsForChecklist}
@@ -192,8 +196,6 @@ export default function DemoSpeakerPage() {
           youtubeVideoUrl={speaker.youtubeVideoUrl}
           speakerPhotoLink={speaker.speakerPhotoLink}
         />
-
-        <Separator />
 
         <SpeakerResourceLinks />
 

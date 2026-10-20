@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@/lib/app-config";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { listAirtableRecords } from "@/lib/airtable/client";
@@ -102,11 +103,11 @@ export async function POST(request: NextRequest) {
     const speakerId = record.id;
 
     const now = Date.now();
-    const expiresInMs = Number(process.env.NEXT_PUBLIC_KEY_EXP ?? 0);
+    const expiresInMs = APP_CONFIG.NEXT_PUBLIC_KEY_EXP;
     const exp = now + expiresInMs; // Default 3M
     const token = generateKey(exp, "auth", speakerId);
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
+    const baseUrl = APP_CONFIG.NEXT_PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
     const link = `${baseUrl}/s?key=${token}`;
 
     const recipientName = getSpeakerDisplayName(record);
@@ -118,7 +119,7 @@ export async function POST(request: NextRequest) {
       console.info(`[auth] link=${link}`);
     }
 
-    const hasSendGridConfig = Boolean(process.env.SENDGRID_API_KEY && process.env.SENDGRID_TEMPLATE_ID);
+    const hasSendGridConfig = Boolean(process.env.SENDGRID_API_KEY);
 
     if (!hasSendGridConfig) {
       if (isDevelopment) {

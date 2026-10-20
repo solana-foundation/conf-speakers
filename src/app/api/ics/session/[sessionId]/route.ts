@@ -1,11 +1,15 @@
 import { fetchSession } from "@/lib/airtable/fetch";
 import { parseSessionRecord } from "@/lib/airtable/schemas";
 import { generateIcsContent } from "@/lib/ics/build";
-import { isAuthenticated } from "@/lib/sign.server";
+import { getTokenPayload } from "@/lib/sign.server";
 import { NextRequest, NextResponse } from "next/server";
+import { EVENT_FILE_SLUG, HOME_SCHEDULE_ENABLED } from "@/lib/site";
+import { getWebPublishingStatus } from "@/lib/airtable/utils";
 
 export const GET = async (request: NextRequest, { params }: { params: Promise<{ sessionId: string }> }) => {
-  if (!isAuthenticated(request, "ics")) {
+  const key = request.nextUrl.searchParams.get("key");
+  const payload = key ? getTokenPayload(key) : null;
+  if (payload?.slug !== "ics" || (!payload.speakerId && !HOME_SCHEDULE_ENABLED)) {
     return NextResponse.json({ error: "Invalid key" }, { status: 401 });
   }
 
@@ -14,6 +18,17 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
   try {
     const record = await fetchSession(sessionId);
     const session = parseSessionRecord(record);
+
+    if (payload.speakerId) {
+      if (![...(session.speakerIds ?? []), ...(session.moderatorIds ?? [])].includes(payload.speakerId)) {
+        return NextResponse.json({ error: "Session not found" }, { status: 404 });
+      }
+    } else {
+      const status = getWebPublishingStatus(session.webPublishingStatus);
+      if (!status.hasTitle || !status.hasTime || status.hasDoNotPublish) {
+        return NextResponse.json({ error: "Session not found" }, { status: 404 });
+      }
+    }
 
     if (!session.name || !session.startTime || !session.endTime) {
       return NextResponse.json({ error: "Session missing start or end time" }, { status: 400 });
@@ -34,7 +49,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
       status: 200,
       headers: {
         "Content-Type": "text/calendar; charset=utf-8",
-        "Content-Disposition": `attachment; filename="breakpoint-2025-session-${sessionId}.ics"`,
+        "Content-Disposition": `attachment; filename="${EVENT_FILE_SLUG}-session-${sessionId}.ics"`,
         "Cache-Control": "public, max-age=3600, s-maxage=3600",
         "X-Content-Type-Options": "nosniff",
         // Add CORS headers for cross-origin requests

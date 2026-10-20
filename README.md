@@ -1,13 +1,13 @@
 # BP Speakers
 
-Next.js 15 App Router app for a speaker portal and private public-facing event schedule backed by Airtable. The app serves:
+Next.js 15 App Router app for a speaker portal and public event schedule backed by Airtable. The app serves:
 
 - `/` for the event schedule
 - `/s?key=...` for the speaker portal
 - `/email-link` for requesting a magic link by email
 - signed ICS feeds for single sessions, a speaker's sessions, or the full event schedule
 
-The app is event-configurable through environment variables, so event name, copy, organizer details, location, timezone, and calendar labels should be changed in config rather than hardcoded in UI files.
+Public event and service settings live in `src/lib/app-config.ts`. Keep credentials in environment variables.
 
 ## Stack
 
@@ -28,7 +28,7 @@ Main areas of the codebase:
 - `src/lib/airtable` Airtable client, fetchers, schemas, and helpers
 - `src/lib/time` timezone helpers
 - `src/lib/ics` ICS generation and URL helpers
-- `src/lib/site.ts` env-driven site and event config
+- `src/lib/app-config.ts` public event and service settings, with derived values in `src/lib/site.ts`
 - `src/components` schedule UI and speaker portal UI
 
 Important files for data issues:
@@ -66,7 +66,7 @@ API routes:
 
 ## Airtable Model
 
-Required table env vars:
+Configured Airtable table IDs in `src/lib/app-config.ts`:
 
 - `AIRTABLE_TABLE_AGENDA`
 - `AIRTABLE_TABLE_SPEAKERS`
@@ -97,8 +97,11 @@ Speaker fields in use:
 - `Role or Title`
 - `Company`
 - `Bio`
-- `Headshot_For Web`
-- `Speaker Card`
+- `Headshot_For Web (PNG)`
+- `Speaker Card (Individual)`
+- `Speaker Portal Link`
+- `Speaking On`
+- `Moderator On`
 - `Twitter`
 - `Slide Deck File`
 - `Luma Speaker Ticket`
@@ -115,6 +118,7 @@ Speaker fields in use:
 Format fields in use:
 
 - `Format`
+- `Duration (minutes)`
 
 Known data gotchas:
 
@@ -124,51 +128,16 @@ Known data gotchas:
 
 ## Environment
 
-Start from `.env.example` and create `.env.local`.
+Public event details, Airtable IDs, cache behavior, URL settings, key lifetime, and SendGrid sender settings live in `src/lib/app-config.ts`. Edit that map when the event changes. `.env.example` contains only credentials. Copy it to `.env.local` and fill in the values:
 
 ```bash
 AIRTABLE_PAT=
-AIRTABLE_BASE=
-AIRTABLE_TABLE_SPEAKERS=
-AIRTABLE_TABLE_AGENDA=
-AIRTABLE_TABLE_FORMATS=
-
-DATA_CACHING_OFF=false
-
-SITE_SECRET=secret
-API_KEY=key
-
-NEXT_PUBLIC_VENUE_TZ=America/New_York
-NEXT_PUBLIC_KEY_EXP=7776000000
-NEXT_PUBLIC_BASE_URL=localhost:3000
-NEXT_PUBLIC_EVENT_NAME=Event
-NEXT_PUBLIC_SITE_NAME="Speaker Portal"
-NEXT_PUBLIC_EVENT_DESCRIPTION="Agenda and speaker information for this event."
-NEXT_PUBLIC_EVENT_LOCATION="New York City"
-NEXT_PUBLIC_ORGANIZER_NAME="Events Team"
-NEXT_PUBLIC_SPEAKER_GUIDE_URL=
-NEXT_PUBLIC_HOME_SCHEDULE_ENABLED=true
-
-EVENT_CALENDAR_NAME="Event Schedule"
-EVENT_ORGANIZER_EMAIL=noreply@example.com
-EVENT_GEO_LAT=
-EVENT_GEO_LON=
-
+SITE_SECRET=<strong-private-secret>
+API_KEY=<private-api-key>
 SENDGRID_API_KEY=
-SENDGRID_TEMPLATE_ID=
-SENDGRID_FROM_EMAIL=noreply@example.com
-SENDGRID_FROM_NAME="Events Team"
-SENDGRID_SANDBOX_MODE=true
 ```
 
-Notes:
-
-- Airtable credentials are server-only
-- Site metadata and ICS labels are driven from `src/lib/site.ts`
-- Set `NEXT_PUBLIC_HOME_SCHEDULE_ENABLED=false` to hide the public home-page schedule behind a feature flag
-- Venue timezone is required and initializes Luxon globally
-- Airtable caching is enabled by default
-- Set `DATA_CACHING_OFF=true` only when you need to bypass Next's data cache
+Airtable credentials are server-only. SendGrid is optional during local development; the app logs magic links when the API key is absent. The public schedule is disabled in the map until publishing statuses are ready. The guide URL still points to the 2025 reference.
 
 ## Quick Start
 
@@ -178,29 +147,13 @@ Notes:
 pnpm install
 ```
 
-2. Copy the example env file and fill in the Airtable and site values:
+2. Copy the example env file and fill in the credentials:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Minimum local setup:
-
-- `AIRTABLE_PAT`
-- `AIRTABLE_BASE`
-- `AIRTABLE_TABLE_SPEAKERS`
-- `AIRTABLE_TABLE_AGENDA`
-- `AIRTABLE_TABLE_FORMATS`
-- `SITE_SECRET`
-- `API_KEY`
-- `NEXT_PUBLIC_VENUE_TZ`
-- `NEXT_PUBLIC_BASE_URL=http://localhost:3000`
-
-Notes:
-
-- The repo already documents the current Airtable table IDs in `AGENTS.md`
-- For local email-link testing, SendGrid is optional
-- If `SENDGRID_API_KEY` and `SENDGRID_TEMPLATE_ID` are not set, the app will log the magic link to the server console in development instead of sending an email
+Minimum local setup: `AIRTABLE_PAT`, `SITE_SECRET`, and `API_KEY`. Set `SENDGRID_API_KEY` to send email. To test links locally, change `NEXT_PUBLIC_BASE_URL` in `src/lib/app-config.ts` to `http://localhost:3000`.
 
 3. Start the dev server:
 
@@ -271,7 +224,7 @@ The page routes currently export `revalidate = 600` for a 10 minute page-level r
 
 ICS files are generated server-side in `src/lib/ics/build.ts`.
 
-Calendar metadata is env-driven:
+Calendar metadata is configured in `src/lib/app-config.ts`:
 
 - `EVENT_CALENDAR_NAME`
 - `NEXT_PUBLIC_EVENT_LOCATION`
@@ -313,11 +266,15 @@ pnpm lint
 pnpm format
 pnpm format:check
 pnpm test
+pnpm airtable:audit
+pnpm airtable:sync-portal-links
 ```
+
+`airtable:sync-portal-links` reports how many records in the Greenlight view lack links. After the Breakpoint portal is deployed and verified, run it with `--write` using the deployed `SITE_SECRET`; it fills only blank `Speaker Portal Link` cells.
 
 ## Testing
 
-The repo includes Jest tests for utility modules and key UI components, including:
+The repo includes Vitest tests for utility modules and key UI components, including:
 
 - timezone helpers
 - JWT helpers

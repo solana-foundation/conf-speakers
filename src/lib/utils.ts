@@ -12,25 +12,23 @@ export function cn(...inputs: ClassValue[]) {
 export function sanitizeXName(input: string): string | null {
   if (!input) return null;
 
-  // Remove leading/trailing whitespace
   let handle = input.trim();
+  if (/^https?:\/\//i.test(handle)) {
+    try {
+      const url = new URL(handle);
+      if (!["x.com", "www.x.com", "twitter.com", "www.twitter.com"].includes(url.hostname.toLowerCase())) return null;
+      handle = url.pathname.replace(/^\/+|\/+$/g, "");
+    } catch {
+      return null;
+    }
+  } else {
+    handle = handle
+      .replace(/^(?:www\.)?(?:x\.com|twitter\.com)\//i, "")
+      .replace(/^@/, "")
+      .replace(/\/+$/, "");
+  }
 
-  // Remove protocol and www if present
-  handle = handle.replace(/^https?:\/\/(www\.)?/i, "");
-
-  // Remove domain if present (both x.com and twitter.com)
-  handle = handle.replace(/^(x\.com|twitter\.com)\//i, "");
-
-  // Remove leading @ if present
-  handle = handle.replace(/^@/, "");
-
-  // Remove any trailing slashes
-  handle = handle.replace(/\/+$/, "");
-
-  // If after all this, handle is empty, return null
-  if (!handle) return null;
-
-  return handle;
+  return /^[A-Za-z0-9_]{1,15}$/.test(handle) ? handle : null;
 }
 
 /**
